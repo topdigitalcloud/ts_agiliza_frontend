@@ -1,19 +1,20 @@
 export const links = [
-    {
-        name: "Estação", sublinks: [
-            { name: 'Buscar Estação', link: "/" },
-            { name: 'Cadastrar Estação', link: "/" },
-            { name: 'Atualização Status', link: "/" },
-
-        ]
-    },
-    {
-        name: "Documentos", sublinks: [
-            { name: 'Licenças', link: "/" },
-            { name: 'Casual Shirts', link: "/" },
-            { name: 'ART', link: "/" },
-            { name: 'Laudos Radiométricos', link: "/" },
-            { name: 'Projetos', link: "/" },
-        ]
-    }
-]
+  {
+    name: "Meu Perfil",
+    auth: true,
+    sublinks: [
+      { name: "Alterar Senha", link: "/password" },
+      { name: "Alterar Dados", link: "/profile" },
+    ],
+  },
+  {
+    name: "Documentos",
+    auth: true,
+    sublinks: [
+      { name: "Licenças", link: "/licensas" },
+      { name: "ART", link: "/art" },
+      { name: "Laudos Radiométricos", link: "/laudos" },
+      { name: "Projetos", link: "/projetos" },
+    ],
+  },
+];
