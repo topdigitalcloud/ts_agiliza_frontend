@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import registerService from "../services/RegisterService";
+import RegisterService from "../services/RegisterService";
 import {
   IRegisterStates,
   TRegister,
@@ -18,7 +18,7 @@ const initialState: IRegisterStates = {
 export const register = createAsyncThunk(
   "register/register",
   async (user: TRegisterFields, thunkAPI) => {
-    const data = await registerService.register(user);
+    const data = await RegisterService.register(user);
 
     if (data.errors) {
       return thunkAPI.rejectWithValue(data.errors[0]);
@@ -27,7 +27,7 @@ export const register = createAsyncThunk(
   }
 );
 
-export const registerSlice = createSlice({
+export const RegisterSlice = createSlice({
   name: "register",
   initialState,
   reducers: {
@@ -60,6 +60,6 @@ export const registerSlice = createSlice({
   },
 });
 
-export const { reset } = registerSlice.actions;
+export const { reset } = RegisterSlice.actions;
 export const registerSelector = (state: RootState) => state.RegisterReducer;
-export default registerSlice.reducer;
+export default RegisterSlice.reducer;

@@ -22,9 +22,9 @@ const login = async (data: any): Promise<any> => {
   }
 };
 
-const loginService = {
+const LoginService = {
   logout,
   login,
 };
 
-export default loginService;
+export default LoginService;

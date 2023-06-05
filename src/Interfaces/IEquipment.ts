@@ -1,0 +1,51 @@
+export type TEquipment = {
+  status: string;
+  nomeEntidade: string;
+  numFistel: string;
+  numAto: string;
+  numEstacao: string;
+  enderecoEstacao: string;
+  endComplemento: string;
+  siglaUf: string;
+  codMunicipio: string;
+  designacaoEmissao: string;
+  tecnologia: string;
+  tipoTecnologia: string;
+  meioAcesso: string;
+  freqTxMHz: string;
+  freqRxMHz: string;
+  azimute: string;
+  codTipoClasseEstacao: string;
+  classInfraFisica: string;
+  compartilhamentoInfraFisica: string;
+  codTipoAntena: string;
+  codEquipamentoAntena: string;
+  ganhoAntena: string;
+  frenteCostaAntena: string;
+  anguloMeiaPotenciaAntena: string;
+  anguloElevacao: string;
+  polarizacao: string;
+  alturaAntena: string;
+  codEquipamentoTransmissor: string;
+  potenciaTransmissorWatts: string;
+  latitude: string;
+  longitude: string;
+  lodDebitoTFI: string;
+  dataLicenciamento: string;
+  dataPrimeiroLicenciamento: string;
+  numRede: string;
+  _id: string;
+  dataValidade: string;
+  numFistelAssociado: string;
+  nomeEntidadeAssociado: string;
+};
+
+export interface IEquipmentStates {
+  equipamentos: TEquipment[];
+  equipamento: TEquipment | null;
+  error: any;
+  success: boolean;
+  loading: boolean;
+  message: string | null;
+  locations: string[];
+}

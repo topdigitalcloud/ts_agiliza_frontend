@@ -1,12 +1,12 @@
 //componnents
 import { Link } from "react-router-dom";
-import Message from "../../components/Message";
 
 //Hooks
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useNotify } from "../../hooks/useNotify";
 
 //types
 
@@ -25,7 +25,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("123456");
 
   const navigate = useNavigate();
-
+  const notify = useNotify();
   const dispatch = useAppDispatch();
 
   const { loading, error, success } = useAppSelector(registerSelector);
@@ -41,14 +41,20 @@ const Register = () => {
     dispatch(register(user));
   };
 
-  //clean all auth states
+  //show error message
+  useEffect(() => {
+    notify(error, "E");
+  }, [error, notify]);
+
+  //show success message and clean all auth states
   useEffect(() => {
     if (success) {
+      notify("Registro feito com sucesso", "S");
       navigate("/login");
+      dispatch(reset());
     }
-    dispatch(reset());
     return;
-  }, [dispatch, success, navigate]);
+  }, [dispatch, success, navigate, notify]);
 
   return (
     <div className="flex w-full mt-4">
@@ -125,9 +131,6 @@ const Register = () => {
                     Aguarde...
                   </button>
                 )}
-              </div>
-              <div className="h-12 flex justify-center  text-red-800 items-center">
-                {error && <Message msg={error} type="error" />}
               </div>
             </form>
           </div>

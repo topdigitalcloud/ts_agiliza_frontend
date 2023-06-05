@@ -5,9 +5,7 @@ import Message from "../../components/Message";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { useState, useEffect } from "react";
-
-//types
-import { TUpdateFields } from "../../Interfaces/IUpdateStates";
+import { useNotify } from "../../hooks/useNotify";
 
 //redux
 
@@ -18,16 +16,12 @@ import {
   profileSelector,
 } from "../../slices/ProfileSlice";
 
-//interface
-interface StringMap {
-  [key: string]: string;
-}
-
 const MyProfile = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
 
   const dispatch = useAppDispatch();
+  const notify = useNotify();
 
   const { user, loading, error, success } = useAppSelector(profileSelector);
 
@@ -37,52 +31,37 @@ const MyProfile = () => {
     dispatch(profile());
   }, [dispatch]);
 
-  console.log(user);
   //fill form with user data
-
   useEffect(() => {
     if (user) {
       setName(user.name);
-      if (typeof email === "string") setEmail(user.email);
+      setEmail(user.email);
     }
   }, [user, email]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     //Gather user data from states
-
-    const userData: StringMap = {
-      name: name,
-      email: email,
+    const user = {
+      name,
+      email,
     };
-
-    //build form data
-
-    const formData = new FormData();
-
-    const userFormData = Object.keys(userData).forEach((key) =>
-      formData.append(key, userData[key])
-    );
-
-    console.log(userFormData);
-
-    formData.append("user", userFormData);
-
-    for (const value of formData.values()) {
-      console.log(value);
-    }
-
-    await dispatch(update(formData));
-
-    //dispatch(update(userData));
+    dispatch(update(user));
   };
 
-  //clean all auth states
+  //show error message
   useEffect(() => {
+    notify(error, "E");
+  }, [error, notify]);
+
+  //show success message and clean all auth states
+  useEffect(() => {
+    if (success) {
+      notify("Perfil atualizado com sucesso", "S");
+    }
     dispatch(reset());
     return;
-  }, [dispatch, success]);
+  }, [dispatch, success, notify]);
 
   return (
     <div className="flex w-full mt-4">

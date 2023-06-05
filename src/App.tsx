@@ -1,6 +1,9 @@
 import React from "react";
 //Router
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+//ToastFy to show messages
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 //Hooks
 
@@ -24,6 +27,7 @@ function App() {
   return (
     <BrowserRouter>
       <NavBar />
+      <ToastContainer />
       <Routes>
         <Route path="/" element={auth ? <Home /> : <Navigate to="/login" />} />
         <Route

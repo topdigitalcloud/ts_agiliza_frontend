@@ -8,15 +8,17 @@ import Message from "../../components/Message";
 import { useState, useEffect, FormEvent } from "react";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
+import { useNotify } from "../../hooks/useNotify";
 
 //Redux
 import { login, reset, loginSelector } from "../../slices/LoginSlice";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("topdigitalcloud@gmail.com");
-  const [password, setPassword] = useState<string>("topdigital");
+  const [password, setPassword] = useState<string>("234567");
 
   const dispatch = useAppDispatch();
+  const notify = useNotify();
 
   //const { loading, error } = useSelector((state: ILoginStates) => state.auth);
 
@@ -30,6 +32,11 @@ const Login = () => {
     };
     dispatch(login(user));
   };
+
+  //show error message
+  useEffect(() => {
+    notify(error, "E");
+  }, [error, notify]);
 
   //clean all auth states
   useEffect(() => {

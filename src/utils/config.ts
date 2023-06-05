@@ -7,7 +7,7 @@ export const requestConfig = (
   token: string | null = null,
   image: any | null = null
 ) => {
-  let config = {};
+  let config: any = {};
 
   if (image) {
     config = {
@@ -31,7 +31,10 @@ export const requestConfig = (
   }
 
   if (token) {
-    config = { ...config, headers: { Authorization: `Bearer ${token}` } };
+    config = {
+      ...config,
+      headers: { ...config.headers, Authorization: `Bearer ${token}` },
+    };
   }
 
   return config;

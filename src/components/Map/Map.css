@@ -1,0 +1,19 @@
+.map {
+  height: 50vh;
+  width: 100vw;
+}
+
+.map_container {
+  height: 100%;
+  width: 100%;
+}
+
+.map_marker {
+  margin-top: -40px;
+}
+
+.map_info_window {
+  background: white;
+  border: "1px solid #ccc";
+  padding: 15;
+}

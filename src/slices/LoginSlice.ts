@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import loginService from "../services/LoginService";
+import LoginService from "../services/LoginService";
 import { ILoginStates, TLogin } from "../Interfaces/ILoginStates";
 import { RootState } from "../store";
 
@@ -31,7 +31,7 @@ const initialState: ILoginStates = {
 export const login = createAsyncThunk(
   "login/login",
   async (user: any, thunkAPI) => {
-    const data = await loginService.login(user);
+    const data = await LoginService.login(user);
 
     if (data.errors) {
       return thunkAPI.rejectWithValue(data.errors[0]);
@@ -43,10 +43,10 @@ export const login = createAsyncThunk(
 //logout an user
 
 export const logout = createAsyncThunk("login/logout", async () => {
-  await loginService.logout();
+  await LoginService.logout();
 });
 
-export const loginSlice = createSlice({
+export const LoginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
@@ -70,7 +70,7 @@ export const loginSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action: PayloadAction<TLogin>) => {
         state.loading = false;
-        state.success = true;
+        state.success = false;
         state.error = null;
         state.user = action.payload;
       })
@@ -82,6 +82,6 @@ export const loginSlice = createSlice({
   },
 });
 
-export const { reset } = loginSlice.actions;
+export const { reset } = LoginSlice.actions;
 export const loginSelector = (state: RootState) => state.LoginReducer;
-export default loginSlice.reducer;
+export default LoginSlice.reducer;

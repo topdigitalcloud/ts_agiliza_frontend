@@ -13,8 +13,8 @@ const register = async (data: any): Promise<any> => {
   }
 };
 
-const registerService = {
+const RegisterService = {
   register,
 };
 
-export default registerService;
+export default RegisterService;

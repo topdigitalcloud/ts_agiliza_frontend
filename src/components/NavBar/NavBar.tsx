@@ -1,37 +1,48 @@
-import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { X, Menu } from "lucide-react";
 
 //Hooks
 import useAppDispatch from "../../hooks/useAppDispatch";
-//import useAppSelector from "../../hooks/useAppSelector";
+import useAppSelector from "../../hooks/useAppSelector";
 import { useAuth } from "../../hooks/useAuth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNotify } from "../../hooks/useNotify";
 
 //Login slice
-import { logout, reset, loginSelector } from "../../slices/LoginSlice";
+import { logout, loginSelector, reset } from "../../slices/LoginSlice";
 import NavLinks from "./NavLinks";
 
 function NavBar() {
   //Auth status
   const { auth } = useAuth();
 
-  console.log(auth);
-
   //State of mobile menu
   const [open, setOpen] = useState(false);
 
   //dispatch for logout
   const dispatch = useAppDispatch();
+  const { success } = useAppSelector(loginSelector);
+
+  //notify thanks for use agiliza
+  const notify = useNotify();
 
   const handleLogout = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(logout());
   };
 
+  //show success message and clean all auth states
+  useEffect(() => {
+    if (success) {
+      notify("Obrigado por utilizar o agliza!", "N");
+    }
+    dispatch(reset());
+    return;
+  }, [dispatch, success, notify]);
+
   return (
     //Nav que abraça todo o cabeçalho
-    <nav className="bg-white">
+    <nav className="bg-slate-300">
       {/* DIV1 principal cabeçalho */}
       <div className="flex items-center justify-around font-medium">
         {/* DIV11 que contem a logomarca ou menu modo mobile */}
@@ -55,43 +66,43 @@ function NavBar() {
           </div>
         </div>
         {/* DIV12 que abraça os itens do Menu */}
-        <div>
-          <ul className="md:flex hidden uppercase items-center gap-8 font-[Poppins]">
-            {auth ? (
+
+        <ul className="md:flex hidden uppercase items-center gap-8 font-[Poppins]">
+          {auth ? (
+            <li>
+              <NavLink to="/" className="py-7 px-3 inline-block">
+                Home
+              </NavLink>
+            </li>
+          ) : (
+            <>
               <li>
-                <NavLink to="/" className="py-7 px-3 inline-block">
-                  Home
+                <NavLink to="/register" className="py-7 px-3 inline-block">
+                  Cadastro
                 </NavLink>
               </li>
-            ) : (
-              <>
-                <li>
-                  <NavLink to="/register" className="py-7 px-3 inline-block">
-                    Cadastro
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/login" className="py-7 px-3 inline-block">
-                    Login
-                  </NavLink>
-                </li>
-              </>
-            )}
-            <NavLinks key="nav_desktop" auth={auth} />
-            {auth && (
               <li>
-                <form>
-                  <button
-                    onClick={handleLogout}
-                    className="py-7 px-3 inline-block font-[Poppins] uppercase"
-                  >
-                    Logout
-                  </button>
-                </form>
+                <NavLink to="/login" className="py-7 px-3 inline-block">
+                  Login
+                </NavLink>
               </li>
-            )}
-          </ul>
-        </div>
+            </>
+          )}
+          <NavLinks key="nav_desktop" auth={auth} />
+          {auth && (
+            <li>
+              <form>
+                <button
+                  onClick={handleLogout}
+                  className="py-7 px-3 inline-block font-[Poppins] uppercase"
+                >
+                  Logout
+                </button>
+              </form>
+            </li>
+          )}
+        </ul>
+
         {/* DIV13 que está vazia*/}
         <div className="md:block hidden"></div>
         {/* Mobile Nav */}
@@ -107,7 +118,7 @@ function NavBar() {
               Home
             </NavLink>
           </li>
-          <NavLinks key="nav_mobile" auth={auth} />
+          <NavLinks auth={auth} />
           <div className="py-5"></div>
         </ul>
       </div>
