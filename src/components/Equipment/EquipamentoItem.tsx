@@ -1,13 +1,15 @@
 import { TEquipment } from "../../Interfaces/IEquipment";
 
-const EquipamentoItem = (equipamento: TEquipment) => {
+type Props = {
+  equipamento: TEquipment;
+};
+
+const EquipamentoItem = ({ equipamento }: Props) => {
   return (
-    <tr>
-      <td className="border px-8 py-4">{equipamento.nomeEntidade}</td>
-      <td className="border px-8 py-4">{equipamento.alturaAntena}</td>
-      <td className="border px-8 py-4">
-        {equipamento.dataPrimeiroLicenciamento}
-      </td>
+    <tr key={equipamento._id}>
+      <td className="border px-8 py-4">{equipamento.NomeEntidade}</td>
+      <td className="border px-8 py-4">{equipamento.AlturaAntena}</td>
+      <td className="border px-8 py-4">{equipamento.DataPrimeiroLicenciamento}</td>
     </tr>
   );
 };

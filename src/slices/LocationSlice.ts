@@ -16,21 +16,18 @@ const initialState: ILocationStates = {
 
 //get all locations
 
-export const getLocations = createAsyncThunk(
-  "locations/getLocations",
-  async (_, thunkAPI) => {
-    const appState = thunkAPI.getState() as RootState;
-    const token = appState.LoginReducer.user!.token;
-    const data = await LocationService.getLocations(token);
-    return data;
-  }
-);
+export const getLocations = createAsyncThunk("locations/getLocations", async (_, thunkAPI) => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+  const data = await LocationService.getLocations(token);
+  return data;
+});
 
 export const LocationSlice = createSlice({
   name: "equipamento",
   initialState,
   reducers: {
-    resetMessage: (state) => {
+    reset: (state) => {
       state.message = null;
     },
   },
@@ -51,6 +48,6 @@ export const LocationSlice = createSlice({
 
 //getAllEquipamentosByLocation
 
-export const { resetMessage } = LocationSlice.actions;
+export const { reset } = LocationSlice.actions;
 export const locationSelector = (state: RootState) => state.LocationReducer;
 export default LocationSlice.reducer;

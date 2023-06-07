@@ -11,6 +11,7 @@ export const links = [
     name: "Documentos",
     auth: true,
     sublinks: [
+      { name: "Upload", link: "/upload" },
       { name: "Licenças", link: "/licensas" },
       { name: "ART", link: "/art" },
       { name: "Laudos Radiométricos", link: "/laudos" },

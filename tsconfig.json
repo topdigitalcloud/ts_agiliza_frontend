@@ -9,6 +9,7 @@
       "es2015",
       "es2019",
     ],
+    "downlevelIteration": true,//Adriano
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

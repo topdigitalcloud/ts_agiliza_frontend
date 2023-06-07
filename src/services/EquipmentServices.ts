@@ -32,13 +32,12 @@ const getEquipamentosByLocation = async (id: string, token: string) => {
   }
 };
 
-//get All Locations
+//get Equipments of visible map area
 
-const getLocations = async (token: string) => {
-  const config = requestConfig("GET", null, token);
-
+const getVisibleEquipments = async (data: any, token: string) => {
+  const config = requestConfig("POST", data, token);
   try {
-    const res = await fetch(api + "/locations", config)
+    const res = await fetch(api + "/equipamentos/visiblelocations/", config)
       .then((res) => res.json())
       .catch((err) => err);
 
@@ -48,10 +47,27 @@ const getLocations = async (token: string) => {
   }
 };
 
+//upload CSV equipments
+
+const uploadEquipments = async (data: any, token: string) => {
+  const config = requestConfig("POST", data, token, true);
+
+  try {
+    const res = await fetch(api + "/equipamentos/upload", config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const EquipmentService = {
   getEquipamentos,
-  getLocations,
   getEquipamentosByLocation,
+  getVisibleEquipments,
+  uploadEquipments,
 };
 
 export default EquipmentService;

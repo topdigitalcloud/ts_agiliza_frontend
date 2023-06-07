@@ -1,6 +1,6 @@
 export type TEquipment = {
   status: string;
-  nomeEntidade: string;
+  NomeEntidade: string;
   numFistel: string;
   numAto: string;
   numEstacao: string;
@@ -25,14 +25,14 @@ export type TEquipment = {
   anguloMeiaPotenciaAntena: string;
   anguloElevacao: string;
   polarizacao: string;
-  alturaAntena: string;
+  AlturaAntena: string;
   codEquipamentoTransmissor: string;
   potenciaTransmissorWatts: string;
   latitude: string;
   longitude: string;
   lodDebitoTFI: string;
   dataLicenciamento: string;
-  dataPrimeiroLicenciamento: string;
+  DataPrimeiroLicenciamento: string;
   numRede: string;
   _id: string;
   dataValidade: string;
@@ -47,5 +47,4 @@ export interface IEquipmentStates {
   success: boolean;
   loading: boolean;
   message: string | null;
-  locations: string[];
 }

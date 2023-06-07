@@ -9,12 +9,7 @@ import { useNotify } from "../../hooks/useNotify";
 
 //redux
 
-import {
-  profile,
-  update,
-  reset,
-  profileSelector,
-} from "../../slices/ProfileSlice";
+import { profile, update, reset, profileSelector } from "../../slices/ProfileSlice";
 
 const MyProfile = () => {
   const [name, setName] = useState<string>("");
@@ -67,9 +62,7 @@ const MyProfile = () => {
     <div className="flex w-full mt-4">
       <div className="w-full flex items-center justify-center">
         <div className="px-10 py-20 rounded-3xl border-2 border-gray-200  bg-white">
-          <p className="text-top-digital text-4xl font-semibold pb-8 pt-2">
-            Meu perfil
-          </p>
+          <p className="text-top-digital text-4xl font-semibold pb-8 pt-2">Meu perfil</p>
           <div className="mt-8">
             <form onSubmit={handleSubmit}>
               <div className="py-2">

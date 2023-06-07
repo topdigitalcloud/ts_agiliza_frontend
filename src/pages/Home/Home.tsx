@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-
 //Hooks
 import { useEffect } from "react";
 
@@ -8,15 +7,15 @@ import useAppSelector from "../../hooks/useAppSelector";
 import useAppDispatch from "../../hooks/useAppDispatch";
 
 //Redux
-import { getLocations, locationSelector, resetMessage } from "../../slices/LocationSlice";
+import { getLocations, locationSelector } from "../../slices/LocationSlice";
 
 //Components
-import Map from "../../components/Map/Map";
-import LocalItem from "../../components/Equipment/LocalItem";
+import Map from "../Map/Map";
+//import LocalItem from "../../components/Equipment/LocalItem";
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const { locations, loading, error, success } = useAppSelector(locationSelector);
+  const { locations, loading } = useAppSelector(locationSelector);
 
   useEffect(() => {
     dispatch(getLocations());
@@ -27,10 +26,24 @@ const Home = () => {
   }
   return (
     <div>
-      <div className="w-auto text-center py-3">
-        <h2 className="font-semibold">Meu Mapa</h2>
-        {locations && locations.length !== 0 && <Map locations={locations} />}
-      </div>
+      {locations && locations.length !== 0 && (
+        <div className="w-auto text-center py-3">
+          <h2 className="font-semibold text-top-digital">Meu Mapa</h2>
+          <Map locations={locations} />
+        </div>
+      )}
+      {locations && locations.length === 0 && (
+        <div className="w-auto text-center py-3">
+          <h2 className="font-semibold text-top-digital">Você ainda não tem sites cadastrados</h2>
+          <p className="text-top-digital">
+            Para cadastrar seus sites{" "}
+            <Link className="font-bold hover:text-top-digital-hover" to="/upload">
+              clique aqui
+            </Link>{" "}
+            para acessar nossa página de upload.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -16,6 +16,7 @@ import Register from "./pages/Register/Register";
 import NavBar from "./components/NavBar/NavBar";
 import MyProfile from "./pages/Profile/MyProfile";
 import AlterPassword from "./pages/Profile/AlterPassword";
+import Upload from "./pages/Upload/Upload";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -30,22 +31,11 @@ function App() {
       <ToastContainer />
       <Routes>
         <Route path="/" element={auth ? <Home /> : <Navigate to="/login" />} />
-        <Route
-          path="/profile"
-          element={auth ? <MyProfile /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/password"
-          element={auth ? <AlterPassword /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/register"
-          element={!auth ? <Register /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/login"
-          element={!auth ? <Login /> : <Navigate to="/" />}
-        />
+        <Route path="/profile" element={auth ? <MyProfile /> : <Navigate to="/login" />} />
+        <Route path="/upload" element={auth ? <Upload /> : <Navigate to="/login" />} />
+        <Route path="/password" element={auth ? <AlterPassword /> : <Navigate to="/login" />} />
+        <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />
+        <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
   );

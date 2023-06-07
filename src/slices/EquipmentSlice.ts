@@ -13,12 +13,11 @@ const initialState: IEquipmentStates = {
   success: false,
   loading: false,
   message: null,
-  locations: [],
 };
 
 //get all equipamentos
 
-export const getEquipamentos = createAsyncThunk("equipamento/getAll", async (_, thunkAPI) => {
+export const getEquipamentos = createAsyncThunk("equipments/getAll", async (_, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
   const data = await EquipmentService.getEquipamentos(token);
@@ -37,12 +36,29 @@ export const getAllEquipamentosByLocation = createAsyncThunk(
   }
 );
 
-//get all locations
-
-export const getLocations = createAsyncThunk("locations/getLocations", async (_, thunkAPI) => {
+//get all equipments of visible map area
+export const getVisibleEquipments = createAsyncThunk("equipments/getVisibleEquipments", async (ids: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await EquipmentService.getLocations(token);
+  const data = await EquipmentService.getVisibleEquipments(ids, token);
+  return data;
+});
+
+//upload CSV file
+
+//publish user photo
+export const uploadEquipments = createAsyncThunk("equipments/uploadEquipments", async (csv: FormData, thunkAPI) => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+
+  const data = await EquipmentService.uploadEquipments(csv, token);
+
+  //check for errors
+
+  if (data.errors) {
+    return thunkAPI.rejectWithValue(data.errors[0]);
+  }
+
   return data;
 });
 
@@ -50,8 +66,11 @@ export const EquipmentSlice = createSlice({
   name: "equipamento",
   initialState,
   reducers: {
-    resetMessage: (state) => {
+    reset: (state) => {
       state.message = null;
+      state.error = false;
+      state.success = false;
+      state.loading = false;
     },
   },
   extraReducers: (builder) => {
@@ -66,31 +85,60 @@ export const EquipmentSlice = createSlice({
         state.loading = true;
         state.error = false;
       })
+      .addCase(getEquipamentos.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
+      })
       .addCase(getAllEquipamentosByLocation.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.locations = action.payload;
+        state.equipamentos = action.payload;
       })
       .addCase(getAllEquipamentosByLocation.pending, (state) => {
         state.loading = true;
         state.error = false;
       })
-      .addCase(getLocations.fulfilled, (state, action) => {
+      .addCase(getAllEquipamentosByLocation.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
+      })
+      .addCase(getVisibleEquipments.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.locations = action.payload;
+        state.equipamentos = action.payload;
       })
-      .addCase(getLocations.pending, (state) => {
+      .addCase(getVisibleEquipments.pending, (state) => {
         state.loading = true;
         state.error = false;
+      })
+      .addCase(getVisibleEquipments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
+      })
+      .addCase(uploadEquipments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+      })
+      .addCase(uploadEquipments.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(uploadEquipments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
       });
   },
 });
 
 //getAllEquipamentosByLocation
 
-export const { resetMessage } = EquipmentSlice.actions;
+export const { reset } = EquipmentSlice.actions;
 export const equipmentSelector = (state: RootState) => state.EquipmentReducer;
 export default EquipmentSlice.reducer;
