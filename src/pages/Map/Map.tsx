@@ -2,7 +2,7 @@
 import { GoogleMap, InfoWindow, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 
 //hooks
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 
 //styles - ideal é ter tudo em tailwind
 import "./Map.css";
@@ -16,6 +16,7 @@ import addPassiveSupport from "../../utils/passiveSupport";
 import { TLocation } from "../../Interfaces/ILocation";
 
 //components
+//import Equipment from "../Equipment/Equipment";
 import Equipment from "../Equipment/Equipment";
 
 //context of locations
@@ -32,7 +33,6 @@ type Props = {
 };
 
 const Map = ({ locations }: Props) => {
-  //console.log(locations);
   //Montagem do Mapa
   //Usando Hooks para evitar reenderização desnecessária do Mapa
   const { isLoaded } = useJsApiLoader({
@@ -40,7 +40,7 @@ const Map = ({ locations }: Props) => {
   });
 
   const [map, setMap] = useState<any>(null);
-  const [visibleLocations, setVisibleLocations] = useState<TLocation[]>([]);
+  const [visibleLocations, setVisibleLocations] = useState<TLocation[]>(locations);
 
   const center = useMemo(() => ({ lat: -20.094740870640535, lng: -43.79375384711474 }), []);
   const zoom = useMemo(() => 10, []);
