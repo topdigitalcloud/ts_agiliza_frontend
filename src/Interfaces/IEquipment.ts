@@ -41,6 +41,7 @@ export type TEquipment = {
 };
 
 export interface IEquipmentStates {
+  labels: string[];
   equipamentos: TEquipment[];
   equipamento: TEquipment | null;
   error: any;

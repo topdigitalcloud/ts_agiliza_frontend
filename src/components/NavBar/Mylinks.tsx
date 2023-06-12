@@ -12,7 +12,7 @@ export const links = [
     auth: true,
     sublinks: [
       { name: "Upload", link: "/upload" },
-      { name: "Licenças", link: "/licensas" },
+      { name: "Configurações", link: "/config" },
       { name: "ART", link: "/art" },
       { name: "Laudos Radiométricos", link: "/laudos" },
       { name: "Projetos", link: "/projetos" },

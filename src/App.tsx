@@ -17,6 +17,8 @@ import NavBar from "./components/NavBar/NavBar";
 import MyProfile from "./pages/Profile/MyProfile";
 import AlterPassword from "./pages/Profile/AlterPassword";
 import Upload from "./pages/Upload/Upload";
+import Config from "./pages/Config/Config";
+import Site from "./pages/Site/Site";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -32,7 +34,9 @@ function App() {
       <Routes>
         <Route path="/" element={auth ? <Home /> : <Navigate to="/login" />} />
         <Route path="/profile" element={auth ? <MyProfile /> : <Navigate to="/login" />} />
+        <Route path="/config" element={auth ? <Config /> : <Navigate to="/login" />} />
         <Route path="/upload" element={auth ? <Upload /> : <Navigate to="/login" />} />
+        <Route path="/site/:id" element={auth ? <Site /> : <Navigate to="/login" />} />
         <Route path="/password" element={auth ? <AlterPassword /> : <Navigate to="/login" />} />
         <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />
         <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />

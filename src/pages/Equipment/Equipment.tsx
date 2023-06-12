@@ -5,22 +5,15 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { equipmentSelector, getVisibleEquipments } from "../../slices/EquipmentSlice";
 
 //component
-import EquipamentoItem from "../../components/Equipment/EquipamentoItem";
+import EquipamentoTable from "../../components/Equipment/EquipmentTable";
 
 type Props = {
   visibleLocations: TLocation[];
 };
 
-// equipamentos: [],
-// equipamento: null,
-// error: false,
-// success: false,
-// loading: false,
-// message: null,
-
 const Equipment = ({ visibleLocations }: Props) => {
   const dispatch = useAppDispatch();
-  const { equipamentos, loading } = useAppSelector(equipmentSelector);
+  const { equipamentos, labels, loading } = useAppSelector(equipmentSelector);
 
   let latLocations: string = "";
   for (const loc of visibleLocations) {
@@ -40,26 +33,7 @@ const Equipment = ({ visibleLocations }: Props) => {
     return <div>Aguarde.....</div>;
   }
 
-  return (
-    <>
-      {equipamentos && equipamentos.length !== 0 && (
-        <div>
-          <table className="shadow-lg bg-white md:w-full text-left">
-            <tbody>
-              <tr key="loc0">
-                <th className="bg-blue-100 border text-left px-8 py-4">NomeEntidade</th>
-                <th className="bg-blue-100 border text-left px-8 py-4">AlturaAntena</th>
-                <th className="bg-blue-100 border text-left px-8 py-4">DataPrimeiroLicenciamento</th>
-              </tr>
-            </tbody>
-            {equipamentos.map((equipamento) => (
-              <EquipamentoItem equipamento={equipamento} />
-            ))}
-          </table>
-        </div>
-      )}
-    </>
-  );
+  return <EquipamentoTable equipamentos={equipamentos} labels={labels} />;
 };
 
 export default Equipment;

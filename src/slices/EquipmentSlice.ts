@@ -7,6 +7,7 @@ import { RootState } from "../store";
 import { IEquipmentStates } from "../Interfaces/IEquipment";
 
 const initialState: IEquipmentStates = {
+  labels: [],
   equipamentos: [],
   equipamento: null,
   error: false,
@@ -45,8 +46,6 @@ export const getVisibleEquipments = createAsyncThunk("equipments/getVisibleEquip
 });
 
 //upload CSV file
-
-//publish user photo
 export const uploadEquipments = createAsyncThunk("equipments/uploadEquipments", async (csv: FormData, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
@@ -109,7 +108,8 @@ export const EquipmentSlice = createSlice({
         state.loading = false;
         state.success = true;
         state.error = null;
-        state.equipamentos = action.payload;
+        state.equipamentos = action.payload[1];
+        state.labels = action.payload[0];
       })
       .addCase(getVisibleEquipments.pending, (state) => {
         state.loading = true;

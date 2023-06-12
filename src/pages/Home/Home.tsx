@@ -11,7 +11,6 @@ import { getLocations, locationSelector } from "../../slices/LocationSlice";
 
 //Components
 import Map from "../Map/Map";
-//import LocalItem from "../../components/Equipment/LocalItem";
 
 const Home = () => {
   const dispatch = useAppDispatch();
