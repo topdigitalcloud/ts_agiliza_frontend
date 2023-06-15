@@ -13,9 +13,9 @@ export const links = [
     sublinks: [
       { name: "Upload", link: "/upload" },
       { name: "Configurações", link: "/config" },
-      { name: "ART", link: "/art" },
-      { name: "Laudos Radiométricos", link: "/laudos" },
-      { name: "Projetos", link: "/projetos" },
+      // { name: "ART", link: "/art" },
+      // { name: "Laudos Radiométricos", link: "/laudos" },
+      // { name: "Projetos", link: "/projetos" },
     ],
   },
 ];
