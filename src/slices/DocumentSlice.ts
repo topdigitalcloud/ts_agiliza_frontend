@@ -4,7 +4,7 @@ import DocumentService from "../services/DocumentService";
 import { RootState } from "../store";
 
 //interface of equipments
-import { IDocumentStates } from "../Interfaces/IDocument";
+import { IDocumentStates, TDocument } from "../Interfaces/IDocument";
 
 const initialState: IDocumentStates = {
   documents: [],
@@ -77,6 +77,17 @@ export const getEquipmentDocs = createAsyncThunk(
     return data;
   }
 );
+
+//get
+export const downloadDoc = createAsyncThunk("document/downloadDoc", async (doc: TDocument | undefined, thunkAPI) => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+  const data = await DocumentService.downloadDoc(doc, token);
+  if (data.errors) {
+    return thunkAPI.rejectWithValue(data.errors[0]);
+  }
+  return data;
+});
 
 //get
 export const getAllDocs = createAsyncThunk("document/getAllDocs", async (_, thunkAPI) => {
@@ -187,6 +198,21 @@ export const DocumentSlice = createSlice({
         state.error = false;
       })
       .addCase(getAllDocs.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
+      })
+      .addCase(downloadDoc.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = null;
+        state.document = action.payload;
+      })
+      .addCase(downloadDoc.pending, (state) => {
+        state.loading = false;
+        state.error = false;
+      })
+      .addCase(downloadDoc.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.success = false;

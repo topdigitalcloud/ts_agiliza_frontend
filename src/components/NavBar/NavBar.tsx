@@ -114,10 +114,21 @@ function NavBar() {
                     `}
         >
           <li>
-            <NavLink to="/" className="py-7 px-3 inline-block">
+            <NavLink to="/" onClick={() => setOpen(!open)} className="py-7 px-3 inline-block">
               Home
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/register" onClick={() => setOpen(!open)} className="py-7 px-3 inline-block">
+              Cadastro
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/login" onClick={() => setOpen(!open)} className="py-7 px-3 inline-block">
+              Login
+            </NavLink>
+          </li>
+
           <NavLinks auth={auth} open={open} setOpen={setOpen} />
           <div className="py-5"></div>
         </ul>

@@ -8,13 +8,18 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 
 //redux
-import { reset, getEquipmentDocs, documentSelector, insertDoc } from "../../slices/DocumentSlice";
+import { reset, getEquipmentDocs, documentSelector, insertDoc, downloadDoc } from "../../slices/DocumentSlice";
 import { getEquipamentoById, equipmentSelector } from "../../slices/EquipmentSlice";
 import { getConfig, configSelector } from "../../slices/ConfigSlice";
 
 //types
 import { TEquipment } from "../../Interfaces/IEquipment";
 import DateFormat from "../../components/DateFormat";
+
+//icons
+import { Download } from "lucide-react";
+import DocIcon from "../../components/DocIcon";
+import { TDocument } from "../../Interfaces/IDocument";
 
 type Props = {};
 
@@ -46,6 +51,11 @@ const Site = (props: Props) => {
     dispatchDocument(getEquipmentDocs(id));
   }, [id, dispatchDocument, docSuccess]);
 
+  const submitDownload = (e: React.MouseEvent<HTMLDivElement>, doc: TDocument) => {
+    e.preventDefault();
+    dispatchDocument(downloadDoc(doc));
+  };
+
   const submitHandle = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -71,7 +81,6 @@ const Site = (props: Props) => {
     } else {
       notify("Favor Selecionar um arquivo", "E");
     }
-    //resetComponentMessage();
   };
 
   useEffect(() => {
@@ -93,7 +102,6 @@ const Site = (props: Props) => {
     setFormDocument(doc);
   };
 
-  console.log(documents);
   return (
     <div className="container mx-auto">
       <div className="flex flex-wrap flex-col md:flex-row md:flex-nowrap ">
@@ -102,8 +110,18 @@ const Site = (props: Props) => {
             equipamento &&
             config.map((conf, index) => (
               <div key={`label${index}`} className="grid grid-cols-2">
-                <div className={`${index % 2 ? "bg-white" : "bg-gray-300"} font-semibold`}>{conf.label}</div>
-                <div className={`${index % 2 ? "bg-white" : "bg-gray-300"}`}>
+                <div
+                  className={`${
+                    index % 2 ? "bg-white" : "bg-top-digital-op-25"
+                  } font-semibold text-top-digital-content-color font-top-digital-content`}
+                >
+                  {conf.label}
+                </div>
+                <div
+                  className={`${
+                    index % 2 ? "bg-white" : "bg-top-digital-op-25"
+                  } text-top-digital-content-color font-normal font-top-digital-content`}
+                >
                   {equipamento[conf.campo as keyof TEquipment]}
                 </div>
               </div>
@@ -114,10 +132,10 @@ const Site = (props: Props) => {
             <p>Aguarde....</p>
           ) : (
             <>
-              <h1 className="text-xl text-top-digital font-semibold mb-2">Documentos</h1>
+              <h1 className="text-3xl text-top-digital font-semibold mb-2 font-top-digital-title">Documentos</h1>
               {!openedUploadForm && (
                 <button
-                  className="hover:shadow-form rounded-md bg-top-digital hover:bg-top-digital-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                  className="rounded-md bg-top-digital py-3 px-8 text-center text-base font-normal font-top-digital-title text-white hover:text-top-digital-buttom-hover outline-none"
                   onClick={(e) => {
                     e.preventDefault();
                     setOpenedUploadForm(true);
@@ -128,23 +146,26 @@ const Site = (props: Props) => {
               )}
 
               {documents && documents.length === 0 && (
-                <p className="text-top-digital">
+                <p className="text-top-digital-content-color">
                   Você ainda não possui documentos cadastrados para esse site. Faço seu primeiro upload utilizando o
                   formulário abaixo
                 </p>
               )}
               {openedUploadForm && (
-                <div className="flex flex-col items-center justify-center font-bold p-12 text-top-digital text-lg">
+                <div className="flex flex-col items-center justify-center font-bold p-2 text-top-digital text-lg">
                   <div className="mx-auto w-full max-w-[550px] mb-6">
-                    <h2>
+                    <h2 className="font-top-digital-content font-normal text-top-digital-content-color">
                       Upload de documentação relacionada ao Site
-                      <span className="text-top-digital-hover"> {equipamento && equipamento._id}</span>
+                      <span className="font-bold"> {equipamento && equipamento._id}</span>
                     </h2>
                   </div>
                   <div className="mx-auto w-full max-w-[550px]">
                     <form onSubmit={submitHandle}>
                       <div className="mb-5">
-                        <label htmlFor="title" className="mb-3 block text-base font-medium text-top-digital">
+                        <label
+                          htmlFor="title"
+                          className="mb-3 block text-base font-medium text-top-digital-content-color"
+                        >
                           Título do documento
                         </label>
                         <input
@@ -152,14 +173,16 @@ const Site = (props: Props) => {
                           onChange={(e) => setTitle(e.target.value)}
                           name="title"
                           id="title"
-                          placeholder="Título do documento"
                           min="0"
-                          className="w-full appearance-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-top-digital file:px-3 file:py-[0.32rem] file:text-white file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-top-digital-hover focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
+                          className="w-full appearance-none rounded-md border border-top-digital-op-25 bg-white py-3 px-6 text-base font-medium text-top-digital-content-color outline-none focus:border-top-digital focus:shadow-md focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
                         />
                       </div>
 
                       <div className="mb-5">
-                        <label htmlFor="document" className="mb-3 block text-base font-medium text-top-digital">
+                        <label
+                          htmlFor="document"
+                          className="mb-3 block text-base font-medium text-top-digital-content-color"
+                        >
                           Selecione o arquivo CSV para upload
                         </label>
                         <input
@@ -168,19 +191,19 @@ const Site = (props: Props) => {
                           name="document"
                           id="document"
                           min="0"
-                          className="w-full appearance-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-top-digital file:px-3 file:py-[0.32rem] file:text-white file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-top-digital-hover focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
+                          className="w-full appearance-none rounded-md border border-top-digital-op-25 bg-white py-3 px-6 text-base font-medium text-top-digital-content-color outline-none focus:border-top-digital focus:shadow-md file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-top-digital file:px-3 file:py-[0.32rem] file:text-white file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:text-top-digital-buttom-hover focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
                         />
                       </div>
                       <div>
                         <div className="flex gap-1">
                           <button
                             type="submit"
-                            className="hover:shadow-form rounded-md bg-top-digital hover:bg-top-digital-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                            className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
                           >
                             Enviar
                           </button>
                           <button
-                            className="hover:shadow-form rounded-md bg-top-digital hover:bg-top-digital-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                            className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
                             type="button"
                             onClick={(e) => {
                               e.preventDefault();
@@ -197,21 +220,44 @@ const Site = (props: Props) => {
               )}
               {documents && documents.length !== 0 && (
                 <div className="bg-white p-2 m-2 flex-1 order-2 md:order-1 overflow-x-auto">
-                  <div className="grid grid-cols-4">
-                    <div className="bg-top-digital font-semibold">Titulo do Documento</div>
-                    <div className="bg-top-digital font-semibold">Extensão</div>
-                    <div className="bg-top-digital font-semibold">Data Criação</div>
-                    <div className="bg-top-digital font-semibold">Download</div>
+                  <div className="grid grid-cols-4 text-top-digital-content-color">
+                    <div className="bg-top-digital-op-25 font-semibold">Titulo do Documento</div>
+                    <div className="bg-top-digital-op-25 font-semibold">Extensão</div>
+                    <div className="bg-top-digital-op-25 font-semibold">Data Criação</div>
+                    <div className="bg-top-digital-op-25 font-semibold">Download</div>
                   </div>
                   {documents &&
                     documents.map((doc, index) => (
-                      <div key={`${index}`} className="grid grid-cols-4">
-                        <div className={`${index % 2 ? "bg-white" : "bg-gray-300"}`}>{doc.title}</div>
-                        <div className={`${index % 2 ? "bg-white" : "bg-gray-300"}`}>{doc.extension}</div>
-                        <div className={`${index % 2 ? "bg-white" : "bg-gray-300"}`}>
+                      <div key={`${index}`} className="grid grid-cols-4 border border-top-digital-op-25">
+                        <div
+                          className={`${
+                            !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                          } text-top-digital-content-color p-1`}
+                        >
+                          {doc.title}
+                        </div>
+                        <div
+                          className={`${
+                            !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                          } text-top-digital-content-color center flex justify-center items-center p-1`}
+                        >
+                          <DocIcon extension={doc.extension} />
+                        </div>
+                        <div
+                          className={`${
+                            !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                          } text-top-digital-content-color p-1`}
+                        >
                           <DateFormat data={doc.createdAt} />
                         </div>
-                        <div className={`${index % 2 ? "bg-white" : "bg-gray-300"}`}>Download</div>
+                        <div
+                          className={`${
+                            !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                          } text-top-digital-content-color flex justify-center items-center p-1 cursor-pointer`}
+                          onClick={(e) => submitDownload(e, doc)}
+                        >
+                          <Download />
+                        </div>
                       </div>
                     ))}
                 </div>

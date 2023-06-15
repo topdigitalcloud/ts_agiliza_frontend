@@ -19,10 +19,10 @@ import { register, reset, registerSelector } from "../../slices/RegisterSlice";
 const numRand: string = String(Math.floor(Math.random() * 10000));
 
 const Register = () => {
-  const [name, setName] = useState(`Usuário de Teste ${numRand}`);
-  const [email, setEmail] = useState(`user${numRand}@example.com`);
-  const [password, setPassword] = useState("123456");
-  const [confirmPassword, setConfirmPassword] = useState("123456");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const navigate = useNavigate();
   const notify = useNotify();
@@ -60,9 +60,7 @@ const Register = () => {
     <div className="flex w-full mt-4">
       <div className="w-full flex items-center justify-center">
         <div className="px-10 py-20 rounded-3xl border-2 border-gray-200  bg-white">
-          <p className="text-top-digital text-4xl font-semibold pb-8 pt-2">
-            Cadastre-se no Agiliza
-          </p>
+          <p className="text-top-digital text-4xl font-semibold pb-8 pt-2">Cadastre-se no Agiliza</p>
           <div className="mt-8">
             <form onSubmit={handleSubmit}>
               <div className="py-2">

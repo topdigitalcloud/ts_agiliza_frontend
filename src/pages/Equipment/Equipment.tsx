@@ -30,8 +30,6 @@ const Equipment = ({ visibleLocations }: Props) => {
     setPage(() => 1);
   }, [apiPageCount]);
 
-  console.log(page, pageCount);
-
   useEffect(() => {
     let latLocations: string = "";
     for (const loc of visibleLocations) {
@@ -58,30 +56,29 @@ const Equipment = ({ visibleLocations }: Props) => {
 
   const handleNext = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    //e.currentTarget.disabled = true;
     setPage((p) => {
       if (p === pageCount) return p;
       return p + 1;
     });
   };
-  console.log("Equipment");
   return (
     <>
       <div className="flex relative">
         <div className="flex gap-2 justify-center items-center absolute left-0 right-0 m-auto w-full h-full">
           <button title="Voltar" disabled={page === 1 || loading === true} onClick={handlePrevious}>
-            <SkipBack />
+            <SkipBack className="text-top-digital hover:text-top-digital-hover" />
           </button>
           <button title="Avançar" disabled={page === pageCount || loading === true} onClick={handleNext}>
-            <SkipForward />
+            <SkipForward className="text-top-digital hover:text-top-digital-hover" />
           </button>
         </div>
-        <div className="flex-1 text-right">
+        <div className="flex-1 text-right font-top-digital-content">
           Página {page} de {pageCount}
         </div>
       </div>
       {!loading && <EquipamentoTable equipamentos={equipamentos} labels={labels} />}
       {loading && <div>Aguarde.....</div>}
+      <div className="mb-14"></div>
     </>
   );
 };

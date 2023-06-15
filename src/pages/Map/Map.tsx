@@ -69,15 +69,15 @@ const Map = ({ locations }: Props) => {
   //Manipulações após carregamento do mapa
   const [infoWindow, setInfoWindow] = useState("");
 
-  const handleInfoWindow = (marker: string) => {
-    addPassiveSupport(false, true, true, false);
-    if (marker === infoWindow) {
+  const handleInfoWindow = (marker: TLocation) => {
+    //addPassiveSupport(false, true, true, false);
+    if (marker._id.latitude === infoWindow) {
       return;
     }
-    setInfoWindow(marker);
+    setInfoWindow(marker._id.latitude);
+    setVisibleLocations([marker]);
   };
 
-  console.log("MAP");
   return (
     <>
       <div className="h-[45vh] w-full" id="map_principal">
@@ -103,26 +103,12 @@ const Map = ({ locations }: Props) => {
                   }}
                   title={eq._id.enderecoEstacao}
                   icon="img/radio-tower.svg"
-                  onClick={(e) => handleInfoWindow(eq._id.latitude)}
+                  onClick={(e) => handleInfoWindow(eq)}
                 >
                   {infoWindow && infoWindow === eq._id.latitude ? (
                     <InfoWindow onCloseClick={() => setInfoWindow("")}>
-                      <div className="border p-2 bg-white" key={`${eq._id.latitude}`}>
-                        <h1 className="font-semibold">{eq._id.enderecoEstacao}</h1>
-                        <table className="shadow-lg bg-white md:w-full text-left">
-                          <tbody>
-                            <tr key="equi0">
-                              <th className="bg-blue-100 border text-left px-8 py-4">Empresa</th>
-                              <th className="bg-blue-100 border text-left px-8 py-4">Altura</th>
-                              <th className="bg-blue-100 border text-left px-8 py-4">Data Licenciamento</th>
-                            </tr>
-                            {/* {eq.Equip.map((equi) => (
-                          <>
-                            <EquipamentoItem key={equi._id} equipamento={equi} />
-                          </>
-                        ))} */}
-                          </tbody>
-                        </table>
+                      <div className="border p-2  bg-top-digital bg-opacity-25" key={`${eq._id.latitude}`}>
+                        <h1 className="font-semibold uppercase">{eq._id.enderecoEstacao}</h1>
                       </div>
                     </InfoWindow>
                   ) : null}

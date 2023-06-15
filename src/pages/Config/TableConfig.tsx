@@ -70,19 +70,19 @@ const TableConfig = () => {
       <table className="min-w-full border-collapse block md:table">
         <thead className="block md:table-header-group">
           <tr className="border border-grey-500 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto  md:relative">
-            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+            <th className="bg-top-digital-op-40 p-2 text-top-digital-content-color font-top-digital-title font-bold md:border md:border-grey-500 text-left block md:table-cell">
               Campo
             </th>
-            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+            <th className="bg-top-digital-op-40 p-2 text-top-digital-content-color font-top-digital-title font-bold md:border md:border-grey-500 text-left block md:table-cell">
               Apelido
             </th>
-            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+            <th className="bg-top-digital-op-40 p-2 text-top-digital-content-color font-top-digital-title font-bold md:border md:border-grey-500 text-left block md:table-cell">
               Ordem
             </th>
-            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+            <th className="bg-top-digital-op-40 p-2 text-top-digital-content-color font-top-digital-title font-bold md:border md:border-grey-500 text-left block md:table-cell">
               Exibir
             </th>
-            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+            <th className="bg-top-digital-op-40 p-2 text-top-digital-content-color font-top-digital-title font-bold md:border md:border-grey-500 text-left block md:table-cell">
               Editar
             </th>
           </tr>
@@ -95,7 +95,7 @@ const TableConfig = () => {
                 <tr
                   key={conf._id}
                   className={` border border-grey-500 md:border-none block md:table-row ${
-                    index % 2 ? "bg-gray-300" : "bg-white"
+                    index % 2 ? "bg-top-digital-op-25" : "bg-white"
                   }`}
                 >
                   <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
@@ -121,7 +121,7 @@ const TableConfig = () => {
                       onClick={(e) => {
                         handleEditForm(e, conf);
                       }}
-                      className="bg-top-digital hover:bg-top-digital-hover text-white font-bold py-1 px-2 border rounded"
+                      className="font-bold py-1 px-2 border rounded"
                     >
                       <Edit />
                     </button>

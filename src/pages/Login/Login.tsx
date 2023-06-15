@@ -14,8 +14,8 @@ import { useNotify } from "../../hooks/useNotify";
 import { login, reset, loginSelector } from "../../slices/LoginSlice";
 
 const Login = () => {
-  const [email, setEmail] = useState<string>("topdigitalcloud@gmail.com");
-  const [password, setPassword] = useState<string>("234567");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   const dispatch = useAppDispatch();
   const notify = useNotify();
@@ -48,9 +48,7 @@ const Login = () => {
       <div className="w-full flex items-center justify-center lg:w-1/2">
         <div className="bg-white px-10 py-20 rounded-3xl border-2 border-gray-200">
           <h1 className="text-5xl font-semibold text-top-digital">Bem Vindo</h1>
-          <p className="font-medium text-lg text-gray-500 mt-4">
-            Entre com suas credenciais do Agiliza
-          </p>
+          <p className="font-medium text-lg text-gray-500 mt-4">Entre com suas credenciais do Agiliza</p>
           <div className="mt-8">
             <form onSubmit={handleSubmit}>
               <div>
@@ -78,9 +76,7 @@ const Login = () => {
                 </label>
               </div>
               <div className="mt-8 flex justify-between items-center">
-                <button className="font-medium text-base text-top-digital">
-                  Esqueci minha senha
-                </button>
+                <button className="font-medium text-base text-top-digital">Esqueci minha senha</button>
               </div>
               <div className="mt-8 flex flex-col gap-y-4">
                 {!loading && (
@@ -101,9 +97,7 @@ const Login = () => {
                 )}
               </div>
               <div className="mt-3 text-red-700">
-                {error && typeof error === "string" && (
-                  <Message msg={error} type="error" />
-                )}
+                {error && typeof error === "string" && <Message msg={error} type="error" />}
               </div>
             </form>
           </div>
@@ -118,11 +112,7 @@ const Login = () => {
         </div>
       </div>
       <div className="hidden lg:flex h-full w-1/2 items-center justify-center bg-gray-200">
-        <img
-          src="/img/img-top-1536x1536.png"
-          alt=""
-          className="h-full w-full"
-        />
+        <img src="/img/img-top-1536x1536.png" alt="" className="h-full w-full" />
       </div>
     </div>
   );

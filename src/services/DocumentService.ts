@@ -1,3 +1,4 @@
+import { TDocument } from "../Interfaces/IDocument";
 import { api, requestConfig } from "../utils/config";
 
 const insertDoc = async (data: any, token: string) => {
@@ -85,6 +86,35 @@ const getEquipmentDocs = async (id: string | undefined, token: string) => {
   }
 };
 
+//Get
+const downloadDoc = async (doc: TDocument | undefined, token: string) => {
+  const config = requestConfig("GET", null, token);
+
+  try {
+    const res = await fetch(api + "/documents/download/" + doc?._id, config)
+      .then((res) =>
+        res.blob().then((blob) => {
+          // Creating new object of PDF/DOC file
+          const fileURL = window.URL.createObjectURL(blob);
+          // Setting various property values
+          let alink = document.createElement("a");
+          alink.href = fileURL;
+          const fileName = doc?.title
+            .replace(/ /g, "_")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLocaleLowerCase();
+          alink.download = fileName + doc!.extension;
+          alink.click();
+        })
+      )
+      .catch((err) => err);
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const DocumentService = {
   insertDoc,
   updateDoc,
@@ -92,6 +122,7 @@ const DocumentService = {
   getAllDocs,
   getDocById,
   getEquipmentDocs,
+  downloadDoc,
 };
 
 export default DocumentService;
