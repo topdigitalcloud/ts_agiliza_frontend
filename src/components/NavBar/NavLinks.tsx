@@ -5,23 +5,23 @@ import { ChevronUp, ChevronDown } from "lucide-react";
 
 type Props = {
   auth: boolean;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const NavLinks = (props: Props) => {
+const NavLinks = ({ auth, open, setOpen }: Props) => {
   const [heading, setHeading] = useState("");
   return (
-    <div className="flex">
+    <>
       {links.map((link) => (
-        <div className="flex" key={link.name}>
-          {link.auth === props.auth && (
-            <div>
+        <div key={link.name}>
+          {link.auth === auth && (
+            <>
               <div className="px-3 text-left md:cursor-pointer group">
                 <h1
-                  className="py-7 flex justify-between items-center md:pr-0 pr-5 group"
+                  className="py-7 flex justify-between items-center md:pr-0 pr-5 group text-top-digital-link-color hover:text-top-digital-link-hover"
                   onClick={() => {
-                    heading !== link.name
-                      ? setHeading(link.name)
-                      : setHeading("");
+                    heading !== link.name ? setHeading(link.name) : setHeading("");
                   }}
                 >
                   {link.name}
@@ -41,13 +41,8 @@ const NavLinks = (props: Props) => {
                       <div className="bg-white p-5 gap-10">
                         {link.sublinks.map((mysublinks) => (
                           <div key={mysublinks.name}>
-                            <li className="text-sm text-gray-600 my-2.5">
-                              <NavLink
-                                to={mysublinks.link}
-                                className="hover:text-top-digital"
-                              >
-                                {mysublinks.name}
-                              </NavLink>
+                            <li className="text-base my-2.5">
+                              <NavLink to={mysublinks.link}>{mysublinks.name}</NavLink>
                             </li>
                           </div>
                         ))}
@@ -56,34 +51,23 @@ const NavLinks = (props: Props) => {
                   </div>
                 )}
               </div>
-              <div
-                className={`${heading === link.name ? "md:hidden" : "hidden"}`}
-              >
+              <div className={`${heading === link.name ? "md:hidden" : "hidden"}`}>
                 {/* sublinks */}
                 {link.sublinks.map((sLink) => (
                   <div key={sLink.name}>
-                    <div
-                      className={`${
-                        heading === link.name ? "md:hidden" : "hidden"
-                      }`}
-                    >
+                    <div onClick={() => setOpen(!open)}>
                       <li className="py-3 pl-5">
-                        <NavLink
-                          to={sLink.link}
-                          className="hover:text-top-digital"
-                        >
-                          {sLink.name}
-                        </NavLink>
+                        <NavLink to={sLink.link}>{sLink.name}</NavLink>
                       </li>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </>
           )}
         </div>
       ))}
-    </div>
+    </>
   );
 };
 

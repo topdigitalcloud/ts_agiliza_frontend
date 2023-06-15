@@ -32,6 +32,21 @@ const getEquipamentosByLocation = async (id: string, token: string) => {
   }
 };
 
+//getEquipamentsByID
+
+const getEquipamentoById = async (id: string | undefined, token: string) => {
+  const config = requestConfig("GET", null, token);
+
+  try {
+    const res = await fetch(api + "/equipamentos/" + id, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 //get Equipments of visible map area
 
 const getVisibleEquipments = async (data: any, token: string) => {
@@ -68,6 +83,7 @@ const EquipmentService = {
   getEquipamentosByLocation,
   getVisibleEquipments,
   uploadEquipments,
+  getEquipamentoById,
 };
 
 export default EquipmentService;

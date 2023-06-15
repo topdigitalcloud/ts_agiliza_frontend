@@ -5,6 +5,7 @@ import ProfileReducer from "./slices/ProfileSlice";
 import EquipmentReducer from "./slices/EquipmentSlice";
 import LocationReducer from "./slices/LocationSlice";
 import ConfigReducer from "./slices/ConfigSlice";
+import DocumentReducer from "./slices/DocumentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     EquipmentReducer,
     LocationReducer,
     ConfigReducer,
+    DocumentReducer,
   },
 });
 

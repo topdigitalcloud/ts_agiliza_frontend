@@ -4,9 +4,6 @@ import { GoogleMap, InfoWindow, MarkerF, useJsApiLoader } from "@react-google-ma
 //hooks
 import { useState, useCallback, useMemo, useEffect } from "react";
 
-//styles - ideal é ter tudo em tailwind
-import "./Map.css";
-
 //preciso analisar essa importação para entender o que ela faz
 //lembrei - tem a ver com event listener do DOM
 //Depois vou verificar mais a fundo
@@ -80,14 +77,15 @@ const Map = ({ locations }: Props) => {
     setInfoWindow(marker);
   };
 
+  console.log("MAP");
   return (
-    <div className="map" id="map_principal">
-      {!isLoaded ? (
-        <h1>Loading...</h1>
-      ) : (
-        <>
+    <>
+      <div className="h-[45vh] w-full" id="map_principal">
+        {!isLoaded ? (
+          <h1>Loading...</h1>
+        ) : (
           <GoogleMap
-            mapContainerClassName="map_container"
+            mapContainerClassName="w-full h-full"
             onLoad={onLoad}
             onUnmount={onUnmount}
             onDragEnd={map !== null ? getEquipmentsVisible : () => {}}
@@ -109,7 +107,7 @@ const Map = ({ locations }: Props) => {
                 >
                   {infoWindow && infoWindow === eq._id.latitude ? (
                     <InfoWindow onCloseClick={() => setInfoWindow("")}>
-                      <div className="map_info_window" key={`${eq._id.latitude}`}>
+                      <div className="border p-2 bg-white" key={`${eq._id.latitude}`}>
                         <h1 className="font-semibold">{eq._id.enderecoEstacao}</h1>
                         <table className="shadow-lg bg-white md:w-full text-left">
                           <tbody>
@@ -131,10 +129,12 @@ const Map = ({ locations }: Props) => {
                 </MarkerF>
               ))}
           </GoogleMap>
-          <Equipment visibleLocations={visibleLocations} />
-        </>
-      )}
-    </div>
+        )}
+      </div>
+      <div className="mt-2 h-full w-full overflow-y-auto">
+        <Equipment visibleLocations={visibleLocations} />
+      </div>
+    </>
   );
 };
 

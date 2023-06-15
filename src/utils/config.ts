@@ -1,12 +1,8 @@
 export const api: string = process.env.REACT_APP_URL_BASE_API + "/api";
 export const uploads: string = process.env.REACT_APP_URL_BASE_API + "/uploads";
+export const urlapp: string = String(process.env.REACT_APP_URL_BASE);
 
-export const requestConfig = (
-  method: string,
-  data: any,
-  token: string | null = null,
-  image: any | null = null
-) => {
+export const requestConfig = (method: string, data: any, token: string | null = null, image: any | null = null) => {
   let config: any = {};
 
   if (image) {

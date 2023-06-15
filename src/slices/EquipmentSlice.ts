@@ -14,6 +14,8 @@ const initialState: IEquipmentStates = {
   success: false,
   loading: false,
   message: null,
+  page: 1,
+  pageCount: 0,
 };
 
 //get all equipamentos
@@ -37,13 +39,35 @@ export const getAllEquipamentosByLocation = createAsyncThunk(
   }
 );
 
+//get equipment by ID
+
+export const getEquipamentoById = createAsyncThunk(
+  "locations/getEquipamentoById",
+  async (id: string | undefined, thunkAPI) => {
+    const appState = thunkAPI.getState() as RootState;
+    const token = appState.LoginReducer.user!.token;
+    const data = await EquipmentService.getEquipamentoById(id, token);
+    return data;
+  }
+);
+
 //get all equipments of visible map area
-export const getVisibleEquipments = createAsyncThunk("equipments/getVisibleEquipments", async (ids: any, thunkAPI) => {
-  const appState = thunkAPI.getState() as RootState;
-  const token = appState.LoginReducer.user!.token;
-  const data = await EquipmentService.getVisibleEquipments(ids, token);
-  return data;
-});
+export const getVisibleEquipments = createAsyncThunk(
+  "equipments/getVisibleEquipments",
+  async (data: any, thunkAPI): Promise<any> => {
+    const appState = thunkAPI.getState() as RootState;
+    const token = appState.LoginReducer.user!.token;
+    const res = await EquipmentService.getVisibleEquipments(data, token);
+
+    //check for errors
+
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+
+    return res;
+  }
+);
 
 //upload CSV file
 export const uploadEquipments = createAsyncThunk("equipments/uploadEquipments", async (csv: FormData, thunkAPI) => {
@@ -76,7 +100,7 @@ export const EquipmentSlice = createSlice({
     builder
       .addCase(getEquipamentos.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true;
+        state.success = false;
         state.error = false;
         state.equipamentos = action.payload;
       })
@@ -91,7 +115,7 @@ export const EquipmentSlice = createSlice({
       })
       .addCase(getAllEquipamentosByLocation.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true;
+        state.success = false;
         state.error = null;
         state.equipamentos = action.payload;
       })
@@ -106,10 +130,12 @@ export const EquipmentSlice = createSlice({
       })
       .addCase(getVisibleEquipments.fulfilled, (state, action) => {
         state.loading = false;
-        state.success = true;
+        state.success = false;
         state.error = null;
         state.equipamentos = action.payload[1];
         state.labels = action.payload[0];
+        state.page = action.payload[2];
+        state.pageCount = action.payload[3];
       })
       .addCase(getVisibleEquipments.pending, (state) => {
         state.loading = true;
@@ -130,6 +156,21 @@ export const EquipmentSlice = createSlice({
         state.error = false;
       })
       .addCase(uploadEquipments.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
+      })
+      .addCase(getEquipamentoById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = false;
+        state.error = null;
+        state.equipamento = action.payload;
+      })
+      .addCase(getEquipamentoById.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getEquipamentoById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.success = false;

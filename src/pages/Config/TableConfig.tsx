@@ -3,10 +3,10 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 
 //icons
-import { X, Save } from "lucide-react";
+import { X, Save, Edit } from "lucide-react";
 
 //redux
-import { reset, getConfig, setConfig, configSelector } from "../../slices/ConfigSlice";
+import { reset, setConfig, configSelector } from "../../slices/ConfigSlice";
 
 //types
 import { TConfig } from "../../Interfaces/IConfig";
@@ -22,7 +22,7 @@ const TableConfig = () => {
   });
 
   const dispatch = useAppDispatch();
-  const { config, loading, success, error } = useAppSelector(configSelector);
+  const { config, loading, success } = useAppSelector(configSelector);
 
   const handleEditForm = (e: MouseEvent<HTMLButtonElement>, config: TConfig) => {
     e.preventDefault();
@@ -66,38 +66,64 @@ const TableConfig = () => {
   }
 
   return (
-    <div className="flex justify-center mt-5 ">
-      <table className="shadow-lg bg-white text-left">
-        <thead>
-          <tr>
-            <th className="bg-blue-100 border text-left px-4 py-2">Campo</th>
-            <th className="bg-blue-100 border text-left px-4 py-2">Apelido</th>
-            <th className="bg-blue-100 border text-left px-4 py-2">Ordem</th>
-            <th className="bg-blue-100 border text-left px-4 py-2">Exibir</th>
-            <th className="bg-blue-100 border text-left px-4 py-2"></th>
+    <div className="container mx-auto mt-2">
+      <table className="min-w-full border-collapse block md:table">
+        <thead className="block md:table-header-group">
+          <tr className="border border-grey-500 md:border-none block md:table-row absolute -top-full md:top-auto -left-full md:left-auto  md:relative">
+            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+              Campo
+            </th>
+            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+              Apelido
+            </th>
+            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+              Ordem
+            </th>
+            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+              Exibir
+            </th>
+            <th className="bg-gray-600 p-2 text-white font-bold md:border md:border-grey-500 text-left block md:table-cell">
+              Editar
+            </th>
           </tr>
         </thead>
         {!isEditing && (
-          <tbody>
+          <tbody className="block md:table-row-group">
             {config &&
               config.length !== 0 &&
-              config.map((conf) => (
-                <tr key={conf._id}>
-                  <td className="border px-4 py-2">{conf.campo}</td>
-                  <td className="border px-4 py-2">{conf.label}</td>
-                  <td className="border px-4 py-2">{conf.order}</td>
-                  <td className="border px-4 py-2">
+              config.map((conf, index) => (
+                <tr
+                  key={conf._id}
+                  className={` border border-grey-500 md:border-none block md:table-row ${
+                    index % 2 ? "bg-gray-300" : "bg-white"
+                  }`}
+                >
+                  <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                    <span className="inline-block w-1/3 md:hidden font-bold">Campo</span>
+                    {conf.campo}
+                  </td>
+                  <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                    <span className="inline-block w-1/3 md:hidden font-bold">Apelido</span>
+                    {conf.label}
+                  </td>
+                  <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                    <span className="inline-block w-1/3 md:hidden font-bold">Ordem</span>
+                    {conf.order}
+                  </td>
+                  <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                    <span className="inline-block w-1/3 md:hidden font-bold">Exibir</span>
                     {conf.visible && <input type="checkbox" checked readOnly disabled />}
                     {!conf.visible && <input type="checkbox" readOnly disabled />}
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                    <span className="inline-block w-1/3 md:hidden font-bold">Editar</span>
                     <button
                       onClick={(e) => {
                         handleEditForm(e, conf);
                       }}
-                      className="bg-top-digital hover:bg-top-digital-hover hover:text-white px-4 py-2 rounded-md"
+                      className="bg-top-digital hover:bg-top-digital-hover text-white font-bold py-1 px-2 border rounded"
                     >
-                      Editar
+                      <Edit />
                     </button>
                   </td>
                 </tr>
@@ -105,20 +131,26 @@ const TableConfig = () => {
           </tbody>
         )}
         {isEditing && (
-          <tbody>
-            <tr key={editForm._id}>
-              <td className="border px-4 py-2">{editForm.campo}</td>
-              <td className="border px-4 py-2">
+          <tbody className="block md:table-row-group">
+            <tr key={editForm._id} className="border border-grey-500 md:border-none block md:table-row bg-gray-300}">
+              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                <span className="inline-block w-1/3 md:hidden font-bold ">Campo</span>
+                {editForm.campo}
+              </td>
+              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                <span className="inline-block w-1/3 md:hidden font-bold">Label</span>
                 <input
+                  className="leading-none text-gray-900 p-3 w-64 focus:outline-none focus:border-blue-700 mt-4 bg-gray-100 border rounded border-gray-200"
                   type="text"
                   name="label"
                   value={editForm.label}
                   onChange={(e) => setEditForm({ ...editForm, [e.target.name]: e.target.value })}
                 />
               </td>
-              <td className="border px-4 py-2 border-top-digital">
+              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell border-top-digital">
+                <span className="inline-block w-1/3 md:hidden font-bold">Ordem</span>
                 <input
-                  className="w-10 outline-21"
+                  className="leading-none text-gray-900 p-3 w-20 focus:outline-none focus:border-blue-700 mt-4 bg-gray-100 border rounded border-gray-200"
                   type="number"
                   name="order"
                   value={editForm.order}
@@ -130,7 +162,8 @@ const TableConfig = () => {
                 />
               </td>
 
-              <td className="border px-4 py-2">
+              <td className="p-2 md:border md:border-grey-500 text-left block md:table-cell">
+                <span className="inline-block w-1/3 md:hidden font-bold">Exibir</span>
                 {editForm.visible ? (
                   <input
                     type="checkbox"
@@ -156,12 +189,13 @@ const TableConfig = () => {
                   />
                 )}
               </td>
-              <td className="border px-4 py-2">
-                <button title="Cancelar Edição" className="px-1 py-2" onClick={handleCancelEdit}>
-                  <X />
-                </button>
+              <td className="p-2  md:border md:border-grey-500 text-left block md:table-cell top-0 right-0">
+                <span className="inline-block w-1/3 md:hidden font-bold">Editar</span>
                 <button title="Salvar Edição" className="px-1 py-2" onClick={handleSaveEdit}>
                   <Save />
+                </button>
+                <button title="Cancelar Edição" className="px-1 py-2" onClick={handleCancelEdit}>
+                  <X />
                 </button>
               </td>
             </tr>

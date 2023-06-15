@@ -38,9 +38,11 @@ const Upload = (props: Props) => {
       formData.append("csvfile", csvFile, csvFile.name);
       dispatch(uploadEquipments(formData));
 
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         dispatch(reset());
       }, 2000);
+
+      return () => clearTimeout(timer);
     } else {
       notify("Favor Selecionar um arquivo", "E");
     }

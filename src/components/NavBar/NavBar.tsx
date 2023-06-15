@@ -1,6 +1,9 @@
 import { NavLink } from "react-router-dom";
 import { X, Menu } from "lucide-react";
 
+//url for logo
+import { urlapp } from "../../utils/config";
+
 //Hooks
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
@@ -17,7 +20,7 @@ function NavBar() {
   const { auth } = useAuth();
 
   //State of mobile menu
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   //dispatch for logout
   const dispatch = useAppDispatch();
@@ -42,32 +45,29 @@ function NavBar() {
 
   return (
     //Nav que abraça todo o cabeçalho
-    <nav className="bg-slate-300">
+    <nav className="bg-top-digital bg-opacity-25">
       {/* DIV1 principal cabeçalho */}
-      <div className="flex items-center justify-around font-medium">
+      <div className="flex items-center justify-around text-base font-top-digital-nav border-b-[1px] border-top-digital">
         {/* DIV11 que contem a logomarca ou menu modo mobile */}
         <div className="flex justify-between md:w-auto w-full z-50 p-5">
           {/* DIV111 para subir um pouco a logo */}
           <div className="mb-3">
             <NavLink to="/">
               <img
-                src="img/logo-top-digital-agi.png"
+                src={`${urlapp}/img/logo-top-digital-agi.png`}
                 alt="Agiliza Top Digital"
                 className="md:cursor-pointer h-12 w-32"
               />
             </NavLink>
           </div>
           {/* DIV112 visível no modo mobile */}
-          <div
-            className="text-3xl md:hidden mt-5"
-            onClick={() => setOpen(!open)}
-          >
+          <div className="text-normal md:hidden mt-5" onClick={() => setOpen(!open)}>
             {open ? <X className="" /> : <Menu />}
           </div>
         </div>
         {/* DIV12 que abraça os itens do Menu */}
 
-        <ul className="md:flex hidden uppercase items-center gap-8 font-[Poppins]">
+        <ul className="md:flex hidden items-center gap-8">
           {auth ? (
             <li>
               <NavLink to="/" className="py-7 px-3 inline-block">
@@ -88,13 +88,13 @@ function NavBar() {
               </li>
             </>
           )}
-          <NavLinks key="nav_desktop" auth={auth} />
+          <NavLinks key="nav_desktop" auth={auth} open={open} setOpen={setOpen} />
           {auth && (
             <li>
               <form>
                 <button
                   onClick={handleLogout}
-                  className="py-7 px-3 inline-block font-[Poppins] uppercase"
+                  className="py-7 px-3 inline-block text-top-digital-link-color hover:text-top-digital-link-hover"
                 >
                   Logout
                 </button>
@@ -118,7 +118,7 @@ function NavBar() {
               Home
             </NavLink>
           </li>
-          <NavLinks auth={auth} />
+          <NavLinks auth={auth} open={open} setOpen={setOpen} />
           <div className="py-5"></div>
         </ul>
       </div>

@@ -1,10 +1,10 @@
 //Hooks
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 //redux
-import { reset, getConfig, setConfig, configSelector } from "../../slices/ConfigSlice";
+import { reset, getConfig, configSelector } from "../../slices/ConfigSlice";
 
 //components
 import TableConfig from "./TableConfig";
@@ -13,7 +13,7 @@ type Props = {};
 
 const Config = (props: Props) => {
   const dispatch = useAppDispatch();
-  const { config, loading, success, error } = useAppSelector(configSelector);
+  const { success } = useAppSelector(configSelector);
 
   useEffect(() => {
     dispatch(getConfig());

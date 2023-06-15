@@ -20,13 +20,15 @@ const Home = () => {
     dispatch(getLocations());
   }, [dispatch]);
 
+  console.log("Home");
+
   if (loading) {
     return <p>Carregando...</p>;
   }
   return (
-    <div>
+    <div className="flex justify-center items-center container mx-auto">
       {locations && locations.length !== 0 && (
-        <div className="w-auto text-center py-3">
+        <div className="text-center flex-1 w-full">
           <h2 className="font-semibold text-top-digital">Meu Mapa</h2>
           <Map locations={locations} />
         </div>

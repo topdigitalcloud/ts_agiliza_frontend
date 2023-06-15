@@ -48,4 +48,6 @@ export interface IEquipmentStates {
   success: boolean;
   loading: boolean;
   message: string | null;
+  page: number;
+  pageCount: number;
 }

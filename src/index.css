@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  a {
+    @apply text-top-digital-link-color;
+  }
+
+  a:hover {
+    @apply text-top-digital-link-hover;
+  }
+}
