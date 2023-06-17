@@ -160,7 +160,7 @@ const Site = (props: Props) => {
                     </h2>
                   </div>
                   <div className="mx-auto w-full max-w-[550px]">
-                    <form onSubmit={submitHandle}>
+                    <form encType="multipart/form-data" onSubmit={submitHandle}>
                       <div className="mb-5">
                         <label
                           htmlFor="title"

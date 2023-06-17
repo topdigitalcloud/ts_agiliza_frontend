@@ -38,11 +38,11 @@ const Upload = (props: Props) => {
       formData.append("csvfile", csvFile, csvFile.name);
       dispatch(uploadEquipments(formData));
 
-      const timer = setTimeout(() => {
-        dispatch(reset());
-      }, 10000);
+      // const timer = setTimeout(() => {
+      //   dispatch(reset());
+      // }, 10000);
 
-      return () => clearTimeout(timer);
+      //return () => clearTimeout(timer);
     } else {
       notify("Favor Selecionar um arquivo", "E");
     }
@@ -78,7 +78,7 @@ const Upload = (props: Props) => {
               <h1 className="text-3xl text-top-digital font-top-digital-title">Upload do arquivo CSV</h1>
             </div>
             <div className="mx-auto w-full max-w-[550px]">
-              <form onSubmit={submitHandle}>
+              <form encType="multipart/form-data" onSubmit={submitHandle}>
                 <div className="mb-5">
                   <label
                     htmlFor="csvfile"
