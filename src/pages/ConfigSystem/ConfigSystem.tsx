@@ -4,14 +4,14 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { useEffect } from "react";
 
 //redux
-import { reset, getConfig, configSelector } from "../../slices/ConfigSlice";
+import { reset, getConfig, configSelector } from "../../slices/ConfigSystemSlice";
 
 //components
-import TableConfig from "./TableConfig";
+import TableSystemConfig from "./TableSystemConfig";
 
 type Props = {};
 
-const Config = (props: Props) => {
+const ConfigSystem = (props: Props) => {
   const dispatch = useAppDispatch();
   const { success } = useAppSelector(configSelector);
 
@@ -25,7 +25,7 @@ const Config = (props: Props) => {
     }
   }, [success, dispatch]);
 
-  return <TableConfig />;
+  return <TableSystemConfig />;
 };
 
-export default Config;
+export default ConfigSystem;

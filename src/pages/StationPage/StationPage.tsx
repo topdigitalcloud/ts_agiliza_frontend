@@ -9,8 +9,8 @@ import useAppSelector from "../../hooks/useAppSelector";
 
 //redux
 import { reset, getEquipmentDocs, documentSelector, insertDoc, downloadDoc } from "../../slices/DocumentSlice";
-import { getEquipamentoById, equipmentSelector } from "../../slices/EquipmentSlice";
-import { getConfig, configSelector } from "../../slices/ConfigSystemSlice";
+import { getStationById, stationSelector } from "../../slices/StationSlice";
+import { getConfig, configSelector } from "../../slices/ConfigStationSlice";
 
 //types
 import { TEquipment } from "../../Interfaces/IEquipment";
@@ -20,10 +20,14 @@ import DateFormat from "../../components/DateFormat";
 import { Download } from "lucide-react";
 import DocIcon from "../../components/DocIcon";
 import { TDocument } from "../../Interfaces/IDocument";
+import { TStation } from "../../Interfaces/IStation";
+
+//pages
+import System from "../System/System";
 
 type Props = {};
 
-const Site = (props: Props) => {
+const StationPage = (props: Props) => {
   //Notify
   const notify = useNotify();
 
@@ -36,15 +40,17 @@ const Site = (props: Props) => {
   const dispatchEquipment = useAppDispatch();
   const dispatchConfig = useAppDispatch();
   const { documents, error: docError, success: docSuccess, loading: docLoading } = useAppSelector(documentSelector);
-  const { equipamento } = useAppSelector(equipmentSelector);
+  const { station } = useAppSelector(stationSelector);
   const { config } = useAppSelector(configSelector);
 
   useEffect(() => {
     dispatchConfig(getConfig());
   }, [dispatchConfig]);
 
+  console.log(config);
+
   useEffect(() => {
-    dispatchEquipment(getEquipamentoById(id));
+    dispatchEquipment(getStationById(id));
   }, [id, dispatchEquipment]);
 
   useEffect(() => {
@@ -62,7 +68,7 @@ const Site = (props: Props) => {
     //build form data
     if (formdocument) {
       const formData = new FormData();
-      formData.append("equipment", equipamento!._id);
+      formData.append("equipment", station!._id);
       formData.append("title", title);
       formData.append("document", formdocument, formdocument.name);
       if (!title) {
@@ -107,7 +113,7 @@ const Site = (props: Props) => {
       <div className="flex flex-wrap flex-col md:flex-row md:flex-nowrap ">
         <div className="bg-white p-2 m-2 flex-1 order-2 md:order-1 overflow-x-auto">
           {config &&
-            equipamento &&
+            station &&
             config.map((conf, index) => (
               <div key={`label${index}`} className="grid grid-cols-2">
                 <div
@@ -122,7 +128,7 @@ const Site = (props: Props) => {
                     index % 2 ? "bg-white" : "bg-top-digital-op-25"
                   } text-top-digital-content-color font-normal font-top-digital-content`}
                 >
-                  {equipamento[conf.campo as keyof TEquipment]}
+                  {station[conf.campo as keyof TStation]}
                 </div>
               </div>
             ))}
@@ -156,7 +162,7 @@ const Site = (props: Props) => {
                   <div className="mx-auto w-full max-w-[550px] mb-6">
                     <h2 className="font-top-digital-content font-normal text-top-digital-content-color">
                       Upload de documentação relacionada ao Site
-                      <span className="font-bold"> {equipamento && equipamento._id}</span>
+                      <span className="font-bold"> {station && station._id}</span>
                     </h2>
                   </div>
                   <div className="mx-auto w-full max-w-[550px]">
@@ -266,8 +272,11 @@ const Site = (props: Props) => {
           )}
         </div>
       </div>
+      <div className="mt-2 h-full w-full overflow-y-auto">
+        <System idStation={id} />
+      </div>
     </div>
   );
 };
 
-export default Site;
+export default StationPage;

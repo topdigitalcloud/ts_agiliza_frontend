@@ -2,7 +2,7 @@
 import { GoogleMap, InfoWindow, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 
 //hooks
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 //preciso analisar essa importação para entender o que ela faz
 //lembrei - tem a ver com event listener do DOM
@@ -10,14 +10,12 @@ import { useState, useCallback, useMemo, useEffect } from "react";
 import addPassiveSupport from "../../utils/passiveSupport";
 
 //types
+import { TStation } from "../../Interfaces/IStation";
 import { TLocation } from "../../Interfaces/ILocation";
 
 //components
 //import Equipment from "../Equipment/Equipment";
-import Equipment from "../Equipment/Equipment";
-
-//context of locations
-//import { VisibleLocationContext } from "../../context/VisibleLocationContext";
+import Station from "../Station/Station";
 
 //parameters: touchstart, wheel, mousewheel, touchmove
 addPassiveSupport(true, false, false, true);
@@ -50,19 +48,22 @@ const Map = ({ locations }: Props) => {
     setMap(null);
   }, []);
 
-  const getEquipmentsVisible = () => {
+  const getStationsVisible = () => {
     const ne = map.getBounds().getNorthEast();
     const sw = map.getBounds().getSouthWest();
     const visible: TLocation[] = [];
-    for (const location of locations) {
-      const latitude = parseFloat(location._id.latitude);
-      const longitude = parseFloat(location._id.longitude);
+    for (const station of locations) {
+      const latitude = parseFloat(station.Latitude);
+      const longitude = parseFloat(station.Longitude);
       if (latitude > sw.lat() && latitude < ne.lat() && longitude > sw.lng() && longitude < ne.lng()) {
-        visible.push(location);
+        visible.push(station);
       }
     }
+    console.log(visible);
     setVisibleLocations([...visible]);
   };
+
+  //console.log(visibleStations);
 
   //fim do processo de montagem do mapa
 
@@ -71,11 +72,11 @@ const Map = ({ locations }: Props) => {
 
   const handleInfoWindow = (marker: TLocation) => {
     //addPassiveSupport(false, true, true, false);
-    if (marker._id.latitude === infoWindow) {
+    if (marker.Latitude === infoWindow) {
       return;
     }
-    setInfoWindow(marker._id.latitude);
-    setVisibleLocations([marker]);
+    setInfoWindow(marker.Latitude);
+    //setVisibleStations([marker]);
   };
 
   return (
@@ -88,27 +89,27 @@ const Map = ({ locations }: Props) => {
             mapContainerClassName="w-full h-full"
             onLoad={onLoad}
             onUnmount={onUnmount}
-            onDragEnd={map !== null ? getEquipmentsVisible : () => {}}
-            onZoomChanged={map !== null ? getEquipmentsVisible : () => {}}
+            onDragEnd={map !== null ? getStationsVisible : () => {}}
+            onZoomChanged={map !== null ? getStationsVisible : () => {}}
             zoom={zoom}
             center={center}
           >
             {locations &&
               locations.map((eq) => (
                 <MarkerF
-                  key={eq._id.latitude}
+                  key={eq._id}
                   position={{
-                    lat: parseFloat(eq._id.latitude),
-                    lng: parseFloat(eq._id.longitude),
+                    lat: parseFloat(eq.Latitude),
+                    lng: parseFloat(eq.Longitude),
                   }}
-                  title={eq._id.enderecoEstacao}
+                  title={eq.EnderecoEstacao}
                   icon="img/radio-tower.svg"
                   onClick={(e) => handleInfoWindow(eq)}
                 >
-                  {infoWindow && infoWindow === eq._id.latitude ? (
+                  {infoWindow && infoWindow === eq.Latitude ? (
                     <InfoWindow onCloseClick={() => setInfoWindow("")}>
-                      <div className="border p-2  bg-top-digital bg-opacity-25" key={`${eq._id.latitude}`}>
-                        <h1 className="font-semibold uppercase">{eq._id.enderecoEstacao}</h1>
+                      <div className="border p-2  bg-top-digital bg-opacity-25" key={`${eq.Latitude}`}>
+                        <h1 className="font-semibold uppercase">{eq.EnderecoEstacao}</h1>
                       </div>
                     </InfoWindow>
                   ) : null}
@@ -118,7 +119,7 @@ const Map = ({ locations }: Props) => {
         )}
       </div>
       <div className="mt-2 h-full w-full overflow-y-auto">
-        <Equipment visibleLocations={visibleLocations} />
+        <Station visibleLocations={visibleLocations} />
       </div>
     </>
   );

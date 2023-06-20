@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import ConfigService from "../services/ConfigService";
+import ConfigService from "../services/ConfigSystemService";
 import { RootState } from "../store";
 
 //interface of equipments
-import { IConfigStates } from "../Interfaces/IConfig";
+import { IConfigSystemStates } from "../Interfaces/IConfigSystem";
 
-const initialState: IConfigStates = {
+const initialState: IConfigSystemStates = {
   config: [],
   error: false,
   success: false,
@@ -16,7 +16,7 @@ const initialState: IConfigStates = {
 
 //get all equipamentos
 
-export const getConfig = createAsyncThunk("config/getConfig", async (_, thunkAPI) => {
+export const getConfig = createAsyncThunk("configsystem/getConfig", async (_, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
   const data = await ConfigService.getConfig(token);
@@ -24,7 +24,7 @@ export const getConfig = createAsyncThunk("config/getConfig", async (_, thunkAPI
 });
 
 //upload CSV file
-export const setConfig = createAsyncThunk("config/setConfig", async (configs: any, thunkAPI) => {
+export const setConfig = createAsyncThunk("configsystem/setConfig", async (configs: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
 
@@ -39,8 +39,8 @@ export const setConfig = createAsyncThunk("config/setConfig", async (configs: an
   return data;
 });
 
-export const ConfigSlice = createSlice({
-  name: "equipamento",
+export const ConfigSystemSlice = createSlice({
+  name: "configsystem",
   initialState,
   reducers: {
     reset: (state) => {
@@ -87,6 +87,6 @@ export const ConfigSlice = createSlice({
 
 //getAllEquipamentosByLocation
 
-export const { reset } = ConfigSlice.actions;
-export const configSelector = (state: RootState) => state.ConfigReducer;
-export default ConfigSlice.reducer;
+export const { reset } = ConfigSystemSlice.actions;
+export const configSelector = (state: RootState) => state.ConfigSystemReducer;
+export default ConfigSystemSlice.reducer;

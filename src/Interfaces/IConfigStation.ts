@@ -1,4 +1,4 @@
-export type TConfig = {
+export type TConfigStation = {
   _id: string;
   campo: string;
   label: string;
@@ -6,8 +6,8 @@ export type TConfig = {
   visible: boolean;
 };
 
-export interface IConfigStates {
-  config: TConfig[];
+export interface IConfigStationStates {
+  config: TConfigStation[];
   error: any;
   success: boolean;
   loading: boolean;

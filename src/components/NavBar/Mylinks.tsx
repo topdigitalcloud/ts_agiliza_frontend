@@ -12,7 +12,8 @@ export const links = [
     auth: true,
     sublinks: [
       { name: "Upload", link: "/upload" },
-      { name: "Configurações", link: "/config" },
+      { name: "Configurações Estações", link: "/configstation" },
+      { name: "Configurações Sistemas", link: "/configsystem" },
       // { name: "ART", link: "/art" },
       // { name: "Laudos Radiométricos", link: "/laudos" },
       // { name: "Projetos", link: "/projetos" },

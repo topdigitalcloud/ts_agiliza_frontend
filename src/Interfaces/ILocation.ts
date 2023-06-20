@@ -1,11 +1,8 @@
-type Location = {
-  latitude: string;
-  longitude: string;
-  enderecoEstacao: string;
-};
-
 export type TLocation = {
-  _id: Location;
+  _id: string;
+  Latitude: string;
+  Longitude: string;
+  EnderecoEstacao: string;
 };
 
 export interface ILocationStates {

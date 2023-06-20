@@ -1,23 +1,23 @@
 import { useEffect, useState, MouseEvent } from "react";
+import { TStation } from "../../Interfaces/IStation";
 import { TLocation } from "../../Interfaces/ILocation";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
-import { equipmentSelector, getVisibleEquipments } from "../../slices/EquipmentSlice";
+import { stationSelector, getVisibleStations } from "../../slices/StationSlice";
 
 //icons
 import { SkipBack, SkipForward } from "lucide-react";
 
 //component
-import EquipamentoTable from "../../components/Equipment/EquipmentTable";
-import { api } from "../../utils/config";
+import StationTable from "./StationTable";
 
 type Props = {
   visibleLocations: TLocation[];
 };
 
-const Equipment = ({ visibleLocations }: Props) => {
+const Station = ({ visibleLocations }: Props) => {
   const dispatch = useAppDispatch();
-  const { equipamentos, labels, loading, page: apiPage, pageCount: apiPageCount } = useAppSelector(equipmentSelector);
+  const { stations, labels, loading, page: apiPage, pageCount: apiPageCount } = useAppSelector(stationSelector);
   const [page, setPage] = useState<number>(1);
   const [pageCount, setPageCount] = useState<number>(0);
 
@@ -33,7 +33,7 @@ const Equipment = ({ visibleLocations }: Props) => {
   useEffect(() => {
     let latLocations: string = "";
     for (const loc of visibleLocations) {
-      latLocations += `${loc._id.latitude},`;
+      latLocations += `${loc.Latitude},`;
     }
 
     if (latLocations !== "") {
@@ -42,7 +42,7 @@ const Equipment = ({ visibleLocations }: Props) => {
         page,
       };
 
-      dispatch(getVisibleEquipments(objData));
+      dispatch(getVisibleStations(objData));
     }
   }, [visibleLocations, page, dispatch]);
 
@@ -76,11 +76,11 @@ const Equipment = ({ visibleLocations }: Props) => {
           Página {page} de {pageCount}
         </div>
       </div>
-      {!loading && <EquipamentoTable equipamentos={equipamentos} labels={labels} />}
+      {!loading && <StationTable stations={stations} labels={labels} />}
       {loading && <div>Aguarde.....</div>}
       <div className="mb-14"></div>
     </>
   );
 };
 
-export default Equipment;
+export default Station;

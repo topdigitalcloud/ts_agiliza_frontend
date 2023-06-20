@@ -4,8 +4,11 @@ import RegisterReducer from "./slices/RegisterSlice";
 import ProfileReducer from "./slices/ProfileSlice";
 import EquipmentReducer from "./slices/EquipmentSlice";
 import LocationReducer from "./slices/LocationSlice";
-import ConfigReducer from "./slices/ConfigSlice";
+import ConfigSystemReducer from "./slices/ConfigSystemSlice";
+import ConfigStationReducer from "./slices/ConfigStationSlice";
 import DocumentReducer from "./slices/DocumentSlice";
+import StationReducer from "./slices/StationSlice";
+import SystemReducer from "./slices/SystemSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,8 +17,11 @@ export const store = configureStore({
     ProfileReducer,
     EquipmentReducer,
     LocationReducer,
-    ConfigReducer,
+    ConfigSystemReducer,
+    ConfigStationReducer,
     DocumentReducer,
+    StationReducer,
+    SystemReducer,
   },
 });
 

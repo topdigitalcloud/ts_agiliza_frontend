@@ -6,14 +6,14 @@ import useAppSelector from "../../hooks/useAppSelector";
 import { X, Save, Edit } from "lucide-react";
 
 //redux
-import { reset, setConfig, configSelector } from "../../slices/ConfigSlice";
+import { reset, setConfig, configSelector } from "../../slices/ConfigStationSlice";
 
 //types
-import { TConfig } from "../../Interfaces/IConfig";
+import { TConfigStation } from "../../Interfaces/IConfigStation";
 
-const TableConfig = () => {
+const TableStationConfig = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState<TConfig>({
+  const [editForm, setEditForm] = useState<TConfigStation>({
     _id: "",
     campo: "",
     label: "",
@@ -24,7 +24,7 @@ const TableConfig = () => {
   const dispatch = useAppDispatch();
   const { config, loading, success } = useAppSelector(configSelector);
 
-  const handleEditForm = (e: MouseEvent<HTMLButtonElement>, config: TConfig) => {
+  const handleEditForm = (e: MouseEvent<HTMLButtonElement>, config: TConfigStation) => {
     e.preventDefault();
     setIsEditing(true);
     setEditForm({ ...config });
@@ -206,4 +206,4 @@ const TableConfig = () => {
   );
 };
 
-export default TableConfig;
+export default TableStationConfig;
