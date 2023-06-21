@@ -18,50 +18,48 @@ const initialState: IDocumentStates = {
 export const insertDoc = createAsyncThunk("document/insertDoc", async (doc: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await DocumentService.insertDoc(doc, token);
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+  const res = await DocumentService.insertDoc(doc, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-  return data;
+  return res;
 });
 
 //put
 export const updateDoc = createAsyncThunk("document/updateDoc", async (docData: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-
-  const data = await DocumentService.updateDoc({ title: docData.title, id: docData.id }, token);
-
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+  const res = await DocumentService.updateDoc({ title: docData.title, id: docData.id }, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-
-  return data;
+  return res;
 });
 
 //delete
 export const deleteDoc = createAsyncThunk("document/deleteDoc", async (id: string, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-
-  const data = await DocumentService.deleteDoc(id, token);
-
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+  const res = await DocumentService.deleteDoc(id, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-
-  return data;
+  return res;
 });
 
 //get
 export const getDocById = createAsyncThunk("document/getDocById", async (id: string, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await DocumentService.getDocById(id, token);
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+  const res = await DocumentService.getDocById(id, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-  return data;
+  return res;
 });
 
 //get
@@ -70,11 +68,12 @@ export const getEquipmentDocs = createAsyncThunk(
   async (id: string | undefined, thunkAPI) => {
     const appState = thunkAPI.getState() as RootState;
     const token = appState.LoginReducer.user!.token;
-    const data = await DocumentService.getEquipmentDocs(id, token);
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
+    const res = await DocumentService.getEquipmentDocs(id, token);
+    //check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
     }
-    return data;
+    return res;
   }
 );
 
@@ -82,22 +81,24 @@ export const getEquipmentDocs = createAsyncThunk(
 export const downloadDoc = createAsyncThunk("document/downloadDoc", async (doc: TDocument | undefined, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await DocumentService.downloadDoc(doc, token);
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+  const res = await DocumentService.downloadDoc(doc, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-  return data;
+  return res;
 });
 
 //get
 export const getAllDocs = createAsyncThunk("document/getAllDocs", async (_, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await DocumentService.getAllDocs(token);
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+  const res = await DocumentService.getAllDocs(token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-  return data;
+  return res;
 });
 
 export const DocumentSlice = createSlice({

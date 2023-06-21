@@ -67,13 +67,10 @@ export const getVisibleStations = createAsyncThunk(
     const appState = thunkAPI.getState() as RootState;
     const token = appState.LoginReducer.user!.token;
     const res = await StationService.getVisibleStations(data, token);
-
     //check for errors
-
     if (res.errors) {
       return thunkAPI.rejectWithValue(res.errors[0]);
     }
-
     return res;
   }
 );
@@ -85,16 +82,12 @@ export const getVisibleStations = createAsyncThunk(
 export const uploadStations = createAsyncThunk("stations/uploadStations", async (csv: FormData, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-
-  const data = await StationService.uploadStations(csv, token);
-
+  const res = await StationService.uploadStations(csv, token);
   //check for errors
-
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-
-  return data;
+  return res;
 });
 
 export const StationSlice = createSlice({

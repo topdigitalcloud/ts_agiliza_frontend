@@ -28,17 +28,14 @@ const initialState: ILoginStates = {
 
 //sign in an user
 
-export const login = createAsyncThunk(
-  "login/login",
-  async (user: any, thunkAPI) => {
-    const data = await LoginService.login(user);
-
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
-    }
-    return data;
+export const login = createAsyncThunk("login/login", async (user: any, thunkAPI) => {
+  const res = await LoginService.login(user);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-);
+  return res;
+});
 
 //logout an user
 

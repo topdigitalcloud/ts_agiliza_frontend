@@ -30,7 +30,11 @@ const System = ({ idStation }: Props) => {
 
   useEffect(() => {
     if (typeof idStation === "string") {
-      dispatch(getSystemsByStation(idStation));
+      const objData = {
+        idStation,
+        page,
+      };
+      dispatch(getSystemsByStation(objData));
     }
   }, [idStation, page, dispatch]);
 

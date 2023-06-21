@@ -1,11 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import RegisterService from "../services/RegisterService";
-import {
-  IRegisterStates,
-  TRegister,
-  TRegisterFields,
-} from "../Interfaces/IRegisterStates";
+import { IRegisterStates, TRegister, TRegisterFields } from "../Interfaces/IRegisterStates";
 import { RootState } from "../store";
 
 const initialState: IRegisterStates = {
@@ -15,17 +11,14 @@ const initialState: IRegisterStates = {
   loading: false,
 };
 
-export const register = createAsyncThunk(
-  "register/register",
-  async (user: TRegisterFields, thunkAPI) => {
-    const data = await RegisterService.register(user);
-
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
-    }
-    return data;
+export const register = createAsyncThunk("register/register", async (user: TRegisterFields, thunkAPI) => {
+  const res = await RegisterService.register(user);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-);
+  return res;
+});
 
 export const RegisterSlice = createSlice({
   name: "register",
@@ -43,15 +36,12 @@ export const RegisterSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        register.fulfilled,
-        (state, action: PayloadAction<TRegister>) => {
-          state.loading = false;
-          state.success = true;
-          state.error = null;
-          state.user = action.payload;
-        }
-      )
+      .addCase(register.fulfilled, (state, action: PayloadAction<TRegister>) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.user = action.payload;
+      })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;

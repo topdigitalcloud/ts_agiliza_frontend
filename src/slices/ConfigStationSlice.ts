@@ -19,24 +19,24 @@ const initialState: IConfigStationStates = {
 export const getConfig = createAsyncThunk("configstation/getConfig", async (_, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await ConfigStationService.getConfig(token);
-  return data;
+  const res = await ConfigStationService.getConfig(token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
+  }
+  return res;
 });
 
 //upload CSV file
 export const setConfig = createAsyncThunk("configstation/setConfig", async (configs: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-
-  const data = await ConfigStationService.setConfig(configs, token);
-
+  const res = await ConfigStationService.setConfig(configs, token);
   //check for errors
-
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-
-  return data;
+  return res;
 });
 
 export const ConfigStationSlice = createSlice({

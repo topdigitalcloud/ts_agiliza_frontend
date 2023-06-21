@@ -21,6 +21,7 @@ import ConfigStation from "./pages/ConfigStation/ConfigStation";
 import ConfigSystem from "./pages/ConfigSystem/ConfigSystem";
 //import Site from "./pages/Site/Site";
 import StationPage from "./pages/StationPage/StationPage";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -44,6 +45,7 @@ function App() {
         <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />
         <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }

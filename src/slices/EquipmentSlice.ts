@@ -23,8 +23,12 @@ const initialState: IEquipmentStates = {
 export const getEquipamentos = createAsyncThunk("equipments/getAll", async (_, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await EquipmentService.getEquipamentos(token);
-  return data;
+  const res = await EquipmentService.getEquipamentos(token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
+  }
+  return res;
 });
 
 //get all equipments by location
@@ -34,8 +38,12 @@ export const getAllEquipamentosByLocation = createAsyncThunk(
   async (id: string, thunkAPI) => {
     const appState = thunkAPI.getState() as RootState;
     const token = appState.LoginReducer.user!.token;
-    const data = await EquipmentService.getEquipamentosByLocation(id, token);
-    return data;
+    const res = await EquipmentService.getEquipamentosByLocation(id, token);
+    //check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+    return res;
   }
 );
 
@@ -46,8 +54,12 @@ export const getEquipamentoById = createAsyncThunk(
   async (id: string | undefined, thunkAPI) => {
     const appState = thunkAPI.getState() as RootState;
     const token = appState.LoginReducer.user!.token;
-    const data = await EquipmentService.getEquipamentoById(id, token);
-    return data;
+    const res = await EquipmentService.getEquipamentoById(id, token);
+    //check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+    return res;
   }
 );
 
@@ -58,13 +70,10 @@ export const getVisibleEquipments = createAsyncThunk(
     const appState = thunkAPI.getState() as RootState;
     const token = appState.LoginReducer.user!.token;
     const res = await EquipmentService.getVisibleEquipments(data, token);
-
     //check for errors
-
     if (res.errors) {
       return thunkAPI.rejectWithValue(res.errors[0]);
     }
-
     return res;
   }
 );
@@ -73,16 +82,12 @@ export const getVisibleEquipments = createAsyncThunk(
 export const uploadEquipments = createAsyncThunk("equipments/uploadEquipments", async (csv: FormData, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-
-  const data = await EquipmentService.uploadEquipments(csv, token);
-
+  const res = await EquipmentService.uploadEquipments(csv, token);
   //check for errors
-
-  if (data.errors) {
-    return thunkAPI.rejectWithValue(data.errors[0]);
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-
-  return data;
+  return res;
 });
 
 export const EquipmentSlice = createSlice({

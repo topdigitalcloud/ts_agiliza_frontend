@@ -20,11 +20,10 @@ export const getLocations = createAsyncThunk("locations/getLocations", async (_,
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
   const res = await LocationService.getLocations(token);
-
+  //check for errors
   if (res.errors) {
     return thunkAPI.rejectWithValue(res.errors[0]);
   }
-
   return res;
 });
 

@@ -12,42 +12,35 @@ const initialState: IUpdateStates = {
 };
 
 //get user detalis
-export const profile = createAsyncThunk(
-  "profile/profile",
-  async (user, thunkAPI): Promise<any> => {
-    const appState = thunkAPI.getState() as RootState;
-    const token = appState.LoginReducer.user!.token;
-    const data = await ProfileService.profile(user, token);
-    return data;
-  }
-);
+export const profile = createAsyncThunk("profile/profile", async (user, thunkAPI): Promise<any> => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+  const data = await ProfileService.profile(user, token);
+  return data;
+});
 
 //change password action
-export const changePassword = createAsyncThunk(
-  "profile/password",
-  async (user: any, thunkAPI): Promise<any> => {
-    const appState = thunkAPI.getState() as RootState;
-    const token = appState.LoginReducer.user!.token;
-    const data = await ProfileService.password(user, token);
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
-    }
-    return data;
+export const changePassword = createAsyncThunk("profile/password", async (user: any, thunkAPI): Promise<any> => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+  const res = await ProfileService.password(user, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-);
+  return res;
+});
 
-export const update = createAsyncThunk(
-  "profile/update",
-  async (user: any, thunkAPI): Promise<any> => {
-    const appState = thunkAPI.getState() as RootState;
-    const token = appState.LoginReducer.user!.token;
-    const data = await ProfileService.update(user, token);
-    if (data.errors) {
-      return thunkAPI.rejectWithValue(data.errors[0]);
-    }
-    return data;
+export const update = createAsyncThunk("profile/update", async (user: any, thunkAPI): Promise<any> => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+  const res = await ProfileService.update(user, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-);
+  return res;
+});
 
 export const ProfileSlice = createSlice({
   name: "profile",
@@ -95,15 +88,12 @@ export const ProfileSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        changePassword.fulfilled,
-        (state, action: PayloadAction<TUpdated>) => {
-          state.loading = false;
-          state.success = true;
-          state.error = null;
-          state.user = action.payload;
-        }
-      )
+      .addCase(changePassword.fulfilled, (state, action: PayloadAction<TUpdated>) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+        state.user = action.payload;
+      })
       .addCase(changePassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;

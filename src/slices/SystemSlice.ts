@@ -22,24 +22,36 @@ const initialState: ISystemStates = {
 export const getSystems = createAsyncThunk("systems/getSystems", async (_, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await SystemService.getSystems(token);
-  return data;
+  const res = await SystemService.getSystems(token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
+  }
+  return res;
 });
 
 //get all equipments by location
-export const getSystemsByStation = createAsyncThunk("systems/getSystemsByStation", async (id: string, thunkAPI) => {
+export const getSystemsByStation = createAsyncThunk("systems/getSystemsByStation", async (data: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await SystemService.getSystemsByStation(id, token);
-  return data;
+  const res = await SystemService.getSystemsByStation(data, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
+  }
+  return res;
 });
 
 //get equipment by ID
 export const getSystemById = createAsyncThunk("systems/getSystemById", async (id: string | undefined, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const data = await SystemService.getSystemById(id, token);
-  return data;
+  const res = await SystemService.getSystemById(id, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
+  }
+  return res;
 });
 
 export const SystemSlice = createSlice({
