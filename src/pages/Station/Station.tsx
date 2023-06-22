@@ -1,5 +1,4 @@
 import { useEffect, useState, MouseEvent } from "react";
-import { TStation } from "../../Interfaces/IStation";
 import { TLocation } from "../../Interfaces/ILocation";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";

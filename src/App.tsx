@@ -23,6 +23,9 @@ import ConfigSystem from "./pages/ConfigSystem/ConfigSystem";
 import StationPage from "./pages/StationPage/StationPage";
 import Footer from "./components/Footer/Footer";
 
+//context //context
+import { ContextSystemProvider } from "./contexts/ContextSystem";
+
 function App() {
   const { auth, loading } = useAuth();
 
@@ -40,7 +43,18 @@ function App() {
         <Route path="/configstation" element={auth ? <ConfigStation /> : <Navigate to="/login" />} />
         <Route path="/configsystem" element={auth ? <ConfigSystem /> : <Navigate to="/login" />} />
         <Route path="/upload" element={auth ? <Upload /> : <Navigate to="/login" />} />
-        <Route path="/stationpage/:id" element={auth ? <StationPage /> : <Navigate to="/login" />} />
+        <Route
+          path="/stationpage/:id"
+          element={
+            auth ? (
+              <ContextSystemProvider>
+                <StationPage />
+              </ContextSystemProvider>
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
         <Route path="/password" element={auth ? <AlterPassword /> : <Navigate to="/login" />} />
         <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />
         <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />

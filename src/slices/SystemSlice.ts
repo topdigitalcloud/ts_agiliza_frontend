@@ -54,6 +54,18 @@ export const getSystemById = createAsyncThunk("systems/getSystemById", async (id
   return res;
 });
 
+//set Label for Station
+export const setLabelSystem = createAsyncThunk("systems/setLabelSystem", async (data: any, thunkAPI): Promise<any> => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+  const res = await SystemService.setLabelSystem(data, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
+  }
+  return res;
+});
+
 export const SystemSlice = createSlice({
   name: "system",
   initialState,
@@ -114,11 +126,23 @@ export const SystemSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.success = false;
+      })
+      .addCase(setLabelSystem.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+      })
+      .addCase(setLabelSystem.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(setLabelSystem.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
       });
   },
 });
-
-//getAllEquipamentosByLocation
 
 export const { reset } = SystemSlice.actions;
 export const systemSelector = (state: RootState) => state.SystemReducer;

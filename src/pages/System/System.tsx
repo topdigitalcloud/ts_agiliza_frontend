@@ -10,10 +10,11 @@ import { SkipBack, SkipForward } from "lucide-react";
 import SystemTable from "./SystemTable";
 
 type Props = {
-  idStation: string | undefined;
+  stationId: string | undefined;
+  refreshSystems: boolean;
 };
 
-const System = ({ idStation }: Props) => {
+const System = ({ stationId, refreshSystems }: Props) => {
   const dispatch = useAppDispatch();
   const { systems, labels, loading, page: apiPage, pageCount: apiPageCount } = useAppSelector(systemSelector);
   const [page, setPage] = useState<number>(1);
@@ -29,16 +30,14 @@ const System = ({ idStation }: Props) => {
   }, [apiPageCount]);
 
   useEffect(() => {
-    if (typeof idStation === "string") {
+    if (typeof stationId === "string") {
       const objData = {
-        idStation,
+        stationId,
         page,
       };
       dispatch(getSystemsByStation(objData));
     }
-  }, [idStation, page, dispatch]);
-
-  console.log("Epa", labels, idStation);
+  }, [stationId, page, dispatch, refreshSystems]);
 
   const handlePrevious = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

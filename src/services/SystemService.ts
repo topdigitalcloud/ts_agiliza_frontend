@@ -15,24 +15,35 @@ const getSystems = async (token: string) => {
   }
 };
 
-//getAllEquipamentosByLocation
-
-const getSystemsByStation = async (id: string, token: string) => {
-  const config = requestConfig("GET", null, token);
-
+//get systemns that belong to station
+const getSystemsByStation = async (data: any, token: string) => {
+  const config = requestConfig("POST", data, token);
   try {
-    const res = await fetch(api + "/systems/station/" + id, config)
+    const res = await fetch(api + "/systems/station/", config)
       .then((res) => res.json())
       .catch((err) => err);
-
     return res;
   } catch (error) {
     console.error(error);
   }
 };
 
-//getEquipamentsByID
+//set Label for System
+const setLabelSystem = async (data: any, token: string) => {
+  const config = requestConfig("POST", data, token);
+  console.log(data);
+  try {
+    const res = await fetch(api + "/systems/labelsystem", config)
+      .then((res) => res.json())
+      .catch((err) => err);
 
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//getEquipamentsByID
 const getSystemById = async (id: string | undefined, token: string) => {
   const config = requestConfig("GET", null, token);
 
@@ -50,6 +61,7 @@ const SystemService = {
   getSystems,
   getSystemsByStation,
   getSystemById,
+  setLabelSystem,
 };
 
 export default SystemService;

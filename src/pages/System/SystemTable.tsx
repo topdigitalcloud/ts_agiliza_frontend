@@ -1,4 +1,13 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react";
+
+//icons
+import { Edit } from "lucide-react";
+
+//types
+import { LabelSystem } from "../../contexts/ContextSystem";
+
+//context
+import { ContextSystem } from "../../contexts/ContextSystem";
 
 type Props = {
   systems: any[];
@@ -6,6 +15,17 @@ type Props = {
 };
 
 const SystemTable = ({ systems, labels }: Props) => {
+  const { labelSystem, setLabelSystem } = useContext<LabelSystem>(ContextSystem);
+
+  const handleOpenLabelSystemForm = (e: React.MouseEvent<HTMLElement>, idSystem: string, label: string) => {
+    e.preventDefault();
+    window.scroll({
+      top: 0,
+      behavior: "smooth",
+    });
+    setLabelSystem({ ...labelSystem, openedLabelSystemForm: true, idSystem: idSystem, labelSystem: label });
+  };
+
   return (
     <>
       {systems && systems.length !== 0 && (
@@ -40,12 +60,31 @@ const SystemTable = ({ systems, labels }: Props) => {
                         key={`${label[0]}${system._id}`}
                         className="whitespace-nowrap px-6 py-4 font-normal text-sm font-top-digital-content"
                       >
-                        {label[0] === "_id" && (
-                          <Link className="underline" key={`lnk${system._id}`} to={`/site/${system[label[0]]}`}>
-                            {system[label[0]]}
-                          </Link>
+                        {label[0] === "Label" && (
+                          <div
+                            className="w-full text-center"
+                            onClick={(e) => {
+                              handleOpenLabelSystemForm(e, system._id, system[label[0]]);
+                            }}
+                          >
+                            <button
+                              className="underline hover:text-top-digital-link-hover"
+                              title="Coloque um apelido na Estação"
+                              onClick={(e) => {
+                                e.preventDefault();
+                              }}
+                            >
+                              {system[label[0]] === "" ? (
+                                <p>
+                                  <Edit />
+                                </p>
+                              ) : (
+                                system[label[0]]
+                              )}
+                            </button>
+                          </div>
                         )}
-                        {label[0] !== "_id" && system[label[0]]}
+                        {label[0] !== "Label" && system[label[0]]}
                       </td>
                     ))}
                 </tr>

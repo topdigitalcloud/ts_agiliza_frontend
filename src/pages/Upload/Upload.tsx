@@ -5,7 +5,7 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 
 //Slice
-import { equipmentSelector, uploadEquipments, reset } from "../../slices/EquipmentSlice";
+import { stationSelector, uploadStations, reset } from "../../slices/StationSlice";
 
 //notify
 import { useNotify } from "../../hooks/useNotify";
@@ -18,7 +18,7 @@ const Upload = (props: Props) => {
 
   //Redux
   const dispatch = useAppDispatch();
-  const { loading, error, success } = useAppSelector(equipmentSelector);
+  const { loading, error, success } = useAppSelector(stationSelector);
 
   const [csvFile, setCsvFile] = useState<File>();
 
@@ -36,7 +36,7 @@ const Upload = (props: Props) => {
     if (csvFile) {
       const formData = new FormData();
       formData.append("csvfile", csvFile, csvFile.name);
-      dispatch(uploadEquipments(formData));
+      dispatch(uploadStations(formData));
 
       // const timer = setTimeout(() => {
       //   dispatch(reset());
@@ -58,7 +58,7 @@ const Upload = (props: Props) => {
   }, [error, notify, dispatch]);
 
   if (loading) {
-    return <div>Realizando o Upload....</div>;
+    return <div>Realizando o Upload. Isso pode levar um tempo....</div>;
   }
 
   return (

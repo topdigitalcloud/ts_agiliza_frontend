@@ -75,8 +75,20 @@ export const getVisibleStations = createAsyncThunk(
   }
 );
 
-// ,
-// ,
+//set Label for Station
+export const setLabelStation = createAsyncThunk(
+  "stations/setLabelStation",
+  async (data: any, thunkAPI): Promise<any> => {
+    const appState = thunkAPI.getState() as RootState;
+    const token = appState.LoginReducer.user!.token;
+    const res = await StationService.setLabelStation(data, token);
+    //check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+    return res;
+  }
+);
 
 //upload CSV file
 export const uploadStations = createAsyncThunk("stations/uploadStations", async (csv: FormData, thunkAPI) => {
@@ -182,11 +194,23 @@ export const StationSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
         state.success = false;
+      })
+      .addCase(setLabelStation.fulfilled, (state, action) => {
+        state.loading = false;
+        state.success = true;
+        state.error = null;
+      })
+      .addCase(setLabelStation.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(setLabelStation.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        state.success = false;
       });
   },
 });
-
-//getAllEquipamentosByLocation
 
 export const { reset } = StationSlice.actions;
 export const stationSelector = (state: RootState) => state.StationReducer;
