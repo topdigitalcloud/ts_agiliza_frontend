@@ -12,6 +12,7 @@ export const links = [
     auth: true,
     sublinks: [
       { name: "Upload", link: "/upload" },
+      { name: "Tipos de Documentos", link: "/doctype" },
       { name: "Configurações Estações", link: "/configstation" },
       { name: "Configurações Sistemas", link: "/configsystem" },
       // { name: "ART", link: "/art" },

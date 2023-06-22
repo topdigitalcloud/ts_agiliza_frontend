@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import DocumentService from "../services/DocumentService";
 import { RootState } from "../store";
 
-//interface of equipments
+//interface of Documents
 import { IDocumentStates, TDocument } from "../Interfaces/IDocument";
 
 const initialState: IDocumentStates = {
@@ -63,19 +63,16 @@ export const getDocById = createAsyncThunk("document/getDocById", async (id: str
 });
 
 //get
-export const getEquipmentDocs = createAsyncThunk(
-  "document/getEquipmentDocs",
-  async (id: string | undefined, thunkAPI) => {
-    const appState = thunkAPI.getState() as RootState;
-    const token = appState.LoginReducer.user!.token;
-    const res = await DocumentService.getEquipmentDocs(id, token);
-    //check for errors
-    if (res.errors) {
-      return thunkAPI.rejectWithValue(res.errors[0]);
-    }
-    return res;
+export const getStationDocs = createAsyncThunk("document/getStationDocs", async (id: string | undefined, thunkAPI) => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+  const res = await DocumentService.getStationDocs(id, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
   }
-);
+  return res;
+});
 
 //get
 export const downloadDoc = createAsyncThunk("document/downloadDoc", async (doc: TDocument | undefined, thunkAPI) => {
@@ -173,17 +170,17 @@ export const DocumentSlice = createSlice({
         state.error = action.payload;
         state.success = false;
       })
-      .addCase(getEquipmentDocs.fulfilled, (state, action) => {
+      .addCase(getStationDocs.fulfilled, (state, action) => {
         state.loading = false;
         state.success = false;
         state.error = null;
         state.documents = action.payload;
       })
-      .addCase(getEquipmentDocs.pending, (state) => {
+      .addCase(getStationDocs.pending, (state) => {
         state.loading = true;
         state.error = false;
       })
-      .addCase(getEquipmentDocs.rejected, (state, action) => {
+      .addCase(getStationDocs.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         state.success = false;
@@ -220,8 +217,6 @@ export const DocumentSlice = createSlice({
       });
   },
 });
-
-//getAllEquipamentosByLocation
 
 export const { reset } = DocumentSlice.actions;
 export const documentSelector = (state: RootState) => state.DocumentReducer;

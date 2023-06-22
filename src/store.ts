@@ -7,6 +7,7 @@ import LocationReducer from "./slices/LocationSlice";
 import ConfigSystemReducer from "./slices/ConfigSystemSlice";
 import ConfigStationReducer from "./slices/ConfigStationSlice";
 import DocumentReducer from "./slices/DocumentSlice";
+import DocTypeReducer from "./slices/DocumentTypeSlice";
 import StationReducer from "./slices/StationSlice";
 import SystemReducer from "./slices/SystemSlice";
 
@@ -20,6 +21,7 @@ export const store = configureStore({
     ConfigSystemReducer,
     ConfigStationReducer,
     DocumentReducer,
+    DocTypeReducer,
     StationReducer,
     SystemReducer,
   },

@@ -22,6 +22,7 @@ import ConfigSystem from "./pages/ConfigSystem/ConfigSystem";
 //import Site from "./pages/Site/Site";
 import StationPage from "./pages/StationPage/StationPage";
 import Footer from "./components/Footer/Footer";
+import DocType from "./pages/DocType/DocType";
 
 //context //context
 import { ContextSystemProvider } from "./contexts/ContextSystem";
@@ -43,6 +44,7 @@ function App() {
         <Route path="/configstation" element={auth ? <ConfigStation /> : <Navigate to="/login" />} />
         <Route path="/configsystem" element={auth ? <ConfigSystem /> : <Navigate to="/login" />} />
         <Route path="/upload" element={auth ? <Upload /> : <Navigate to="/login" />} />
+        <Route path="/doctype" element={auth ? <DocType /> : <Navigate to="/login" />} />
         <Route
           path="/stationpage/:id"
           element={

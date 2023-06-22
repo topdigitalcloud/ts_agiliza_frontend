@@ -8,7 +8,7 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 
 //redux
-import { reset, getEquipmentDocs, documentSelector, insertDoc, downloadDoc } from "../../slices/DocumentSlice";
+import { reset, getStationDocs, documentSelector, insertDoc, downloadDoc } from "../../slices/DocumentSlice";
 import {
   getStationById,
   stationSelector,
@@ -21,6 +21,7 @@ import {
   setLabelSystem as setSystemSliceStation,
   reset as resetSliceSystem,
 } from "../../slices/SystemSlice";
+import { getDocTypes, docTypeSelector } from "../../slices/DocumentTypeSlice";
 
 //context
 import { ContextSystem } from "../../contexts/ContextSystem";
@@ -30,13 +31,14 @@ import DateFormat from "../../components/DateFormat";
 import { LabelSystem } from "../../contexts/ContextSystem";
 
 //icons
-import { Download } from "lucide-react";
+import { Download, Link } from "lucide-react";
 import DocIcon from "../../components/DocIcon";
 import { TDocument } from "../../Interfaces/IDocument";
 import { TStation } from "../../Interfaces/IStation";
 
 //pages
 import System from "../System/System";
+import SystemLinkDocument from "../System/SystemLinkDocument";
 
 type Props = {};
 
@@ -49,9 +51,21 @@ const StationPage = (props: Props) => {
   const dispatchStation = useAppDispatch();
   const dispatchSystem = useAppDispatch();
   const dispatchConfig = useAppDispatch();
+  const dispatchTypes = useAppDispatch();
   const { config } = useAppSelector(configSelector);
+  //get doc types to fill form to upload document
+  const { docTypes } = useAppSelector(docTypeSelector);
 
-  /*Inicio Formulário de Label do Sistema*/
+  /*Inicio Formulário de Vinculação dos Sistemas*/
+  const [openSystemLinkForm, setOpenSystemLinkForm] = useState<boolean>(false);
+  const [stationId, setStationId] = useState<string | undefined>("");
+  const [documentId, setDocumentId] = useState<string>("");
+  const handleOpenFormLinkSystem = (idStation: string | undefined, idDocument: string) => {
+    setOpenSystemLinkForm(true);
+    setStationId(idStation);
+    setDocumentId(idDocument);
+  };
+  /*Fim Formulário de Vinculação dos Sistemas*/
 
   //Extract context with initial state bellow
   /* 
@@ -107,10 +121,11 @@ const StationPage = (props: Props) => {
   const { documents, error: docError, success: docSuccess, loading: docLoading } = useAppSelector(documentSelector);
   const [formdocument, setFormDocument] = useState<File>();
   const [title, setTitle] = useState<string>("");
+  const [docTypeId, setDocTypeId] = useState<string>("0");
   const [openedUploadForm, setOpenedUploadForm] = useState<boolean>(false);
   const dispatchDocument = useAppDispatch();
   useEffect(() => {
-    dispatchDocument(getEquipmentDocs(id));
+    dispatchDocument(getStationDocs(id));
   }, [id, dispatchDocument, docSuccess]);
 
   const submitDownload = (e: React.MouseEvent<HTMLDivElement>, doc: TDocument) => {
@@ -124,8 +139,10 @@ const StationPage = (props: Props) => {
     //build form data
     if (formdocument) {
       const formData = new FormData();
-      formData.append("equipment", station!._id);
+      formData.append("stationId", station!._id);
       formData.append("title", title);
+      formData.append("systemId", "");
+      formData.append("typeId", docTypeId);
       formData.append("document", formdocument, formdocument.name);
       if (!title) {
         notify("Favor inserir um título para o documento", "E");
@@ -171,6 +188,10 @@ const StationPage = (props: Props) => {
   }, [dispatchConfig]);
 
   useEffect(() => {
+    dispatchTypes(getDocTypes());
+  }, [dispatchTypes]);
+
+  useEffect(() => {
     dispatchStation(getStationById(id));
   }, [id, dispatchStation, success]);
 
@@ -212,6 +233,15 @@ const StationPage = (props: Props) => {
                   </div>
                 </div>
               ))}
+            {openSystemLinkForm && (
+              <div className="absolute bg-white top-0 right-0 w-full h-full border">
+                <SystemLinkDocument
+                  setOpenSystemLinkForm={setOpenSystemLinkForm}
+                  stationId={stationId}
+                  documentId={documentId}
+                />
+              </div>
+            )}
             {station && openedLabelStationForm && (
               <div className="absolute bg-white top-0 right-0 w-full h-full border">
                 <div className="flex flex-col items-center justify-center font-bold p-2 text-top-digital text-lg">
@@ -367,7 +397,32 @@ const StationPage = (props: Props) => {
                             className="w-full appearance-none rounded-md border border-top-digital-op-25 bg-white py-3 px-6 text-base font-medium text-top-digital-content-color outline-none focus:border-top-digital focus:shadow-md focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
                           />
                         </div>
-
+                        <div className="mb-5">
+                          <label
+                            htmlFor="typeDoc"
+                            className="mb-3 block text-base font-medium text-top-digital-content-color"
+                          >
+                            Tipo do documento
+                          </label>
+                          <select
+                            name="typeDoc"
+                            value={docTypeId}
+                            onChange={(e) => setDocTypeId(e.target.value)}
+                            id="typeDoc"
+                            className="w-full rounded-md border border-top-digital-op-25 bg-white py-3 px-6 text-base font-medium text-top-digital-content-color  focus:border-top-digital focus:shadow-md  focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
+                          >
+                            <option key="0" value="0">
+                              Selecione um Tipo
+                            </option>
+                            {docTypes &&
+                              docTypes.length > 0 &&
+                              docTypes.map((docType) => (
+                                <option key={docType._id} value={docType._id}>
+                                  {docType.typeName}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
                         <div className="mb-5">
                           <label
                             htmlFor="document"
@@ -410,21 +465,39 @@ const StationPage = (props: Props) => {
                 )}
                 {documents && documents.length !== 0 && (
                   <div className="bg-white p-2 m-2 flex-1 order-2 md:order-1 overflow-x-auto">
-                    <div className="grid grid-cols-4 text-top-digital-content-color">
+                    <div className="grid grid-cols-5 text-top-digital-content-color">
                       <div className="bg-top-digital-op-25 font-semibold">Titulo do Documento</div>
+                      <div className="bg-top-digital-op-25 font-semibold">Tipo</div>
                       <div className="bg-top-digital-op-25 font-semibold">Extensão</div>
                       <div className="bg-top-digital-op-25 font-semibold">Data Criação</div>
                       <div className="bg-top-digital-op-25 font-semibold">Download</div>
                     </div>
                     {documents &&
                       documents.map((doc, index) => (
-                        <div key={`${index}`} className="grid grid-cols-4 border border-top-digital-op-25">
+                        <div key={`${index}`} className="grid grid-cols-5 border border-top-digital-op-25">
                           <div
                             className={`${
                               !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
                             } text-top-digital-content-color p-1`}
                           >
                             {doc.title}
+                          </div>
+                          <div
+                            title="Vincular Documento com Sistemas"
+                            className={`${
+                              !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                            } text-top-digital-content-color p-1 flex`}
+                          >
+                            {doc.tipo?.typeName || "-"}
+                            {doc.tipo?.toSystem && (
+                              <Link
+                                className="cursor-pointer text-top-digital-hover"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleOpenFormLinkSystem(id, doc.tipo!._id);
+                                }}
+                              />
+                            )}
                           </div>
                           <div
                             className={`${

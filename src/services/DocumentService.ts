@@ -73,11 +73,11 @@ const getDocById = async (id: string, token: string) => {
 };
 
 //Get
-const getEquipmentDocs = async (id: string | undefined, token: string) => {
+const getStationDocs = async (id: string | undefined, token: string) => {
   const config = requestConfig("GET", null, token);
 
   try {
-    const res = await fetch(api + "/documents/equipment/" + id, config)
+    const res = await fetch(api + "/documents/station/" + id, config)
       .then((res) => res.json())
       .catch((err) => err);
     return res;
@@ -121,7 +121,7 @@ const DocumentService = {
   deleteDoc,
   getAllDocs,
   getDocById,
-  getEquipmentDocs,
+  getStationDocs,
   downloadDoc,
 };
 

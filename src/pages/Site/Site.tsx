@@ -8,7 +8,7 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 
 //redux
-import { reset, getEquipmentDocs, documentSelector, insertDoc, downloadDoc } from "../../slices/DocumentSlice";
+import { reset, getStationDocs, documentSelector, insertDoc, downloadDoc } from "../../slices/DocumentSlice";
 import { getEquipamentoById, equipmentSelector } from "../../slices/EquipmentSlice";
 import { getConfig, configSelector } from "../../slices/ConfigSystemSlice";
 
@@ -48,7 +48,7 @@ const Site = (props: Props) => {
   }, [id, dispatchEquipment]);
 
   useEffect(() => {
-    dispatchDocument(getEquipmentDocs(id));
+    dispatchDocument(getStationDocs(id));
   }, [id, dispatchDocument, docSuccess]);
 
   const submitDownload = (e: React.MouseEvent<HTMLDivElement>, doc: TDocument) => {
