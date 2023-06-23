@@ -199,7 +199,7 @@ const StationPage = (props: Props) => {
     <div className="flex justify-center items-center container mx-auto">
       <div className="flex-1 w-full">
         <div className="flex flex-wrap flex-col md:flex-row md:flex-nowrap ">
-          <div className="bg-white p-2 m-2 flex-1 order-2 md:order-1 overflow-x-auto relative">
+          <div className="bg-white m-2 flex-1 order-2 md:order-1 overflow-x-auto relative">
             {config &&
               station &&
               config.map((conf, index) => (

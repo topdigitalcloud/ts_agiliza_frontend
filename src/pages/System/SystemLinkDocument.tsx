@@ -51,61 +51,79 @@ const SystemLinkDocument = ({ setOpenSystemLinkForm, stationId, documentId }: Pr
       return p + 1;
     });
   };
-
+  console.log(labels);
   return (
     <>
       {systems && systems.length !== 0 && (
-        <table className="text-left text-sm font-light ">
-          <thead className="border-b bg-top-digital-op-40 font-medium dark:border-neutral-500">
-            <tr key="loc0">
-              {labels && labels.length !== 0 && (
-                <>
-                  {labels.map((label, index) => (
-                    <th
-                      key={index}
-                      scope="col"
-                      className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base"
-                    >
-                      {label[1]}
-                    </th>
-                  ))}
-                </>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {systems &&
-              systems.map((system, index) => (
-                <tr
-                  key={system._id}
-                  className={`border-b dark:border-neutral-500 ${index % 2 ? " bg-top-digital-op-25" : "bg-white"}`}
-                >
-                  {labels &&
-                    labels.map((label) => (
-                      <td
-                        key={`${label[0]}${system._id}`}
-                        className="whitespace-nowrap px-6 py-4 font-normal text-sm font-top-digital-content"
-                      >
-                        {label[0] === "Label" && (
-                          <div className="w-full text-center">
-                            <button
-                              className="underline hover:text-top-digital-link-hover"
-                              title="Coloque um apelido na Estação"
-                              onClick={(e) => {
-                                e.preventDefault();
-                              }}
+        <>
+          <div className="sticky bg-white top-0 z-50">Vou ficar fixo aqui</div>
+          <div className="z-0 static">
+            <table className="text-left text-sm font-light ">
+              <thead className="border-b bg-top-digital-op-40 font-medium dark:border-neutral-500">
+                <tr key="loc0">
+                  <th
+                    key="vincular"
+                    scope="col"
+                    className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base"
+                  >
+                    Vincular
+                  </th>
+                  {labels && labels.length !== 0 && (
+                    <>
+                      {labels.map(
+                        (label, index) =>
+                          (label[0] === "idAnatel" ||
+                            label[0] === "Label" ||
+                            label[0] === "FreqRxMHz" ||
+                            label[0] === "FreqRxMHz") && (
+                            <th
+                              key={index}
+                              scope="col"
+                              className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base"
                             >
-                              {system[label[0]] === "" ? <p>Edit</p> : system[label[0]]}
-                            </button>
-                          </div>
-                        )}
-                        Label
-                      </td>
-                    ))}
+                              {label[1]}
+                            </th>
+                          )
+                      )}
+                    </>
+                  )}
                 </tr>
-              ))}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {systems &&
+                  systems.map((system, index) => (
+                    <tr
+                      key={system._id}
+                      className={`border-b dark:border-neutral-500 ${index % 2 ? " bg-top-digital-op-25" : "bg-white"}`}
+                    >
+                      {labels &&
+                        labels.map((label) => (
+                          <td
+                            key={`${label[0]}${system._id}`}
+                            className="whitespace-nowrap px-6 py-4 font-normal text-sm font-top-digital-content"
+                          >
+                            {label[0] === "Label" && (
+                              <div className="w-full text-center">
+                                <button
+                                  className="underline hover:text-top-digital-link-hover"
+                                  title="Coloque um apelido na Estação"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                  }}
+                                >
+                                  {system[label[0]] === "" ? <p>Edit</p> : system[label[0]]}
+                                </button>
+                              </div>
+                            )}
+                            Label
+                          </td>
+                        ))}
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </>
   );
