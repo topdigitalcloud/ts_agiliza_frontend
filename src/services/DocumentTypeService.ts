@@ -32,7 +32,6 @@ const updateDocType = async (data: any, token: string) => {
 //Delete do type
 const deleteDocType = async (id: string, token: string) => {
   const config = requestConfig("DELETE", null, token);
-  console.log(id);
   try {
     const res = await fetch(api + "/doctypes/" + id, config)
       .then((res) => res.json())

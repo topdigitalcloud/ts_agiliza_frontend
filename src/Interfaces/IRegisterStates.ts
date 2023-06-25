@@ -11,7 +11,8 @@ export type TRegisterFields = {
 
 export interface IRegisterStates {
   user: TRegister | null;
-  error: any;
+  error: boolean;
+  message: string;
   success: boolean;
   loading: boolean;
 }

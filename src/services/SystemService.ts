@@ -15,7 +15,7 @@ const getSystems = async (token: string) => {
   }
 };
 
-//get systemns that belong to station
+//get systemns that belong to station with pagination
 const getSystemsByStation = async (data: any, token: string) => {
   const config = requestConfig("POST", data, token);
   try {
@@ -28,10 +28,22 @@ const getSystemsByStation = async (data: any, token: string) => {
   }
 };
 
+//get systemns that belong to station
+const getAllSystemsByStation = async (id: any, token: string) => {
+  const config = requestConfig("GET", null, token);
+  try {
+    const res = await fetch(api + "/systems/station/" + id, config)
+      .then((res) => res.json())
+      .catch((err) => err);
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 //set Label for System
 const setLabelSystem = async (data: any, token: string) => {
   const config = requestConfig("POST", data, token);
-  console.log(data);
   try {
     const res = await fetch(api + "/systems/labelsystem", config)
       .then((res) => res.json())
@@ -60,6 +72,7 @@ const getSystemById = async (id: string | undefined, token: string) => {
 const SystemService = {
   getSystems,
   getSystemsByStation,
+  getAllSystemsByStation,
   getSystemById,
   setLabelSystem,
 };

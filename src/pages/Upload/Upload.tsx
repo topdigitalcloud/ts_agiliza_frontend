@@ -18,7 +18,7 @@ const Upload = (props: Props) => {
 
   //Redux
   const dispatch = useAppDispatch();
-  const { loading, error, success } = useAppSelector(stationSelector);
+  const { loading, error, success, message } = useAppSelector(stationSelector);
 
   const [csvFile, setCsvFile] = useState<File>();
 
@@ -52,7 +52,7 @@ const Upload = (props: Props) => {
   //show error message
   useEffect(() => {
     if (error) {
-      notify(error, "E");
+      notify(message, "E");
       dispatch(reset());
     }
   }, [error, notify, dispatch]);

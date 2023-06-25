@@ -7,11 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 //redux
 
-import {
-  changePassword,
-  profileSelector,
-  reset,
-} from "../../slices/ProfileSlice";
+import { changePassword, profileSelector, reset } from "../../slices/ProfileSlice";
 
 const AlterPassword = () => {
   const [password, setPassword] = useState<string>("234567");
@@ -21,7 +17,7 @@ const AlterPassword = () => {
   const notify = useNotify();
   const navigate = useNavigate();
 
-  const { loading, error, success } = useAppSelector(profileSelector);
+  const { loading, error, success, message } = useAppSelector(profileSelector);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,8 +32,8 @@ const AlterPassword = () => {
 
   //show error message
   useEffect(() => {
-    notify(error, "E");
-  }, [error, notify]);
+    notify(message, "E");
+  }, [error, message, notify]);
 
   //show success message and clean all auth states
   useEffect(() => {
@@ -53,9 +49,7 @@ const AlterPassword = () => {
     <div className="flex w-full mt-4">
       <div className="w-full flex items-center justify-center">
         <div className="px-10 py-20 rounded-3xl border-2 border-gray-200  bg-white">
-          <p className="text-top-digital text-4xl font-semibold pb-8 pt-2">
-            Alteração de Senha
-          </p>
+          <p className="text-top-digital text-4xl font-semibold pb-8 pt-2">Alteração de Senha</p>
           <div className="mt-8">
             <form onSubmit={handleSubmit}>
               <div className="py-2">

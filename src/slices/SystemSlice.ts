@@ -7,13 +7,13 @@ import { RootState } from "../store";
 import { ISystemStates } from "../Interfaces/ISystem";
 
 const initialState: ISystemStates = {
-  labels: [],
-  systems: [],
-  system: null,
   error: false,
   success: false,
   loading: false,
-  message: null,
+  message: "",
+  labels: [],
+  systems: [],
+  system: null,
   page: 1,
   pageCount: 0,
 };
@@ -30,7 +30,7 @@ export const getSystems = createAsyncThunk("systems/getSystems", async (_, thunk
   return res;
 });
 
-//get all equipments by location
+//get all equipments by location with pagination
 export const getSystemsByStation = createAsyncThunk("systems/getSystemsByStation", async (data: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
@@ -71,75 +71,79 @@ export const SystemSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.message = null;
       state.error = false;
       state.success = false;
       state.loading = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getSystems.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = false;
         state.systems = action.payload;
       })
       .addCase(getSystems.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getSystems.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getSystemsByStation.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.systems = action.payload[1];
         state.labels = action.payload[0];
         state.page = action.payload[2];
         state.pageCount = action.payload[3];
       })
       .addCase(getSystemsByStation.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getSystemsByStation.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getSystemById.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.systems = action.payload;
       })
       .addCase(getSystemById.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getSystemById.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(setLabelSystem.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
       })
       .addCase(setLabelSystem.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(setLabelSystem.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });

@@ -61,7 +61,6 @@ const getVisibleStations = async (data: any, token: string) => {
 //set Label for Station
 const setLabelStation = async (data: any, token: string) => {
   const config = requestConfig("POST", data, token);
-  console.log(data);
   try {
     const res = await fetch(api + "/stations/labelstation", config)
       .then((res) => res.json())

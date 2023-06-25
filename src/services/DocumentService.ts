@@ -57,18 +57,17 @@ const getAllDocs = async (token: string) => {
   }
 };
 
-//Get
-const getDocById = async (id: string, token: string) => {
-  const config = requestConfig("GET", null, token);
-
+//Get document by ID
+const getDocById = async (data: any, token: string) => {
+  const config = requestConfig("POST", data, token);
   try {
-    const res = await fetch(api + "/documents/" + id, config)
+    const res = await fetch(api + "/documents/show", config)
       .then((res) => res.json())
       .catch((err) => err);
 
     return res;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 };
 

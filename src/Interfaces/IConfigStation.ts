@@ -8,8 +8,8 @@ export type TConfigStation = {
 
 export interface IConfigStationStates {
   config: TConfigStation[];
-  error: any;
+  error: boolean;
   success: boolean;
   loading: boolean;
-  message: string | null;
+  message: string;
 }

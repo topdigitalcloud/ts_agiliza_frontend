@@ -7,11 +7,12 @@ import { RootState } from "../store";
 import { IDocumentStates, TDocument } from "../Interfaces/IDocument";
 
 const initialState: IDocumentStates = {
+  error: false,
+  loading: false,
+  success: false,
+  message: "",
   documents: [],
   document: null,
-  error: false,
-  success: false,
-  loading: false,
 };
 
 //Post
@@ -51,7 +52,7 @@ export const deleteDoc = createAsyncThunk("document/deleteDoc", async (id: strin
 });
 
 //get
-export const getDocById = createAsyncThunk("document/getDocById", async (id: string, thunkAPI) => {
+export const getDocById = createAsyncThunk("document/getDocById", async (id: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
   const res = await DocumentService.getDocById(id, token);
@@ -104,116 +105,125 @@ export const DocumentSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.error = false;
-      state.success = false;
       state.loading = false;
+      state.success = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(insertDoc.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = false;
         state.document = action.payload;
       })
       .addCase(insertDoc.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(insertDoc.rejected, (state, action) => {
+        state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(updateDoc.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
         state.document = action.payload;
       })
       .addCase(updateDoc.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(updateDoc.rejected, (state, action) => {
+        state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(deleteDoc.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
         state.document = action.payload;
       })
       .addCase(deleteDoc.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(deleteDoc.rejected, (state, action) => {
+        state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getDocById.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.document = action.payload;
       })
       .addCase(getDocById.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getDocById.rejected, (state, action) => {
+        state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getStationDocs.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.documents = action.payload;
       })
       .addCase(getStationDocs.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getStationDocs.rejected, (state, action) => {
+        state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getAllDocs.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.document = action.payload;
       })
       .addCase(getAllDocs.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getAllDocs.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(downloadDoc.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.document = action.payload;
       })
       .addCase(downloadDoc.pending, (state) => {
-        state.loading = false;
         state.error = false;
+        state.loading = false;
       })
       .addCase(downloadDoc.rejected, (state, action) => {
+        //console.log("entrou");
+        //state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        //state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });

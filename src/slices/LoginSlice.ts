@@ -18,13 +18,12 @@ if (localStorageUser) {
 }
 
 const initialState: ILoginStates = {
-  user: user ? user : null,
-  error: null,
+  error: false,
   success: false,
   loading: false,
+  message: "",
+  user: user ? user : null,
 };
-
-//console.log(initialState);
 
 //sign in an user
 
@@ -40,7 +39,7 @@ export const login = createAsyncThunk("login/login", async (user: any, thunkAPI)
 //logout an user
 
 export const logout = createAsyncThunk("login/logout", async () => {
-  await LoginService.logout();
+  LoginService.logout();
 });
 
 export const LoginSlice = createSlice({
@@ -48,33 +47,35 @@ export const LoginSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
+      state.error = false;
       state.loading = false;
-      state.error = null;
       state.success = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(logout.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
         state.user = null;
       })
       .addCase(login.pending, (state) => {
+        state.error = false;
         state.loading = true;
-        state.error = null;
       })
       .addCase(login.fulfilled, (state, action: PayloadAction<TLogin>) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.user = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.user = null;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });

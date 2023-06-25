@@ -22,7 +22,6 @@ const password = async (data: any, token: string): Promise<any> => {
     const res = await fetch(api + "/users/password", config)
       .then((res) => res.json())
       .catch((err) => err);
-    console.log(res);
     return res;
   } catch (error) {
     console.log(error);

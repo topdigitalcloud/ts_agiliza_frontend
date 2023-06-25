@@ -14,16 +14,17 @@ export type TSystem = {
   AnguloElevacao: string;
   Polarizacao: string;
   AlturaAntena: string;
+  //Documents: TDocument[];
 };
 
 export interface ISystemStates {
   labels: string[];
   systems: TSystem[];
   system: TSystem | null;
-  error: any;
+  error: boolean;
   success: boolean;
   loading: boolean;
-  message: string | null;
+  message: string;
   page: number;
   pageCount: number;
 }

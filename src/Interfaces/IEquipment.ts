@@ -44,10 +44,10 @@ export interface IEquipmentStates {
   labels: string[];
   equipamentos: TEquipment[];
   equipamento: TEquipment | null;
-  error: any;
+  error: boolean;
   success: boolean;
   loading: boolean;
-  message: string | null;
+  message: string;
   page: number;
   pageCount: number;
 }

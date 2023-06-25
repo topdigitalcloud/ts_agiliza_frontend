@@ -22,7 +22,7 @@ const Login = () => {
 
   //const { loading, error } = useSelector((state: ILoginStates) => state.auth);
 
-  const { loading, error } = useAppSelector(loginSelector);
+  const { loading, error, message } = useAppSelector(loginSelector);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,8 +35,8 @@ const Login = () => {
 
   //show error message
   useEffect(() => {
-    notify(error, "E");
-  }, [error, notify]);
+    notify(message, "E");
+  }, [error, message, notify]);
 
   //clean all auth states
   useEffect(() => {

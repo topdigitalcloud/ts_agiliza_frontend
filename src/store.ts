@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import LoginReducer from "./slices/LoginSlice";
 import RegisterReducer from "./slices/RegisterSlice";
 import ProfileReducer from "./slices/ProfileSlice";
@@ -10,6 +10,7 @@ import DocumentReducer from "./slices/DocumentSlice";
 import DocTypeReducer from "./slices/DocumentTypeSlice";
 import StationReducer from "./slices/StationSlice";
 import SystemReducer from "./slices/SystemSlice";
+import LinkSystemDocReducer from "./slices/LinkSystemDocSlice";
 
 export const store = configureStore({
   reducer: {
@@ -24,8 +25,10 @@ export const store = configureStore({
     DocTypeReducer,
     StationReducer,
     SystemReducer,
+    LinkSystemDocReducer,
   },
 });
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
+//export type AppThunk = ThunkAction<void, RootState, null, Action<string>>;

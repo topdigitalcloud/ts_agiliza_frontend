@@ -7,11 +7,11 @@ import { RootState } from "../store";
 import { IConfigStationStates } from "../Interfaces/IConfigStation";
 
 const initialState: IConfigStationStates = {
-  config: [],
   error: false,
   success: false,
   loading: false,
-  message: null,
+  message: "",
+  config: [],
 };
 
 //get all equipamentos
@@ -44,43 +44,44 @@ export const ConfigStationSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.message = null;
       state.error = false;
-      state.success = false;
       state.loading = false;
+      state.success = false;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getConfig.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = false;
         state.config = action.payload;
       })
       .addCase(getConfig.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getConfig.rejected, (state, action) => {
+        state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(setConfig.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
         state.config = action.payload;
       })
       .addCase(setConfig.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(setConfig.rejected, (state, action) => {
+        state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });

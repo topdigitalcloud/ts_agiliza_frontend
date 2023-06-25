@@ -34,10 +34,10 @@ export interface IStationStates {
   labels: string[];
   stations: TStation[];
   station: TStation | null;
-  error: any;
+  error: boolean;
   success: boolean;
   loading: boolean;
-  message: string | null;
+  message: string;
   page: number;
   pageCount: number;
 }

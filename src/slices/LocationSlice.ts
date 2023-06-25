@@ -7,11 +7,11 @@ import { RootState } from "../store";
 import { ILocationStates } from "../Interfaces/ILocation";
 
 const initialState: ILocationStates = {
-  locations: [],
   error: false,
   success: false,
   loading: false,
-  message: null,
+  message: "",
+  locations: [],
 };
 
 //get all locations
@@ -32,20 +32,23 @@ export const LocationSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.message = null;
+      state.error = false;
+      state.loading = false;
+      state.success = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getLocations.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
         state.locations = action.payload;
       })
       .addCase(getLocations.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       });
   },
 });

@@ -6,9 +6,10 @@ import { RootState } from "../store";
 
 const initialState: IRegisterStates = {
   user: null,
-  error: null,
+  error: false,
   success: false,
   loading: false,
+  message: "",
 };
 
 export const register = createAsyncThunk("register/register", async (user: TRegisterFields, thunkAPI) => {
@@ -25,26 +26,28 @@ export const RegisterSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
+      state.error = false;
       state.loading = false;
-      state.error = null;
       state.success = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = false;
       })
       .addCase(register.fulfilled, (state, action: PayloadAction<TRegister>) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
         state.user = action.payload;
       })
       .addCase(register.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
+        state.message = typeof action.payload === "string" ? action.payload : "";
         state.user = null;
       });
   },

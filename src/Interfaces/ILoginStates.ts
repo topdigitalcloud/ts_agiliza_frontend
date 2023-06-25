@@ -5,7 +5,8 @@ export type TLogin = {
 
 export interface ILoginStates {
   user: TLogin | null;
-  error: any;
+  error: boolean;
+  message: string;
   success: boolean;
   loading: boolean;
 }

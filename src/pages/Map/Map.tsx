@@ -59,7 +59,6 @@ const Map = ({ locations }: Props) => {
         visible.push(station);
       }
     }
-    console.log(visible);
     setVisibleLocations([...visible]);
   };
 

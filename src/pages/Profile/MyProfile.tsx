@@ -18,7 +18,7 @@ const MyProfile = () => {
   const dispatch = useAppDispatch();
   const notify = useNotify();
 
-  const { user, loading, error, success } = useAppSelector(profileSelector);
+  const { user, loading, error, success, message } = useAppSelector(profileSelector);
 
   //load user data
 
@@ -46,8 +46,8 @@ const MyProfile = () => {
 
   //show error message
   useEffect(() => {
-    notify(error, "E");
-  }, [error, notify]);
+    notify(message, "E");
+  }, [error, message, notify]);
 
   //show success message and clean all auth states
   useEffect(() => {

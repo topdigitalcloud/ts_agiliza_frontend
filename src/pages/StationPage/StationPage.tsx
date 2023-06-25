@@ -58,11 +58,11 @@ const StationPage = (props: Props) => {
 
   /*Inicio Formulário de Vinculação dos Sistemas*/
   const [openSystemLinkForm, setOpenSystemLinkForm] = useState<boolean>(false);
-  const [stationId, setStationId] = useState<string | undefined>("");
+  //const [stationId, setStationId] = useState<string | undefined>("");
   const [documentId, setDocumentId] = useState<string>("");
-  const handleOpenFormLinkSystem = (idStation: string | undefined, idDocument: string) => {
+  const handleOpenFormLinkSystem = (idDocument: string) => {
     setOpenSystemLinkForm(true);
-    setStationId(idStation);
+    //setStationId(idStation);
     setDocumentId(idDocument);
   };
   /*Fim Formulário de Vinculação dos Sistemas*/
@@ -118,7 +118,13 @@ const StationPage = (props: Props) => {
   /*Fim Formulário de Label da Estação*/
 
   /*Inicio Formulário de Documentos*/
-  const { documents, error: docError, success: docSuccess, loading: docLoading } = useAppSelector(documentSelector);
+  const {
+    documents,
+    error: docError,
+    message: docMessage,
+    success: docSuccess,
+    loading: docLoading,
+  } = useAppSelector(documentSelector);
   const [formdocument, setFormDocument] = useState<File>();
   const [title, setTitle] = useState<string>("");
   const [docTypeId, setDocTypeId] = useState<string>("0");
@@ -164,7 +170,8 @@ const StationPage = (props: Props) => {
 
   useEffect(() => {
     if (docError) {
-      notify(docError, "E");
+      alert(docError);
+      notify(docMessage, "E");
       dispatchDocument(reset());
     }
 
@@ -173,7 +180,7 @@ const StationPage = (props: Props) => {
       setOpenedUploadForm(false);
       dispatchDocument(reset());
     }
-  }, [docSuccess, docError, dispatchDocument, notify]);
+  }, [docSuccess, docError, docMessage, dispatchDocument, notify]);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const doc = e?.target?.files?.[0];
@@ -237,7 +244,7 @@ const StationPage = (props: Props) => {
               <div className="absolute bg-white top-0 right-0 w-full h-full border">
                 <SystemLinkDocument
                   setOpenSystemLinkForm={setOpenSystemLinkForm}
-                  stationId={stationId}
+                  stationId={id}
                   documentId={documentId}
                 />
               </div>
@@ -494,7 +501,7 @@ const StationPage = (props: Props) => {
                                 className="cursor-pointer text-top-digital-hover"
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  handleOpenFormLinkSystem(id, doc.tipo!._id);
+                                  handleOpenFormLinkSystem(doc._id);
                                 }}
                               />
                             )}

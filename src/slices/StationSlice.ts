@@ -7,13 +7,13 @@ import { RootState } from "../store";
 import { IStationStates } from "../Interfaces/IStation";
 
 const initialState: IStationStates = {
+  error: false,
+  loading: false,
+  success: false,
+  message: "",
   labels: [],
   stations: [],
   station: null,
-  error: false,
-  success: false,
-  loading: false,
-  message: null,
   page: 1,
   pageCount: 0,
 };
@@ -107,18 +107,18 @@ export const StationSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.message = null;
       state.error = false;
       state.success = false;
       state.loading = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getStations.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = false;
         state.stations = action.payload[1];
         state.labels = action.payload[0];
         state.page = action.payload[2];
@@ -129,85 +129,91 @@ export const StationSlice = createSlice({
         state.error = false;
       })
       .addCase(getStations.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getStationsByLocation.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.stations = action.payload;
       })
       .addCase(getStationsByLocation.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getStationsByLocation.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getVisibleStations.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.stations = action.payload[1];
         state.labels = action.payload[0];
         state.page = action.payload[2];
         state.pageCount = action.payload[3];
       })
       .addCase(getVisibleStations.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getVisibleStations.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(uploadStations.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
       })
       .addCase(uploadStations.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(uploadStations.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getStationById.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.station = action.payload;
       })
       .addCase(getStationById.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getStationById.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(setLabelStation.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
       })
       .addCase(setLabelStation.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(setLabelStation.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });

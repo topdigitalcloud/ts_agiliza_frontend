@@ -5,10 +5,11 @@ import { IUpdateStates, TUpdated } from "../Interfaces/IProfileStates";
 import { RootState } from "../store";
 
 const initialState: IUpdateStates = {
-  user: null,
-  error: null,
+  error: false,
   success: false,
   loading: false,
+  user: null,
+  message: "",
 };
 
 //get user detalis
@@ -47,57 +48,61 @@ export const ProfileSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
+      state.error = false;
       state.loading = false;
-      state.error = null;
       state.success = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(update.pending, (state) => {
+        state.error = false;
         state.loading = true;
-        state.error = null;
       })
       .addCase(update.fulfilled, (state, action: PayloadAction<TUpdated>) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
         state.user = action.payload;
       })
       .addCase(update.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
+        state.message = typeof action.payload === "string" ? action.payload : "";
         state.user = null;
       })
       .addCase(profile.pending, (state) => {
+        state.error = false;
         state.loading = true;
-        state.error = null;
       })
       .addCase(profile.fulfilled, (state, action: PayloadAction<TUpdated>) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.user = action.payload;
       })
       .addCase(profile.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.user = null;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(changePassword.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.error = false;
       })
       .addCase(changePassword.fulfilled, (state, action: PayloadAction<TUpdated>) => {
         state.loading = false;
         state.success = true;
-        state.error = null;
+        state.error = false;
         state.user = action.payload;
       })
       .addCase(changePassword.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.user = null;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });

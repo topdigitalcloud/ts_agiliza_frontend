@@ -7,11 +7,11 @@ import { RootState } from "../store";
 import { IConfigSystemStates } from "../Interfaces/IConfigSystem";
 
 const initialState: IConfigSystemStates = {
-  config: [],
   error: false,
-  success: false,
   loading: false,
-  message: null,
+  success: false,
+  message: "",
+  config: [],
 };
 
 //get all equipamentos
@@ -44,48 +44,48 @@ export const ConfigSystemSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.message = null;
       state.error = false;
-      state.success = false;
       state.loading = false;
+      state.success = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getConfig.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = false;
         state.config = action.payload;
       })
       .addCase(getConfig.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getConfig.rejected, (state, action) => {
+        state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(setConfig.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.error = null;
+        state.error = false;
         state.config = action.payload;
       })
       .addCase(setConfig.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(setConfig.rejected, (state, action) => {
+        state.error = true;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });
-
-//getAllEquipamentosByLocation
 
 export const { reset } = ConfigSystemSlice.actions;
 export const configSelector = (state: RootState) => state.ConfigSystemReducer;

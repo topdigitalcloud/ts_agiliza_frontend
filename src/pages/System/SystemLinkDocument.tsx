@@ -1,8 +1,12 @@
-import React from "react";
-import { Dispatch, SetStateAction, useState, useEffect, MouseEvent } from "react";
+import { useParams } from "react-router-dom";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
-import { systemSelector, getSystemsByStation } from "../../slices/SystemSlice";
+import { linkSystemDocSelector, getAllSystemsByStation } from "../../slices/LinkSystemDocSlice";
+import { documentSelector, getDocById } from "../../slices/DocumentSlice";
+import { X } from "lucide-react";
+import { TSystem } from "../../Interfaces/ISystem";
+import SystemActionLinkDoc from "./SystemActionLinkDoc";
 
 type Props = {
   setOpenSystemLinkForm: Dispatch<SetStateAction<boolean>>;
@@ -11,54 +15,50 @@ type Props = {
 };
 
 const SystemLinkDocument = ({ setOpenSystemLinkForm, stationId, documentId }: Props) => {
-  setOpenSystemLinkForm(true);
-  const dispatch = useAppDispatch();
-  const { systems, labels, loading, page: apiPage, pageCount: apiPageCount } = useAppSelector(systemSelector);
-  const [page, setPage] = useState<number>(1);
-  const [pageCount, setPageCount] = useState<number>(0);
+  const dispatchStation = useAppDispatch();
+  const { systemsToLink, labels } = useAppSelector(linkSystemDocSelector);
+  const { id } = useParams();
 
-  useEffect(() => {
-    setPage(() => apiPage);
-  }, [apiPage]);
+  const dispatchDocument = useAppDispatch();
 
-  useEffect(() => {
-    setPageCount(() => apiPageCount);
-    setPage(() => 1);
-  }, [apiPageCount]);
+  const { document } = useAppSelector(documentSelector);
 
   useEffect(() => {
     if (typeof stationId === "string") {
-      const objData = {
-        stationId,
-        page,
-      };
-      dispatch(getSystemsByStation(objData));
+      dispatchStation(getAllSystemsByStation(id));
     }
-  }, [stationId, page, dispatch]);
+  }, [stationId, dispatchStation, id]);
 
-  const handlePrevious = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setPage((p) => {
-      if (p === 1) return p;
-      return p - 1;
-    });
-  };
+  useEffect(() => {
+    const objData = {
+      id: documentId,
+    };
+    dispatchDocument(getDocById(objData));
+  }, [documentId, dispatchDocument]);
 
-  const handleNext = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setPage((p) => {
-      if (p === pageCount) return p;
-      return p + 1;
-    });
-  };
-  console.log(labels);
   return (
     <>
-      {systems && systems.length !== 0 && (
+      {systemsToLink && systemsToLink.length !== 0 && (
         <>
-          <div className="sticky bg-white top-0 z-50">Vou ficar fixo aqui</div>
+          <div className="sticky bg-white top-0 z-50 flex justify-between mb-2">
+            <div>
+              <h2 className="text-xl text-top-digital">
+                Vincular o documento{" "}
+                <span className="text-top-digital-hover hover:text-top-digital-link-hover">{document?.title}</span> aos
+                sistemas
+              </h2>
+            </div>
+            <div>
+              <X
+                className="cursor-pointer"
+                onClick={() => {
+                  setOpenSystemLinkForm(false);
+                }}
+              />
+            </div>
+          </div>
           <div className="z-0 static">
-            <table className="text-left text-sm font-light ">
+            <table className="text-left text-sm font-light border-2">
               <thead className="border-b bg-top-digital-op-40 font-medium dark:border-neutral-500">
                 <tr key="loc0">
                   <th
@@ -75,7 +75,7 @@ const SystemLinkDocument = ({ setOpenSystemLinkForm, stationId, documentId }: Pr
                           (label[0] === "idAnatel" ||
                             label[0] === "Label" ||
                             label[0] === "FreqRxMHz" ||
-                            label[0] === "FreqRxMHz") && (
+                            label[0] === "FreqTxMHz") && (
                             <th
                               key={index}
                               scope="col"
@@ -90,34 +90,33 @@ const SystemLinkDocument = ({ setOpenSystemLinkForm, stationId, documentId }: Pr
                 </tr>
               </thead>
               <tbody>
-                {systems &&
-                  systems.map((system, index) => (
+                {systemsToLink &&
+                  systemsToLink.map((system, index) => (
                     <tr
                       key={system._id}
                       className={`border-b dark:border-neutral-500 ${index % 2 ? " bg-top-digital-op-25" : "bg-white"}`}
                     >
+                      <td
+                        key="vincular"
+                        className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base"
+                      >
+                        <SystemActionLinkDoc document={documentId} system={system._id} linked={true} />
+                      </td>
                       {labels &&
-                        labels.map((label) => (
-                          <td
-                            key={`${label[0]}${system._id}`}
-                            className="whitespace-nowrap px-6 py-4 font-normal text-sm font-top-digital-content"
-                          >
-                            {label[0] === "Label" && (
-                              <div className="w-full text-center">
-                                <button
-                                  className="underline hover:text-top-digital-link-hover"
-                                  title="Coloque um apelido na Estação"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                  }}
-                                >
-                                  {system[label[0]] === "" ? <p>Edit</p> : system[label[0]]}
-                                </button>
-                              </div>
-                            )}
-                            Label
-                          </td>
-                        ))}
+                        labels.map(
+                          (label) =>
+                            (label[0] === "idAnatel" ||
+                              label[0] === "Label" ||
+                              label[0] === "FreqRxMHz" ||
+                              label[0] === "FreqTxMHz") && (
+                              <td
+                                key={`${label[0]}${system._id}`}
+                                className="whitespace-nowrap px-6 py-4 font-normal text-sm font-top-digital-content"
+                              >
+                                <p>{system[label[0] as keyof TSystem]}</p>
+                              </td>
+                            )
+                        )}
                     </tr>
                   ))}
               </tbody>

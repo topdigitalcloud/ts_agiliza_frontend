@@ -7,11 +7,12 @@ import { RootState } from "../store";
 import { IDocTypeStates } from "../Interfaces/IDocType";
 
 const initialState: IDocTypeStates = {
+  error: false,
+  loading: false,
+  success: false,
+  message: "",
   docTypes: [],
   docType: null,
-  error: false,
-  success: false,
-  loading: false,
 };
 
 //Post
@@ -80,32 +81,34 @@ export const DocumentTypeSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.error = false;
-      state.success = false;
       state.loading = false;
+      state.success = false;
+      state.message = "";
     },
   },
 
   extraReducers: (builder) => {
     builder
       .addCase(insertDocType.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = false;
         state.docType = action.payload;
       })
       .addCase(insertDocType.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(insertDocType.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(updateDocType.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.error = null;
+        state.error = false;
         state.docType = action.payload;
       })
       .addCase(updateDocType.pending, (state) => {
@@ -113,59 +116,61 @@ export const DocumentTypeSlice = createSlice({
         state.error = false;
       })
       .addCase(updateDocType.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(deleteDocType.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
         state.docType = action.payload;
       })
       .addCase(deleteDocType.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(deleteDocType.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getDocTypes.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.docTypes = action.payload;
       })
       .addCase(getDocTypes.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getDocTypes.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getDocTypeById.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.docType = action.payload;
       })
       .addCase(getDocTypeById.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getDocTypeById.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });
-
-//getAllEquipamentosByLocation
 
 export const { reset } = DocumentTypeSlice.actions;
 export const docTypeSelector = (state: RootState) => state.DocTypeReducer;

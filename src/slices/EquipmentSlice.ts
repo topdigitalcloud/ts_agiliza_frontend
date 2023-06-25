@@ -7,15 +7,15 @@ import { RootState } from "../store";
 import { IEquipmentStates } from "../Interfaces/IEquipment";
 
 const initialState: IEquipmentStates = {
+  error: false,
+  loading: false,
+  success: false,
+  message: "",
+  page: 1,
+  pageCount: 0,
   labels: [],
   equipamentos: [],
   equipamento: null,
-  error: false,
-  success: false,
-  loading: false,
-  message: null,
-  page: 1,
-  pageCount: 0,
 };
 
 //get all equipamentos
@@ -95,95 +95,97 @@ export const EquipmentSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
-      state.message = null;
       state.error = false;
-      state.success = false;
       state.loading = false;
+      state.success = false;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getEquipamentos.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = false;
         state.equipamentos = action.payload;
       })
       .addCase(getEquipamentos.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getEquipamentos.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getAllEquipamentosByLocation.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.equipamentos = action.payload;
       })
       .addCase(getAllEquipamentosByLocation.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getAllEquipamentosByLocation.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(getVisibleEquipments.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.equipamentos = action.payload[1];
         state.labels = action.payload[0];
         state.page = action.payload[2];
         state.pageCount = action.payload[3];
       })
       .addCase(getVisibleEquipments.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getVisibleEquipments.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(uploadEquipments.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = true;
-        state.error = null;
       })
       .addCase(uploadEquipments.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(uploadEquipments.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
       })
       .addCase(getEquipamentoById.fulfilled, (state, action) => {
+        state.error = false;
         state.loading = false;
         state.success = false;
-        state.error = null;
         state.equipamento = action.payload;
       })
       .addCase(getEquipamentoById.pending, (state) => {
-        state.loading = true;
         state.error = false;
+        state.loading = true;
       })
       .addCase(getEquipamentoById.rejected, (state, action) => {
+        state.error = false;
         state.loading = false;
-        state.error = action.payload;
         state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });
-
-//getAllEquipamentosByLocation
 
 export const { reset } = EquipmentSlice.actions;
 export const equipmentSelector = (state: RootState) => state.EquipmentReducer;

@@ -28,7 +28,7 @@ const Register = () => {
   const notify = useNotify();
   const dispatch = useAppDispatch();
 
-  const { loading, error, success } = useAppSelector(registerSelector);
+  const { loading, error, success, message } = useAppSelector(registerSelector);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,8 +43,8 @@ const Register = () => {
 
   //show error message
   useEffect(() => {
-    notify(error, "E");
-  }, [error, notify]);
+    notify(message, "E");
+  }, [error, message, notify]);
 
   //show success message and clean all auth states
   useEffect(() => {

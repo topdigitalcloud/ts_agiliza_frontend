@@ -9,7 +9,8 @@ export type TUpdated = {
 
 export interface IUpdateStates {
   user: TUpdated | null;
-  error: any;
+  error: boolean;
+  message: string;
   success: boolean;
   loading: boolean;
 }

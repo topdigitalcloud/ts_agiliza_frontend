@@ -12,7 +12,8 @@ export type TDocType = {
 export interface IDocTypeStates {
   docTypes: TDocType[];
   docType: TDocType | null;
-  error: any;
+  error: boolean;
+  message: string;
   success: boolean;
   loading: boolean;
 }

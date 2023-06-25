@@ -7,8 +7,8 @@ export type TLocation = {
 
 export interface ILocationStates {
   locations: TLocation[];
-  error: any;
+  error: boolean;
   success: boolean;
   loading: boolean;
-  message: string | null;
+  message: string;
 }
