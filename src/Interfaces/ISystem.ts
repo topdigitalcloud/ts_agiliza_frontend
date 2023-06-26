@@ -14,7 +14,7 @@ export type TSystem = {
   AnguloElevacao: string;
   Polarizacao: string;
   AlturaAntena: string;
-  //Documents: TDocument[];
+  documents?: string[];
 };
 
 export interface ISystemStates {

@@ -16,8 +16,6 @@ import { TRegisterFields } from "../../Interfaces/IRegisterStates";
 
 import { register, reset, registerSelector } from "../../slices/RegisterSlice";
 
-const numRand: string = String(Math.floor(Math.random() * 10000));
-
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -43,7 +41,9 @@ const Register = () => {
 
   //show error message
   useEffect(() => {
-    notify(message, "E");
+    if (error) {
+      notify(message, "E");
+    }
   }, [error, message, notify]);
 
   //show success message and clean all auth states

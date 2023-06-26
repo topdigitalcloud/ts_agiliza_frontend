@@ -70,7 +70,7 @@ export const SystemSlice = createSlice({
   name: "system",
   initialState,
   reducers: {
-    reset: (state) => {
+    resetSystemSlice: (state) => {
       state.error = false;
       state.success = false;
       state.loading = false;
@@ -148,6 +148,6 @@ export const SystemSlice = createSlice({
   },
 });
 
-export const { reset } = SystemSlice.actions;
+export const { resetSystemSlice } = SystemSlice.actions;
 export const systemSelector = (state: RootState) => state.SystemReducer;
 export default SystemSlice.reducer;

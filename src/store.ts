@@ -1,4 +1,4 @@
-import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import LoginReducer from "./slices/LoginSlice";
 import RegisterReducer from "./slices/RegisterSlice";
 import ProfileReducer from "./slices/ProfileSlice";
@@ -31,4 +31,3 @@ export const store = configureStore({
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-//export type AppThunk = ThunkAction<void, RootState, null, Action<string>>;

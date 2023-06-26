@@ -168,7 +168,7 @@ export const DocumentSlice = createSlice({
       })
       .addCase(getDocById.pending, (state) => {
         state.error = false;
-        state.loading = true;
+        state.loading = false;
       })
       .addCase(getDocById.rejected, (state, action) => {
         state.error = true;

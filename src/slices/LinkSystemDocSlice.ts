@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import SystemService from "../services/SystemService";
+import LinkSystemDocService from "../services/LinkSystemDocService";
 import { RootState } from "../store";
 
 //interface of equipments
@@ -14,15 +15,28 @@ const initialState: ILinkStationDocStates = {
   labels: [],
   systemsToLink: [],
   systemToLink: null,
-  page: 1,
-  pageCount: 0,
 };
 
 //get all equipments by location
-export const getAllSystemsByStation = createAsyncThunk("systems/getAllSystemsByStation", async (id: any, thunkAPI) => {
+export const getAllSystemsByStation = createAsyncThunk(
+  "linktosystems/getAllSystemsByStation",
+  async (id: any, thunkAPI) => {
+    const appState = thunkAPI.getState() as RootState;
+    const token = appState.LoginReducer.user!.token;
+    const res = await SystemService.getAllSystemsByStation(id, token);
+    //check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+    return res;
+  }
+);
+
+//get all equipments by location
+export const setDocToSystem = createAsyncThunk("linktosystems/setDocToSystem", async (data: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const res = await SystemService.getAllSystemsByStation(id, token);
+  const res = await LinkSystemDocService.setDocToSystem(data, token);
   //check for errors
   if (res.errors) {
     return thunkAPI.rejectWithValue(res.errors[0]);
@@ -30,11 +44,26 @@ export const getAllSystemsByStation = createAsyncThunk("systems/getAllSystemsByS
   return res;
 });
 
-export const SystemSlice = createSlice({
-  name: "system",
+//get all equipments by location
+export const removeDocFromSystem = createAsyncThunk(
+  "linktosystems/removeDocFromSystem",
+  async (data: any, thunkAPI) => {
+    const appState = thunkAPI.getState() as RootState;
+    const token = appState.LoginReducer.user!.token;
+    const res = await LinkSystemDocService.removeDocFromSystem(data, token);
+    //check for errors
+    if (res.errors) {
+      return thunkAPI.rejectWithValue(res.errors[0]);
+    }
+    return res;
+  }
+);
+
+export const LinkSystemDocSlice = createSlice({
+  name: "linktosystems",
   initialState,
   reducers: {
-    reset: (state) => {
+    resetLinkSystemDocSlice: (state) => {
       state.error = false;
       state.loading = false;
       state.success = false;
@@ -46,7 +75,6 @@ export const SystemSlice = createSlice({
       .addCase(getAllSystemsByStation.fulfilled, (state, action) => {
         state.error = false;
         state.loading = false;
-        state.success = true;
         state.labels = action.payload[0];
         state.systemsToLink = action.payload[1];
       })
@@ -59,10 +87,42 @@ export const SystemSlice = createSlice({
         state.loading = false;
         state.success = false;
         state.message = typeof action.payload === "string" ? action.payload : "";
+      })
+      .addCase(setDocToSystem.fulfilled, (state, action) => {
+        state.error = false;
+        state.loading = false;
+        state.success = true;
+        state.message = action.payload;
+      })
+      .addCase(setDocToSystem.pending, (state) => {
+        state.error = false;
+        state.loading = true;
+      })
+      .addCase(setDocToSystem.rejected, (state, action) => {
+        state.error = false;
+        state.loading = false;
+        state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
+      })
+      .addCase(removeDocFromSystem.fulfilled, (state, action) => {
+        state.error = false;
+        state.loading = false;
+        state.success = true;
+        state.message = action.payload;
+      })
+      .addCase(removeDocFromSystem.pending, (state) => {
+        state.error = false;
+        state.loading = true;
+      })
+      .addCase(removeDocFromSystem.rejected, (state, action) => {
+        state.error = false;
+        state.loading = false;
+        state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
       });
   },
 });
 
-export const { reset } = SystemSlice.actions;
+export const { resetLinkSystemDocSlice } = LinkSystemDocSlice.actions;
 export const linkSystemDocSelector = (state: RootState) => state.LinkSystemDocReducer;
-export default SystemSlice.reducer;
+export default LinkSystemDocSlice.reducer;

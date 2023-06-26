@@ -10,32 +10,26 @@ import SystemActionLinkDoc from "./SystemActionLinkDoc";
 
 type Props = {
   setOpenSystemLinkForm: Dispatch<SetStateAction<boolean>>;
-  stationId: string | undefined;
   documentId: string;
 };
 
-const SystemLinkDocument = ({ setOpenSystemLinkForm, stationId, documentId }: Props) => {
-  const dispatchStation = useAppDispatch();
+const SystemLinkDocument = ({ setOpenSystemLinkForm, documentId }: Props) => {
+  const dispatch = useAppDispatch();
   const { systemsToLink, labels } = useAppSelector(linkSystemDocSelector);
   const { id } = useParams();
-
-  const dispatchDocument = useAppDispatch();
 
   const { document } = useAppSelector(documentSelector);
 
   useEffect(() => {
-    if (typeof stationId === "string") {
-      dispatchStation(getAllSystemsByStation(id));
-    }
-  }, [stationId, dispatchStation, id]);
+    dispatch(getAllSystemsByStation(id));
+  }, [documentId, dispatch, id]);
 
   useEffect(() => {
     const objData = {
       id: documentId,
     };
-    dispatchDocument(getDocById(objData));
-  }, [documentId, dispatchDocument]);
-
+    dispatch(getDocById(objData));
+  }, [documentId, dispatch]);
   return (
     <>
       {systemsToLink && systemsToLink.length !== 0 && (
@@ -100,7 +94,12 @@ const SystemLinkDocument = ({ setOpenSystemLinkForm, stationId, documentId }: Pr
                         key="vincular"
                         className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base"
                       >
-                        <SystemActionLinkDoc document={documentId} system={system._id} linked={true} />
+                        <SystemActionLinkDoc
+                          key={system._id}
+                          document={documentId}
+                          system={system._id}
+                          linked={system.documents!.includes(documentId)}
+                        />
                       </td>
                       {labels &&
                         labels.map(

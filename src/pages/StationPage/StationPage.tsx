@@ -16,11 +16,7 @@ import {
   reset as resetSliceStation,
 } from "../../slices/StationSlice";
 import { getConfig, configSelector } from "../../slices/ConfigStationSlice";
-import {
-  systemSelector,
-  setLabelSystem as setSystemSliceStation,
-  reset as resetSliceSystem,
-} from "../../slices/SystemSlice";
+import { systemSelector, setLabelSystem as setSystemSliceStation, resetSystemSlice } from "../../slices/SystemSlice";
 import { getDocTypes, docTypeSelector } from "../../slices/DocumentTypeSlice";
 
 //context
@@ -58,11 +54,9 @@ const StationPage = (props: Props) => {
 
   /*Inicio Formulário de Vinculação dos Sistemas*/
   const [openSystemLinkForm, setOpenSystemLinkForm] = useState<boolean>(false);
-  //const [stationId, setStationId] = useState<string | undefined>("");
   const [documentId, setDocumentId] = useState<string>("");
   const handleOpenFormLinkSystem = (idDocument: string) => {
     setOpenSystemLinkForm(true);
-    //setStationId(idStation);
     setDocumentId(idDocument);
   };
   /*Fim Formulário de Vinculação dos Sistemas*/
@@ -88,7 +82,7 @@ const StationPage = (props: Props) => {
     if (successSystem) {
       setLabelSystem({ ...labelSystem, openedLabelSystemForm: false });
     }
-    dispatchStation(resetSliceSystem());
+    dispatchStation(resetSystemSlice());
   }, [successSystem, dispatchStation, setLabelSystem, labelSystem]);
 
   /*Fim Formulário de Label do Sistema*/
@@ -170,7 +164,6 @@ const StationPage = (props: Props) => {
 
   useEffect(() => {
     if (docError) {
-      alert(docError);
       notify(docMessage, "E");
       dispatchDocument(reset());
     }
@@ -242,11 +235,7 @@ const StationPage = (props: Props) => {
               ))}
             {openSystemLinkForm && (
               <div className="absolute bg-white top-0 right-0 w-full h-full border">
-                <SystemLinkDocument
-                  setOpenSystemLinkForm={setOpenSystemLinkForm}
-                  stationId={id}
-                  documentId={documentId}
-                />
+                <SystemLinkDocument setOpenSystemLinkForm={setOpenSystemLinkForm} documentId={documentId} />
               </div>
             )}
             {station && openedLabelStationForm && (

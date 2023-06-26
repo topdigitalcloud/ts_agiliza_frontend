@@ -7,7 +7,5 @@ export interface ILinkStationDocStates {
   error: boolean;
   success: boolean;
   loading: boolean;
-  message: string;
-  page: number;
-  pageCount: number;
+  message: any;
 }
