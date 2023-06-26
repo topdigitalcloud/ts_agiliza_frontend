@@ -55,7 +55,7 @@ const Upload = (props: Props) => {
       notify(message, "E");
       dispatch(reset());
     }
-  }, [error, notify, dispatch]);
+  }, [error, notify, dispatch, message]);
 
   if (loading) {
     return <div>Realizando o Upload. Isso pode levar um tempo....</div>;

@@ -10,7 +10,6 @@ import { useState, useCallback, useMemo } from "react";
 import addPassiveSupport from "../../utils/passiveSupport";
 
 //types
-import { TStation } from "../../Interfaces/IStation";
 import { TLocation } from "../../Interfaces/ILocation";
 
 //components
