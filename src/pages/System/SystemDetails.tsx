@@ -40,8 +40,8 @@ const SystemDetails = ({ systemId }: Props) => {
     <>
       <div>
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl p-1 text-top-digital font-semibold mb-1 font-top-digital-title text-center">
-            Documentos do systema {system?.Label !== "" ? system?.Label : system?._id}
+          <h1 className="text-xl p-1 text-top-digital font-semibold mb-1 font-top-digital-title text-center">
+            Documentos do sistema {system?.Label !== "" ? system?.Label : system?._id}
           </h1>
           <button
             onClick={() => setLabelSystem({ ...labelSystem, openedSystemDetails: false, openedLabelSystemForm: false })}
