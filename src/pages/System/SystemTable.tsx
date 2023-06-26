@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 //icons
-import { Edit } from "lucide-react";
+import { Edit, BookOpen } from "lucide-react";
 
 //types
 import { LabelSystem } from "../../contexts/ContextSystem";
@@ -23,7 +23,22 @@ const SystemTable = ({ systems, labels }: Props) => {
       top: 0,
       behavior: "smooth",
     });
-    setLabelSystem({ ...labelSystem, openedLabelSystemForm: true, idSystem: idSystem, labelSystem: label });
+    setLabelSystem({
+      ...labelSystem,
+      openedLabelSystemForm: true,
+      openedSystemDetails: false,
+      idSystem: idSystem,
+      labelSystem: label,
+    });
+  };
+
+  const handleOpenSystemDetails = (e: React.MouseEvent<HTMLElement>, idSystem: string) => {
+    e.preventDefault();
+    window.scroll({
+      top: 0,
+      behavior: "smooth",
+    });
+    setLabelSystem({ ...labelSystem, openedLabelSystemForm: true, openedSystemDetails: true, idSystem: idSystem });
   };
 
   return (
@@ -32,6 +47,13 @@ const SystemTable = ({ systems, labels }: Props) => {
         <table className="text-left text-sm font-light ">
           <thead className="border-b bg-top-digital-op-40 font-medium dark:border-neutral-500">
             <tr key="loc0">
+              <th
+                key="open"
+                scope="col"
+                className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base"
+              >
+                Abrir
+              </th>
               {labels && labels.length !== 0 && (
                 <>
                   {labels.map((label, index) => (
@@ -54,6 +76,19 @@ const SystemTable = ({ systems, labels }: Props) => {
                   key={system._id}
                   className={`border-b dark:border-neutral-500 ${index % 2 ? " bg-top-digital-op-25" : "bg-white"}`}
                 >
+                  <td key="open" className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base">
+                    <button
+                      className="underline hover:text-top-digital-link-hover"
+                      title="Coloque um apelido na Estação"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleOpenSystemDetails(e, system._id);
+                      }}
+                    >
+                      <BookOpen className="cursor-pointer" />
+                    </button>
+                  </td>
+
                   {labels &&
                     labels.map((label) => (
                       <td
@@ -64,6 +99,7 @@ const SystemTable = ({ systems, labels }: Props) => {
                           <div
                             className="w-full text-center flex items-center gap-2"
                             onClick={(e) => {
+                              e.preventDefault();
                               handleOpenLabelSystemForm(e, system._id, system[label[0]]);
                             }}
                           >
@@ -71,13 +107,8 @@ const SystemTable = ({ systems, labels }: Props) => {
                             <button
                               className="underline hover:text-top-digital-link-hover"
                               title="Coloque um apelido na Estação"
-                              onClick={(e) => {
-                                e.preventDefault();
-                              }}
                             >
-                              <p>
-                                <Edit />
-                              </p>
+                              <Edit />
                             </button>
                           </div>
                         )}

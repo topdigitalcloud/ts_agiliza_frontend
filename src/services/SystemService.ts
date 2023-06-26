@@ -56,11 +56,11 @@ const setLabelSystem = async (data: any, token: string) => {
 };
 
 //getEquipamentsByID
-const getSystemById = async (id: string | undefined, token: string) => {
-  const config = requestConfig("GET", null, token);
-
+const getSystemById = async (data: any | undefined, token: string) => {
+  const config = requestConfig("POST", data, token);
+  console.log(config);
   try {
-    const res = await fetch(api + "/systems/" + id, config)
+    const res = await fetch(api + "/systems/system", config)
       .then((res) => res.json())
       .catch((err) => err);
     return res;

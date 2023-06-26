@@ -71,6 +71,20 @@ const getDocById = async (data: any, token: string) => {
   }
 };
 
+//post
+const getSystemDocs = async (data: any, token: string) => {
+  const config = requestConfig("POST", data, token);
+  try {
+    const res = await fetch(api + "/documents/system", config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //Get
 const getStationDocs = async (id: string | undefined, token: string) => {
   const config = requestConfig("GET", null, token);
@@ -121,6 +135,7 @@ const DocumentService = {
   getAllDocs,
   getDocById,
   getStationDocs,
+  getSystemDocs,
   downloadDoc,
 };
 

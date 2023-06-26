@@ -43,10 +43,10 @@ export const getSystemsByStation = createAsyncThunk("systems/getSystemsByStation
 });
 
 //get equipment by ID
-export const getSystemById = createAsyncThunk("systems/getSystemById", async (id: string | undefined, thunkAPI) => {
+export const getSystemById = createAsyncThunk("systems/getSystemById", async (data: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const res = await SystemService.getSystemById(id, token);
+  const res = await SystemService.getSystemById(data, token);
   //check for errors
   if (res.errors) {
     return thunkAPI.rejectWithValue(res.errors[0]);
@@ -118,7 +118,7 @@ export const SystemSlice = createSlice({
         state.error = false;
         state.loading = false;
         state.success = false;
-        state.systems = action.payload;
+        state.system = action.payload;
       })
       .addCase(getSystemById.pending, (state) => {
         state.error = false;

@@ -26,6 +26,7 @@ import DocType from "./pages/DocType/DocType";
 
 //context //context
 import { ContextSystemProvider } from "./contexts/ContextSystem";
+import SystemDetails from "./pages/System/SystemDetails";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -45,6 +46,10 @@ function App() {
         <Route path="/configsystem" element={auth ? <ConfigSystem /> : <Navigate to="/login" />} />
         <Route path="/upload" element={auth ? <Upload /> : <Navigate to="/login" />} />
         <Route path="/doctype" element={auth ? <DocType /> : <Navigate to="/login" />} />
+        <Route
+          path="/system"
+          element={auth ? <SystemDetails systemId="64988744a03feae936e67c89" /> : <Navigate to="/login" />}
+        />
         <Route
           path="/stationpage/:id"
           element={

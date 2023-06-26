@@ -64,6 +64,18 @@ export const getDocById = createAsyncThunk("document/getDocById", async (id: any
 });
 
 //get
+export const getSystemDocs = createAsyncThunk("document/getSystemDocs", async (data: any, thunkAPI) => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+  const res = await DocumentService.getSystemDocs(data, token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
+  }
+  return res;
+});
+
+//get
 export const getStationDocs = createAsyncThunk("document/getStationDocs", async (id: string | undefined, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
@@ -187,6 +199,22 @@ export const DocumentSlice = createSlice({
         state.loading = true;
       })
       .addCase(getStationDocs.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+        state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
+      })
+      .addCase(getSystemDocs.fulfilled, (state, action) => {
+        state.error = false;
+        state.loading = false;
+        state.success = false;
+        state.documents = action.payload;
+      })
+      .addCase(getSystemDocs.pending, (state) => {
+        state.error = false;
+        state.loading = true;
+      })
+      .addCase(getSystemDocs.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
         state.success = false;

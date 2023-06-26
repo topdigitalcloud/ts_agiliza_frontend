@@ -34,6 +34,7 @@ import { TStation } from "../../Interfaces/IStation";
 import System from "../System/System";
 import SystemLinkDocument from "../System/SystemLinkDocument";
 import EditStationLabel from "../../components/EditStationLabel";
+import SystemDetails from "../System/SystemDetails";
 
 type Props = {};
 
@@ -278,6 +279,11 @@ const StationPage = (props: Props) => {
                 </div>
               </div>
             )}
+            {station && labelSystem.openedSystemDetails && (
+              <div className="absolute bg-white top-0 right-0 w-full h-full border">
+                <SystemDetails systemId={labelSystem.idSystem} />
+              </div>
+            )}
           </div>
           <div className="bg-white border p-2 m-2 flex-1 order-1 md:order-2">
             {docLoading ? (
@@ -427,6 +433,11 @@ const StationPage = (props: Props) => {
                                 onClick={(e) => {
                                   e.preventDefault();
                                   handleOpenFormLinkSystem(doc._id);
+                                  setLabelSystem({
+                                    ...labelSystem,
+                                    openedSystemDetails: false,
+                                    openedLabelSystemForm: false,
+                                  });
                                 }}
                               />
                             )}

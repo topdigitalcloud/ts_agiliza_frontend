@@ -3,6 +3,7 @@ import { createContext, ReactNode, useState, Dispatch, SetStateAction } from "re
 export type TLabelSystem = {
   openedLabelSystemForm: boolean;
   labelSystem: string;
+  openedSystemDetails: boolean;
   idSystem: string;
 };
 
@@ -16,6 +17,7 @@ export const ContextSystem = createContext<LabelSystem>({} as LabelSystem);
 export const ContextSystemProvider = ({ children }: { children: ReactNode }) => {
   const [labelSystem, setLabelSystem] = useState({
     openedLabelSystemForm: false,
+    openedSystemDetails: false,
     labelSystem: "",
     idSystem: "",
   });
