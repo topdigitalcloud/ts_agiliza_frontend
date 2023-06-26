@@ -46,10 +46,6 @@ const SystemActionLinkDoc = ({ document, system, linked }: Props) => {
   useEffect(() => {
     if (success && message["successSystem"] === sSistema && message["successDoc"] === dDocumento) {
       setIsLinked((l) => !l);
-      console.log("CERTO");
-    }
-    if (success && message["successSystem"] === system && message["successDoc"] === document) {
-      console.log("ERRADO");
     }
   }, [success, message, sSistema, dDocumento, dispatch, document, system]);
 

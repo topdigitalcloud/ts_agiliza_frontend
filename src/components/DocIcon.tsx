@@ -47,6 +47,35 @@ const DocIcon = ({ extension }: Props) => {
           ></path>
         </svg>
       )}
+      {extension && (extension === ".xls" || extension === ".xlsx") && (
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 256 256">
+          <g fill="none" strokeMiterlimit="10" strokeWidth="1" transform="matrix(2.81 0 0 2.81 1.407 1.407)">
+            <path
+              fill="#FFF"
+              d="M80.959 78.79H19.13a2.876 2.876 0 01-2.876-2.876V14.085a2.876 2.876 0 012.876-2.876h61.829a2.876 2.876 0 012.876 2.876v61.829a2.876 2.876 0 01-2.876 2.876z"
+            ></path>
+            <path
+              fill="#19754C"
+              d="M80.959 80.79H19.13a4.881 4.881 0 01-4.876-4.875v-61.83a4.882 4.882 0 014.876-4.876h61.829a4.882 4.882 0 014.876 4.876v61.83a4.88 4.88 0 01-4.876 4.875zM19.13 13.209a.877.877 0 00-.876.876v61.83c0 .482.393.875.876.875h61.829a.877.877 0 00.876-.875v-61.83a.877.877 0 00-.876-.876H19.13z"
+            ></path>
+            <rect width="15.93" height="4" x="61.05" y="20.47" fill="#19754C" rx="0" ry="0"></rect>
+            <rect width="15.93" height="4" x="61.05" y="31.74" fill="#19754C" rx="0" ry="0"></rect>
+            <rect width="15.93" height="4" x="61.05" y="43" fill="#19754C" rx="0" ry="0"></rect>
+            <rect width="15.93" height="4" x="61.05" y="54.26" fill="#19754C" rx="0" ry="0"></rect>
+            <rect width="15.93" height="4" x="61.05" y="65.53" fill="#19754C" rx="0" ry="0"></rect>
+            <rect width="15.93" height="4" x="39.76" y="20.47" fill="#19754C" rx="0" ry="0"></rect>
+            <rect width="15.93" height="4" x="39.76" y="31.74" fill="#19754C" rx="0" ry="0"></rect>
+            <rect width="15.93" height="4" x="39.76" y="43" fill="#19754C" rx="0" ry="0"></rect>
+            <rect width="15.93" height="4" x="39.76" y="54.26" fill="#19754C" rx="0" ry="0"></rect>
+            <rect width="15.93" height="4" x="39.76" y="65.53" fill="#19754C" rx="0" ry="0"></rect>
+            <path fill="#19754C" d="M51.33 90L6.17 78.79 6.17 11.21 51.33 0z"></path>
+            <path
+              fill="#FFF"
+              d="M38.15 28.21L31.01 28.62 26.67 37.72 22.56 29.1 15.8 29.48 23.2 45 15.8 60.52 22.56 60.9 26.67 52.28 31.01 61.38 38.15 61.79 30.14 45z"
+            ></path>
+          </g>
+        </svg>
+      )}
     </>
   );
 };

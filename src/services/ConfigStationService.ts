@@ -16,6 +16,21 @@ const getConfig = async (token: string) => {
   }
 };
 
+//get visible fields customized by user
+const getVisibleFields = async (token: string) => {
+  const config = requestConfig("GET", null, token);
+
+  try {
+    const res = await fetch(api + "/configstations/visible", config)
+      .then((res) => res.json())
+      .catch((err) => err);
+
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 //getAllEquipamentosByLocation
 
 const setConfig = async (configs: any, token: string) => {
@@ -33,6 +48,7 @@ const setConfig = async (configs: any, token: string) => {
 const ConfigStationService = {
   getConfig,
   setConfig,
+  getVisibleFields,
 };
 
 export default ConfigStationService;

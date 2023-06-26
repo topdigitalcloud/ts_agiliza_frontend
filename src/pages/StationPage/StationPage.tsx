@@ -10,7 +10,7 @@ import useAppSelector from "../../hooks/useAppSelector";
 //redux
 
 //primeira parte do componente: config e station
-import { configSelector, getConfig } from "../../slices/ConfigStationSlice";
+import { configSelector, getVisibleFields } from "../../slices/ConfigStationSlice";
 import { stationSelector, getStationById } from "../../slices/StationSlice";
 
 import { reset, getStationDocs, documentSelector, insertDoc, downloadDoc } from "../../slices/DocumentSlice";
@@ -60,7 +60,7 @@ const StationPage = (props: Props) => {
   const { station, success } = useAppSelector(stationSelector);
   //chamando o reducer para config
   useEffect(() => {
-    dispatchConfig(getConfig());
+    dispatchConfig(getVisibleFields());
   }, [dispatchConfig]);
   //chamando o reducer para station
   useEffect(() => {

@@ -27,6 +27,18 @@ export const getConfig = createAsyncThunk("configstation/getConfig", async (_, t
   return res;
 });
 
+//getVisibleFields
+export const getVisibleFields = createAsyncThunk("configstation/getVisibleFields", async (_, thunkAPI) => {
+  const appState = thunkAPI.getState() as RootState;
+  const token = appState.LoginReducer.user!.token;
+  const res = await ConfigStationService.getConfig(token);
+  //check for errors
+  if (res.errors) {
+    return thunkAPI.rejectWithValue(res.errors[0]);
+  }
+  return res;
+});
+
 //upload CSV file
 export const setConfig = createAsyncThunk("configstation/setConfig", async (configs: any, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
@@ -62,6 +74,22 @@ export const ConfigStationSlice = createSlice({
         state.loading = true;
       })
       .addCase(getConfig.rejected, (state, action) => {
+        state.error = true;
+        state.loading = false;
+        state.success = false;
+        state.message = typeof action.payload === "string" ? action.payload : "";
+      })
+      .addCase(getVisibleFields.fulfilled, (state, action) => {
+        state.error = false;
+        state.loading = false;
+        state.success = true;
+        state.config = action.payload;
+      })
+      .addCase(getVisibleFields.pending, (state) => {
+        state.error = false;
+        state.loading = true;
+      })
+      .addCase(getVisibleFields.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
         state.success = false;
