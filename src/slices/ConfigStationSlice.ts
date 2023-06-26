@@ -31,7 +31,7 @@ export const getConfig = createAsyncThunk("configstation/getConfig", async (_, t
 export const getVisibleFields = createAsyncThunk("configstation/getVisibleFields", async (_, thunkAPI) => {
   const appState = thunkAPI.getState() as RootState;
   const token = appState.LoginReducer.user!.token;
-  const res = await ConfigStationService.getConfig(token);
+  const res = await ConfigStationService.getVisibleFields(token);
   //check for errors
   if (res.errors) {
     return thunkAPI.rejectWithValue(res.errors[0]);
