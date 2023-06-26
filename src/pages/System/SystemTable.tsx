@@ -62,11 +62,12 @@ const SystemTable = ({ systems, labels }: Props) => {
                       >
                         {label[0] === "Label" && (
                           <div
-                            className="w-full text-center"
+                            className="w-full text-center flex items-center gap-2"
                             onClick={(e) => {
                               handleOpenLabelSystemForm(e, system._id, system[label[0]]);
                             }}
                           >
+                            {system[label[0]]}
                             <button
                               className="underline hover:text-top-digital-link-hover"
                               title="Coloque um apelido na Estação"
@@ -74,13 +75,9 @@ const SystemTable = ({ systems, labels }: Props) => {
                                 e.preventDefault();
                               }}
                             >
-                              {system[label[0]] === "" ? (
-                                <p>
-                                  <Edit />
-                                </p>
-                              ) : (
-                                system[label[0]]
-                              )}
+                              <p>
+                                <Edit />
+                              </p>
                             </button>
                           </div>
                         )}

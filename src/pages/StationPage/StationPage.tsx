@@ -8,14 +8,12 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 
 //redux
+
+//primeira parte do componente: config e station
+import { configSelector, getConfig } from "../../slices/ConfigStationSlice";
+import { stationSelector, getStationById } from "../../slices/StationSlice";
+
 import { reset, getStationDocs, documentSelector, insertDoc, downloadDoc } from "../../slices/DocumentSlice";
-import {
-  getStationById,
-  stationSelector,
-  setLabelStation as setLabelSliceStation,
-  reset as resetSliceStation,
-} from "../../slices/StationSlice";
-import { getConfig, configSelector } from "../../slices/ConfigStationSlice";
 import { systemSelector, setLabelSystem as setSystemSliceStation, resetSystemSlice } from "../../slices/SystemSlice";
 import { getDocTypes, docTypeSelector } from "../../slices/DocumentTypeSlice";
 
@@ -27,7 +25,7 @@ import DateFormat from "../../components/DateFormat";
 import { LabelSystem } from "../../contexts/ContextSystem";
 
 //icons
-import { Download, Link } from "lucide-react";
+import { Download, Edit, Link } from "lucide-react";
 import DocIcon from "../../components/DocIcon";
 import { TDocument } from "../../Interfaces/IDocument";
 import { TStation } from "../../Interfaces/IStation";
@@ -35,26 +33,48 @@ import { TStation } from "../../Interfaces/IStation";
 //pages
 import System from "../System/System";
 import SystemLinkDocument from "../System/SystemLinkDocument";
+import EditStationLabel from "../../components/EditStationLabel";
 
 type Props = {};
 
 const StationPage = (props: Props) => {
+  //states
+  const [openedLabelStationForm, setOpenedLabelStationForm] = useState<boolean>(false);
+  const [openSystemLinkForm, setOpenSystemLinkForm] = useState<boolean>(false);
+  const [documentId, setDocumentId] = useState<string>("");
+  const [formdocument, setFormDocument] = useState<File>();
+  const [title, setTitle] = useState<string>("");
+  const [docTypeId, setDocTypeId] = useState<string>("0");
+  const [openedUploadForm, setOpenedUploadForm] = useState<boolean>(false);
+
   //Notify
   const notify = useNotify();
-
+  /*INICIO PRIMEIRA PARTE DO COMPOMENTE*/
+  //id da station
   const { id } = useParams();
-
-  const dispatchStation = useAppDispatch();
-  const dispatchSystem = useAppDispatch();
+  //distatchs da parte inicial do componente
   const dispatchConfig = useAppDispatch();
-  const dispatchTypes = useAppDispatch();
+  const dispatchStation = useAppDispatch();
+  //selecionando os atributos de config e station para ser usado
   const { config } = useAppSelector(configSelector);
+  const { station, success } = useAppSelector(stationSelector);
+  //chamando o reducer para config
+  useEffect(() => {
+    dispatchConfig(getConfig());
+  }, [dispatchConfig]);
+  //chamando o reducer para station
+  useEffect(() => {
+    dispatchStation(getStationById(id));
+  }, [id, dispatchStation, success, openedLabelStationForm]);
+  /*FIM PRIMEIRA PARTE*/
+
+  const dispatchSystem = useAppDispatch();
+  const dispatchTypes = useAppDispatch();
+
   //get doc types to fill form to upload document
   const { docTypes } = useAppSelector(docTypeSelector);
 
   /*Inicio Formulário de Vinculação dos Sistemas*/
-  const [openSystemLinkForm, setOpenSystemLinkForm] = useState<boolean>(false);
-  const [documentId, setDocumentId] = useState<string>("");
   const handleOpenFormLinkSystem = (idDocument: string) => {
     setOpenSystemLinkForm(true);
     setDocumentId(idDocument);
@@ -87,30 +107,6 @@ const StationPage = (props: Props) => {
 
   /*Fim Formulário de Label do Sistema*/
 
-  /*Inicio Formulário de Label da Estação*/
-  const { station, success } = useAppSelector(stationSelector);
-  const [openedLabelStationForm, setOpenedLabelStationForm] = useState<boolean>(false);
-  const [labelStation, setLabelStation] = useState<string>("");
-  const submitHandleLabelStation = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const data: any = {
-      labelStation,
-      idStation: station!._id,
-    };
-
-    dispatchStation(setLabelSliceStation(data));
-  };
-
-  useEffect(() => {
-    if (success) {
-      setOpenedLabelStationForm(false);
-    }
-    dispatchStation(resetSliceStation());
-  }, [success, dispatchStation]);
-
-  /*Fim Formulário de Label da Estação*/
-
   /*Inicio Formulário de Documentos*/
   const {
     documents,
@@ -119,10 +115,6 @@ const StationPage = (props: Props) => {
     success: docSuccess,
     loading: docLoading,
   } = useAppSelector(documentSelector);
-  const [formdocument, setFormDocument] = useState<File>();
-  const [title, setTitle] = useState<string>("");
-  const [docTypeId, setDocTypeId] = useState<string>("0");
-  const [openedUploadForm, setOpenedUploadForm] = useState<boolean>(false);
   const dispatchDocument = useAppDispatch();
   useEffect(() => {
     dispatchDocument(getStationDocs(id));
@@ -184,16 +176,8 @@ const StationPage = (props: Props) => {
   /*Fim Formulário de Documentos*/
 
   useEffect(() => {
-    dispatchConfig(getConfig());
-  }, [dispatchConfig]);
-
-  useEffect(() => {
     dispatchTypes(getDocTypes());
   }, [dispatchTypes]);
-
-  useEffect(() => {
-    dispatchStation(getStationById(id));
-  }, [id, dispatchStation, success]);
 
   return (
     <div className="flex justify-center items-center container mx-auto">
@@ -209,27 +193,28 @@ const StationPage = (props: Props) => {
                       index % 2 ? "bg-white" : "bg-top-digital-op-25"
                     } font-semibold text-top-digital-content-color font-top-digital-content`}
                   >
-                    {conf.campo === "Label" && (
-                      <button
-                        className="underline hover:text-top-digital-link-hover"
-                        title="Coloque um apelido na Estação"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setOpenedLabelStationForm(true);
-                          setLabelStation(station[conf.campo as keyof TStation]);
-                        }}
-                      >
-                        {conf.label}
-                      </button>
-                    )}
-                    {conf.campo !== "Label" && <>{conf.label}</>}
+                    {conf.label}
                   </div>
                   <div
                     className={`${
                       index % 2 ? "bg-white" : "bg-top-digital-op-25"
                     } text-top-digital-content-color font-normal font-top-digital-content`}
                   >
-                    {station[conf.campo as keyof TStation]}
+                    <div className="flex gap-2 items-center">
+                      {station[conf.campo as keyof TStation]}
+                      {conf.campo === "Label" && (
+                        <button
+                          className="underline hover:text-top-digital-link-hover"
+                          title="Coloque um apelido na Estação"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setOpenedLabelStationForm(true);
+                          }}
+                        >
+                          <Edit />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -239,56 +224,7 @@ const StationPage = (props: Props) => {
               </div>
             )}
             {station && openedLabelStationForm && (
-              <div className="absolute bg-white top-0 right-0 w-full h-full border">
-                <div className="flex flex-col items-center justify-center font-bold p-2 text-top-digital text-lg">
-                  <div className="mx-auto w-full max-w-[550px] mb-6">
-                    <h2 className="font-top-digital-content font-normal text-top-digital-content-color">
-                      Adicione/Edite um apelido para a estação
-                      <span className="font-bold"> {station && station.EnderecoEstacao}</span>
-                    </h2>
-                  </div>
-                  <div className="mx-auto w-full max-w-[550px]">
-                    <form encType="multipart/form-data" onSubmit={submitHandleLabelStation}>
-                      <div className="mb-5">
-                        <label
-                          htmlFor="labelStation"
-                          className="mb-3 block text-base font-medium text-top-digital-content-color"
-                        >
-                          Apelido da Estação
-                        </label>
-                        <input
-                          type="text"
-                          onChange={(e) => setLabelStation(e.target.value)}
-                          name="labelStation"
-                          value={labelStation}
-                          id="labelStation"
-                          className="w-full appearance-none rounded-md border border-top-digital-op-25 bg-white py-3 px-6 text-base font-medium text-top-digital-content-color outline-none focus:border-top-digital focus:shadow-md focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
-                        />
-                      </div>
-                      <div>
-                        <div className="flex gap-1">
-                          <button
-                            type="submit"
-                            className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
-                          >
-                            Enviar
-                          </button>
-                          <button
-                            className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setOpenedLabelStationForm(false);
-                            }}
-                          >
-                            Cancelar
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
+              <EditStationLabel setOpenedLabelStationForm={setOpenedLabelStationForm} label={station.Label} />
             )}
             {station && labelSystem.openedLabelSystemForm && (
               <div className="absolute bg-white top-0 right-0 w-full h-full border">

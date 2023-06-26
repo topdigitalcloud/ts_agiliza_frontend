@@ -11,6 +11,7 @@ import DocTypeReducer from "./slices/DocumentTypeSlice";
 import StationReducer from "./slices/StationSlice";
 import SystemReducer from "./slices/SystemSlice";
 import LinkSystemDocReducer from "./slices/LinkSystemDocSlice";
+import LabelStationReducer from "./slices/LabelStationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     StationReducer,
     SystemReducer,
     LinkSystemDocReducer,
+    LabelStationReducer,
   },
 });
 
