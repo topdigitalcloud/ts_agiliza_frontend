@@ -186,6 +186,7 @@ const StationPage = (props: Props) => {
       <div className="flex-1 w-full">
         <div className="flex flex-wrap flex-col md:flex-row md:flex-nowrap ">
           <div className="bg-white m-2 flex-1 order-2 md:order-1 overflow-x-auto relative">
+            <h1 className="text-xl text-top-digital font-semibold mb-2 font-top-digital-title">Dados da Estação</h1>
             {config &&
               station &&
               config.map((conf, index) => (
@@ -291,7 +292,7 @@ const StationPage = (props: Props) => {
               <p>Aguarde....</p>
             ) : (
               <>
-                <h1 className="text-3xl text-top-digital font-semibold mb-2 font-top-digital-title">Documentos</h1>
+                <h1 className="text-2xl text-top-digital font-semibold mb-2 font-top-digital-title">Documentos</h1>
                 {!openedUploadForm && (
                   <button
                     className="rounded-md bg-top-digital py-3 px-8 text-center text-base font-normal font-top-digital-title text-white hover:text-top-digital-buttom-hover outline-none"
@@ -427,7 +428,6 @@ const StationPage = (props: Props) => {
                               !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
                             } text-top-digital-content-color p-1 flex`}
                           >
-                            {doc.tipo?.typeName || "-"}
                             {doc.tipo?.toSystem && (
                               <Link
                                 className="cursor-pointer text-top-digital-hover"
@@ -442,6 +442,7 @@ const StationPage = (props: Props) => {
                                 }}
                               />
                             )}
+                            {doc.tipo?.typeName || "-"}
                           </div>
                           <div
                             className={`${

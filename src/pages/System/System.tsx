@@ -57,6 +57,9 @@ const System = ({ stationId, refreshSystems }: Props) => {
   return (
     <>
       <div className="flex relative">
+        <h1 className="text-xl text-top-digital font-semibold mb-2 font-top-digital-title">
+          Sistemas instalados da Estação
+        </h1>
         <div className="flex gap-2 justify-center items-center absolute left-0 right-0 m-auto w-full h-full">
           <button title="Voltar" disabled={page === 1 || loading === true} onClick={handlePrevious}>
             <SkipBack className="text-top-digital hover:text-top-digital-hover" />
