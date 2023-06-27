@@ -112,7 +112,7 @@ const SystemLinkDocument = ({ setOpenSystemLinkForm, documentId }: Props) => {
                                 key={`${label[0]}${system._id}`}
                                 className="whitespace-nowrap px-6 py-4 font-normal text-sm font-top-digital-content"
                               >
-                                <p>{system[label[0] as keyof TSystem]}</p>
+                                <p>{system[label[0] as keyof TSystem]?.toString()}</p>
                               </td>
                             )
                         )}

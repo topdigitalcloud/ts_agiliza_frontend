@@ -58,7 +58,6 @@ const setLabelSystem = async (data: any, token: string) => {
 //getEquipamentsByID
 const getSystemById = async (data: any | undefined, token: string) => {
   const config = requestConfig("POST", data, token);
-  console.log(config);
   try {
     const res = await fetch(api + "/systems/system", config)
       .then((res) => res.json())

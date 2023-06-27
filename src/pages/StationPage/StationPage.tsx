@@ -59,6 +59,7 @@ const StationPage = (props: Props) => {
   //selecionando os atributos de config e station para ser usado
   const { config } = useAppSelector(configSelector);
   const { station, success } = useAppSelector(stationSelector);
+
   //chamando o reducer para config
   useEffect(() => {
     dispatchConfig(getVisibleFields());

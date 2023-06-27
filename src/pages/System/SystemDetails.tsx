@@ -16,6 +16,7 @@ import { ContextSystem } from "../../contexts/ContextSystem";
 //components
 import DocumentsSystem from "../Document/DocumentsSystem";
 import { LabelSystem } from "../../contexts/ContextSystem";
+import DataUnixTimeStamp from "../../components/DataUnixTimeStamp";
 
 type Props = {
   systemId: string;
@@ -34,7 +35,6 @@ const SystemDetails = ({ systemId }: Props) => {
     dispatch(getSystemById(obj));
     dispatch(getConfig());
   }, [dispatch, systemId]);
-  console.log(system, config);
 
   return (
     <>
@@ -67,7 +67,12 @@ const SystemDetails = ({ systemId }: Props) => {
                       index % 2 ? "bg-white" : "bg-top-digital-op-25"
                     } text-top-digital-content-color font-normal font-top-digital-content`}
                   >
-                    <div className="flex gap-2 items-center">{system[conf.campo as keyof TSystem]}</div>
+                    {conf.label === "DataValidade" && (
+                      <DataUnixTimeStamp timestamp={system[conf.campo as keyof TSystem]!.toString()} />
+                    )}
+                    {conf.label !== "DataValidade" && (
+                      <div className="flex gap-2 items-center">{system[conf.campo as keyof TSystem]?.toString()}</div>
+                    )}
                   </div>
                 </div>
               )

@@ -8,6 +8,7 @@ import { LabelSystem } from "../../contexts/ContextSystem";
 
 //context
 import { ContextSystem } from "../../contexts/ContextSystem";
+import DataUnixTimeStamp from "../../components/DataUnixTimeStamp";
 
 type Props = {
   systems: any[];
@@ -112,7 +113,11 @@ const SystemTable = ({ systems, labels }: Props) => {
                             </button>
                           </div>
                         )}
-                        {label[0] !== "Label" && system[label[0]]}
+                        {label[0] !== "Label" && label[0] === "DataValidade" ? (
+                          <DataUnixTimeStamp timestamp={system[label[0]]} />
+                        ) : (
+                          system[label[0]]
+                        )}
                       </td>
                     ))}
                 </tr>
