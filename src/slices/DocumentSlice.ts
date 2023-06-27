@@ -212,7 +212,7 @@ export const DocumentSlice = createSlice({
       })
       .addCase(getSystemDocs.pending, (state) => {
         state.error = false;
-        state.loading = true;
+        state.loading = false;
       })
       .addCase(getSystemDocs.rejected, (state, action) => {
         state.error = true;

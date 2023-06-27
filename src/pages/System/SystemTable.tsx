@@ -39,7 +39,12 @@ const SystemTable = ({ systems, labels }: Props) => {
       top: 0,
       behavior: "smooth",
     });
-    setLabelSystem({ ...labelSystem, openedLabelSystemForm: true, openedSystemDetails: true, idSystem: idSystem });
+    setLabelSystem({
+      ...labelSystem,
+      openedLabelSystemForm: false,
+      openedSystemDetails: true,
+      idSystem: idSystem,
+    });
   };
 
   return (
