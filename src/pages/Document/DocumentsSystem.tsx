@@ -17,7 +17,7 @@ type Props = {
 
 const DocumentsSystem = ({ systemId }: Props) => {
   const dispatch = useAppDispatch();
-  const { documents } = useAppSelector(documentSelector);
+  const { docsSystemDetails: documents } = useAppSelector(documentSelector);
 
   useEffect(() => {
     const obj = {

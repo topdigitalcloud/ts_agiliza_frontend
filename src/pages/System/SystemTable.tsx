@@ -85,7 +85,7 @@ const SystemTable = ({ systems, labels }: Props) => {
                   <td key="open" className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base">
                     <button
                       className="underline hover:text-top-digital-link-hover"
-                      title="Coloque um apelido na Estação"
+                      title="Ver detalhes"
                       onClick={(e) => {
                         e.preventDefault();
                         handleOpenSystemDetails(e, system._id);
@@ -118,10 +118,10 @@ const SystemTable = ({ systems, labels }: Props) => {
                             </button>
                           </div>
                         )}
-                        {label[0] !== "Label" && label[0] === "DataValidade" ? (
+                        {label[0] === "DataValidade" ? (
                           <DataUnixTimeStamp timestamp={system[label[0]]} />
                         ) : (
-                          system[label[0]]
+                          label[0] !== "Label" && system[label[0]]
                         )}
                       </td>
                     ))}

@@ -12,6 +12,7 @@ export type TDocument = {
 
 export interface IDocumentStates {
   documents: TDocument[];
+  docsSystemDetails: TDocument[];
   document: TDocument | null;
   error: boolean;
   message: string;

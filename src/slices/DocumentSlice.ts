@@ -12,6 +12,7 @@ const initialState: IDocumentStates = {
   success: false,
   message: "",
   documents: [],
+  docsSystemDetails: [],
   document: null,
 };
 
@@ -208,7 +209,7 @@ export const DocumentSlice = createSlice({
         state.error = false;
         state.loading = false;
         state.success = false;
-        state.documents = action.payload;
+        state.docsSystemDetails = action.payload;
       })
       .addCase(getSystemDocs.pending, (state) => {
         state.error = false;

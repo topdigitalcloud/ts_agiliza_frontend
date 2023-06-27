@@ -37,7 +37,6 @@ const EditStationLabel = ({ setOpenedLabelStationForm, label }: Props) => {
       labelStation,
       idStation: station!._id,
     };
-    console.log(data);
     dispatch(setNewLabelStation(data));
   };
 
