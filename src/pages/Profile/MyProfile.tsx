@@ -46,7 +46,10 @@ const MyProfile = () => {
 
   //show error message
   useEffect(() => {
-    notify(message, "E");
+    if (error) {
+      notify(message, "E");
+      dispatch(profile());
+    }
   }, [error, message, notify]);
 
   //show success message and clean all auth states

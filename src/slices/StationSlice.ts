@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import StationService from "../services/StationService";
 import { RootState } from "../store";
@@ -16,6 +16,7 @@ const initialState: IStationStates = {
   station: null,
   page: 1,
   pageCount: 0,
+  uploadProgress: 0,
 };
 
 //get all equipamentos
@@ -90,17 +91,35 @@ export const setLabelStation = createAsyncThunk(
   }
 );
 
-//upload CSV file
-export const uploadStations = createAsyncThunk("stations/uploadStations", async (csv: FormData, thunkAPI) => {
-  const appState = thunkAPI.getState() as RootState;
-  const token = appState.LoginReducer.user!.token;
-  const res = await StationService.uploadStations(csv, token);
-  //check for errors
-  if (res.errors) {
-    return thunkAPI.rejectWithValue(res.errors[0]);
+// //upload CSV file
+// export const uploadStations = createAsyncThunk("stations/uploadStations", async (csv: FormData, thunkAPI) => {
+//   const appState = thunkAPI.getState() as RootState;
+//   const token = appState.LoginReducer.user!.token;
+//   const res = await StationService.uploadStations(csv, token);
+//   //check for errors
+//   if (res.errors) {
+//     return thunkAPI.rejectWithValue(res.errors[0]);
+//   }
+//   return res;
+// });
+
+export const uploadStations = createAsyncThunk(
+  "station/uploadStations",
+  async (csv: FormData, { getState, rejectWithValue, dispatch }) => {
+    const appState = getState() as RootState;
+    const token = appState.LoginReducer.user!.token;
+    const res: any = await StationService.uploadStations(csv, token, (progressEvent) => {
+      const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+      dispatch(setUploadProgress(progress));
+    });
+    // Verifique erros e retorne a resposta ou rejeite com o valor do erro
+    if (res.errors) {
+      console.log("ENTROU");
+      return rejectWithValue(res.errors[0]);
+    }
+    return res;
   }
-  return res;
-});
+);
 
 export const StationSlice = createSlice({
   name: "station",
@@ -111,6 +130,11 @@ export const StationSlice = createSlice({
       state.success = false;
       state.loading = false;
       state.message = "";
+      state.uploadProgress = 0;
+    },
+    setUploadProgress: (state, action: PayloadAction<number>) => {
+      state.uploadProgress = action.payload;
+      console.log(state.uploadProgress);
     },
   },
   extraReducers: (builder) => {
@@ -170,11 +194,13 @@ export const StationSlice = createSlice({
         state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(uploadStations.fulfilled, (state, action) => {
+        console.log("fulfilled");
         state.error = false;
-        state.loading = false;
+        state.loading = true;
         state.success = true;
       })
       .addCase(uploadStations.pending, (state) => {
+        console.log("pending");
         state.error = false;
         state.loading = true;
       })
@@ -183,6 +209,7 @@ export const StationSlice = createSlice({
         state.loading = false;
         state.success = false;
         state.message = typeof action.payload === "string" ? action.payload : "";
+        console.log("rejected", state.message);
       })
       .addCase(getStationById.fulfilled, (state, action) => {
         state.error = false;
@@ -218,6 +245,6 @@ export const StationSlice = createSlice({
   },
 });
 
-export const { reset } = StationSlice.actions;
+export const { reset, setUploadProgress } = StationSlice.actions;
 export const stationSelector = (state: RootState) => state.StationReducer;
 export default StationSlice.reducer;

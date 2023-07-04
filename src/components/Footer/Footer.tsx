@@ -7,7 +7,7 @@ type Props = {};
 
 const Footer = (props: Props) => {
   return (
-    <footer className="bg-white flex justify-center text-center">
+    <footer className="bg-white flex justify-center text-center items-end h-80">
       <NavLink to="/">
         <img
           width="244"

@@ -72,19 +72,54 @@ const setLabelStation = async (data: any, token: string) => {
   }
 };
 
-//upload CSV of Stations and Systems
-const uploadStations = async (data: any, token: string) => {
-  const config = requestConfig("POST", data, token, true);
+// //upload CSV of Stations and Systems
+// const uploadStations = async (data: any, token: string) => {
+//   const config = requestConfig("POST", data, token, true);
 
-  try {
-    const res = await fetch(api + "/stations/upload", config)
-      .then((res) => res.json())
-      .catch((err) => err);
+//   try {
+//     const res = await fetch(api + "/stations/upload", config)
+//       .then((res) => res.json())
+//       .catch((err) => err);
 
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
+//     return res;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+const uploadStations = async (
+  data: any,
+  token: string,
+  onProgress: (progressEvent: ProgressEvent<EventTarget>) => void
+) => {
+  const config = {
+    method: "POST",
+    body: data,
+    headers: `Bearer ${token}`,
+  };
+
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+
+    xhr.upload.addEventListener("progress", onProgress);
+
+    xhr.open(config.method, api + "/stations/upload");
+    xhr.setRequestHeader("Authorization", config.headers);
+
+    xhr.onload = () => {
+      if (xhr.status === 201) {
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        reject(xhr.responseText);
+      }
+    };
+
+    xhr.onerror = () => {
+      reject(xhr.statusText);
+    };
+
+    xhr.send(config.body);
+  });
 };
 
 const StationService = {

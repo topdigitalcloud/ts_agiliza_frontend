@@ -99,7 +99,7 @@ export const ProfileSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(changePassword.rejected, (state, action) => {
-        state.error = false;
+        state.error = true;
         state.loading = false;
         state.user = null;
         state.message = typeof action.payload === "string" ? action.payload : "";

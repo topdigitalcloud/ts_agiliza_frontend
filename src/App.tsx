@@ -36,38 +36,40 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <NavBar />
-      <ToastContainer />
-      <Routes>
-        <Route path="/" element={auth ? <Home /> : <Navigate to="/login" />} />
-        <Route path="/profile" element={auth ? <MyProfile /> : <Navigate to="/login" />} />
-        <Route path="/configstation" element={auth ? <ConfigStation /> : <Navigate to="/login" />} />
-        <Route path="/configsystem" element={auth ? <ConfigSystem /> : <Navigate to="/login" />} />
-        <Route path="/upload" element={auth ? <Upload /> : <Navigate to="/login" />} />
-        <Route path="/doctype" element={auth ? <DocType /> : <Navigate to="/login" />} />
-        <Route
-          path="/system"
-          element={auth ? <SystemDetails systemId="64988744a03feae936e67c89" /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/stationpage/:id"
-          element={
-            auth ? (
-              <ContextSystemProvider>
-                <StationPage />
-              </ContextSystemProvider>
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-        <Route path="/password" element={auth ? <AlterPassword /> : <Navigate to="/login" />} />
-        <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />
-        <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+    <div className="flex flex-col min-h-screen">
+      <BrowserRouter>
+        <NavBar />
+        <ToastContainer />
+        <Routes>
+          <Route path="/" element={auth ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/profile" element={auth ? <MyProfile /> : <Navigate to="/login" />} />
+          <Route path="/configstation" element={auth ? <ConfigStation /> : <Navigate to="/login" />} />
+          <Route path="/configsystem" element={auth ? <ConfigSystem /> : <Navigate to="/login" />} />
+          <Route path="/upload" element={auth ? <Upload /> : <Navigate to="/login" />} />
+          <Route path="/doctype" element={auth ? <DocType /> : <Navigate to="/login" />} />
+          <Route
+            path="/system"
+            element={auth ? <SystemDetails systemId="64988744a03feae936e67c89" /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/stationpage/:id"
+            element={
+              auth ? (
+                <ContextSystemProvider>
+                  <StationPage />
+                </ContextSystemProvider>
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route path="/password" element={auth ? <AlterPassword /> : <Navigate to="/login" />} />
+          <Route path="/register" element={!auth ? <Register /> : <Navigate to="/" />} />
+          <Route path="/login" element={!auth ? <Login /> : <Navigate to="/" />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </div>
   );
 }
 

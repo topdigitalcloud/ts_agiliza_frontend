@@ -11,22 +11,37 @@ import { SkipBack, SkipForward } from "lucide-react";
 import StationTable from "./StationTable";
 
 type Props = {
-  visibleLocations: TLocation[];
+  visibleLocations: TLocation[] | [];
 };
 
 const Station = ({ visibleLocations }: Props) => {
   const dispatch = useAppDispatch();
-  const { stations, labels, loading, page: apiPage, pageCount: apiPageCount } = useAppSelector(stationSelector);
-  const [page, setPage] = useState<number>(1);
+  const { stations, labels, loading, pageCount: apiPageCount } = useAppSelector(stationSelector);
+  const lastPage = localStorage.getItem("page") || "1";
+
+  const [page, setPage] = useState<number>(parseInt(lastPage));
   const [pageCount, setPageCount] = useState<number>(0);
 
   useEffect(() => {
-    setPage(() => apiPage);
-  }, [apiPage]);
+    const startPage = localStorage.getItem("page");
+
+    if (startPage !== null) {
+      setPage(() => parseInt(startPage));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("page", String(page));
+  }, [page]);
 
   useEffect(() => {
     setPageCount(() => apiPageCount);
-    setPage(() => 1);
+    const startPage = localStorage.getItem("page");
+    if (startPage !== null) {
+      setPage(() => parseInt(startPage));
+    } else {
+      //setPage(() => 1);
+    }
   }, [apiPageCount]);
 
   useEffect(() => {
@@ -35,18 +50,17 @@ const Station = ({ visibleLocations }: Props) => {
       latLocations += `${loc.Latitude},`;
     }
 
-    if (latLocations !== "") {
-      const objData = {
-        latLocations,
-        page,
-      };
+    const objData = {
+      latLocations,
+      page,
+    };
 
-      dispatch(getVisibleStations(objData));
-    }
+    dispatch(getVisibleStations(objData));
   }, [visibleLocations, page, dispatch]);
 
   const handlePrevious = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     setPage((p) => {
       if (p === 1) return p;
       return p - 1;
@@ -62,22 +76,27 @@ const Station = ({ visibleLocations }: Props) => {
   };
   return (
     <>
-      <div className="flex relative">
-        <div className="flex gap-2 justify-center items-center absolute left-0 right-0 m-auto w-full h-full">
-          <button title="Voltar" disabled={page === 1 || loading === true} onClick={handlePrevious}>
-            <SkipBack className="text-top-digital hover:text-top-digital-hover" />
-          </button>
-          <button title="Avançar" disabled={page === pageCount || loading === true} onClick={handleNext}>
-            <SkipForward className="text-top-digital hover:text-top-digital-hover" />
-          </button>
-        </div>
-        <div className="flex-1 text-right font-top-digital-content">
-          Página {page} de {pageCount}
-        </div>
-      </div>
-      {!loading && <StationTable stations={stations} labels={labels} />}
-      {loading && <div>Aguarde.....</div>}
-      <div className="mb-14"></div>
+      {stations && stations.length !== 0 && (
+        <>
+          <div className="flex relative">
+            <div className="flex gap-2 justify-center items-center absolute left-0 right-0 m-auto w-full h-full">
+              <button title="Voltar" disabled={page === 1 || loading === true} onClick={handlePrevious}>
+                <SkipBack className="text-top-digital hover:text-top-digital-hover" />
+              </button>
+              <button title="Avançar" disabled={page === pageCount || loading === true} onClick={handleNext}>
+                <SkipForward className="text-top-digital hover:text-top-digital-hover" />
+              </button>
+            </div>
+            <div className="flex-1 text-right font-top-digital-content">
+              Página {page} de {pageCount}
+            </div>
+          </div>
+          {!loading && <StationTable stations={stations} labels={labels} />}
+          {loading && <div>Aguarde.....</div>}
+          <div className="mb-14"></div>
+        </>
+      )}
+      {stations && stations.length === 0 && <p>oi</p>}
     </>
   );
 };

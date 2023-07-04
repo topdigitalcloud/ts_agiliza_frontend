@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { changePassword, profileSelector, reset } from "../../slices/ProfileSlice";
 
 const AlterPassword = () => {
-  const [password, setPassword] = useState<string>("234567");
-  const [confirmPassword, setConfirmPassword] = useState<string>("234567");
+  const [password, setPassword] = useState<string>();
+  const [confirmPassword, setConfirmPassword] = useState<string>();
 
   const dispatch = useAppDispatch();
   const notify = useNotify();
@@ -32,8 +32,11 @@ const AlterPassword = () => {
 
   //show error message
   useEffect(() => {
-    notify(message, "E");
-  }, [error, message, notify]);
+    if (error) {
+      notify(message, "E");
+      dispatch(reset());
+    }
+  }, [error, message, notify, dispatch]);
 
   //show success message and clean all auth states
   useEffect(() => {
