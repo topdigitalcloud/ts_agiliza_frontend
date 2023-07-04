@@ -48,7 +48,7 @@ const MyProfile = () => {
   useEffect(() => {
     if (error) {
       notify(message, "E");
-      dispatch(profile());
+      dispatch(reset());
     }
   }, [error, message, notify]);
 

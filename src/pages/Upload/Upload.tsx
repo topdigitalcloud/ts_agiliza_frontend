@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState, useEffect, MouseEvent } from "react";
 import io from "socket.io-client";
 import { Link } from "react-router-dom";
+import { api } from "../../utils/config";
 
 //Hooks Redux
 import useAppDispatch from "../../hooks/useAppDispatch";
@@ -16,7 +17,7 @@ import { TUpload } from "../../Interfaces/IStation";
 type Props = {};
 
 //connect to socket io server
-const socket = io("http://api:5000");
+const socket = io(api);
 
 const Upload = (props: Props) => {
   //Io Client
