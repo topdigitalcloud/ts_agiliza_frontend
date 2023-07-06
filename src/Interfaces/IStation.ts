@@ -10,7 +10,6 @@ export type TStation = {
   NomeEntidade: string;
   NumFistel: string;
   NumServico: string;
-  CodTipoClasseEstacao: string;
   CompartilhamentoInfraFisica: string;
   EndComplemento: string;
   NomeEntidadeAssociado: string;

@@ -34,13 +34,11 @@ const Upload = (props: Props) => {
   const [csvFile, setCsvFile] = useState<File>();
 
   useEffect(() => {
-    //progress of upload
-
     socket.on("uploadProgress", (progress) => {
       setProgress(progress);
     });
 
-    // Encerra a conexão do socket quando o componente é desmontado
+    //Terminates socket connection when component is unmounted
     return () => {
       socket.disconnect();
     };
@@ -60,6 +58,11 @@ const Upload = (props: Props) => {
     if (csvFile) {
       const formData = new FormData();
       formData.append("csvfile", csvFile, csvFile.name);
+      // Remove coords and page from localstorage
+      localStorage.removeItem("page");
+      localStorage.removeItem("coords");
+      //progress of upload
+
       dispatch(uploadStations(formData));
     } else {
       notify("Favor Selecionar um arquivo", "E");
@@ -158,9 +161,7 @@ const Upload = (props: Props) => {
 
               {progress?.thirdStep.status && (
                 <div className="mx-auto w-full mb-2 flex flex-col items-start">
-                  <div className="text-top-digital text-xl font-semibold">
-                    Etapa 4: Insersão do sistema auxiliar de checagem
-                  </div>
+                  <div className="text-top-digital text-xl font-semibold">Etapa 4: Registros auxiliares</div>
                   <div className="flex flex-col">
                     <div className="text-top-digital text-base">
                       {progress?.thirdStep.insertEquipments ? (
@@ -184,13 +185,7 @@ const Upload = (props: Props) => {
                       Total novas estações: {progress?.fourthStep.totalNewStations}
                     </div>
                     <div className="text-top-digital text-base">
-                      Total de estações atualizadas: {progress?.fourthStep.totalUpdatedStations}
-                    </div>
-                    <div className="text-top-digital text-base">
-                      Total de estações sem atualização: {progress?.fourthStep.totalNoChangedStations}
-                    </div>
-                    <div className="text-top-digital text-base">
-                      Total estações: {progress?.fourthStep.totalStations}
+                      Total Sistemas: {progress?.fourthStep.totalSystems}
                     </div>
                     <div className="text-top-digital text-base">
                       Total novos sistemas: {progress?.fourthStep.totalNewSystems}

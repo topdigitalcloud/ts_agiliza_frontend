@@ -50,7 +50,7 @@ const MyProfile = () => {
       notify(message, "E");
       dispatch(reset());
     }
-  }, [error, message, notify]);
+  }, [error, message, notify, dispatch]);
 
   //show success message and clean all auth states
   useEffect(() => {

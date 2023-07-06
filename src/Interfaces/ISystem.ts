@@ -27,6 +27,7 @@ export type TSystem = {
   tipoTecnologia: string;
   ClassInfraFisica: string;
   CodDebitoTFI: string;
+  CodTipoClasseEstacao: string;
   documents?: string[];
 };
 

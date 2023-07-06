@@ -96,7 +96,7 @@ const Station = ({ visibleLocations }: Props) => {
           <div className="mb-14"></div>
         </>
       )}
-      {stations && stations.length === 0 && <p>oi</p>}
+      {stations && stations.length === 0 && <p className="mt-4 text-top-digital text-base">Nenhuma estação no mapa</p>}
     </>
   );
 };
