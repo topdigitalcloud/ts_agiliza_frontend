@@ -15,6 +15,7 @@ import { TBounds, TCoordInfo, TLocation } from "../../Interfaces/ILocation";
 //components
 //import Equipment from "../Equipment/Equipment";
 import Station from "../Station/Station";
+import InfoWindowStations from "./InfoWindowStations";
 
 //parameters: touchstart, wheel, mousewheel, touchmove
 addPassiveSupport(true, false, false, true);
@@ -119,11 +120,6 @@ const Map = ({ locations }: Props) => {
     const change: boolean = storedCoords !== JSON.stringify(current) || CheckDragged;
 
     if (change) {
-      // console.log("mudou");
-      // console.log("check1", storedCoords);
-      // console.log("check2", JSON.stringify(current));
-      // console.log("check3", JSON.stringify(iniDrag));
-
       localStorage.setItem("page", "1");
     }
     return {
@@ -165,20 +161,17 @@ const Map = ({ locations }: Props) => {
             {locations &&
               locations.map((eq) => (
                 <MarkerF
-                  key={eq._id}
+                  key={`${eq.Latitude}${eq.Longitude}`}
                   position={{
                     lat: parseFloat(eq.Latitude),
                     lng: parseFloat(eq.Longitude),
                   }}
-                  title={eq.Info.EnderecoEstacao}
                   icon="img/radio-tower.svg"
                   onClick={(e) => handleInfoWindow(eq)}
                 >
                   {infoWindow && infoWindow === eq.Latitude ? (
                     <InfoWindow onCloseClick={() => setInfoWindow("")}>
-                      <div className="border p-2  bg-top-digital bg-opacity-25" key={`${eq.Latitude}`}>
-                        <h1 className="font-semibold uppercase">{eq.Info.EnderecoEstacao}</h1>
-                      </div>
+                      <InfoWindowStations location={eq} />
                     </InfoWindow>
                   ) : null}
                 </MarkerF>

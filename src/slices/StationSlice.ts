@@ -114,7 +114,6 @@ export const uploadStations = createAsyncThunk(
     });
     // Verifique erros e retorne a resposta ou rejeite com o valor do erro
     if (res.errors) {
-      console.log("ENTROU");
       return rejectWithValue(res.errors[0]);
     }
     return res;
@@ -134,7 +133,6 @@ export const StationSlice = createSlice({
     },
     setUploadProgress: (state, action: PayloadAction<number>) => {
       state.uploadProgress = action.payload;
-      console.log(state.uploadProgress);
     },
   },
   extraReducers: (builder) => {
@@ -194,13 +192,11 @@ export const StationSlice = createSlice({
         state.message = typeof action.payload === "string" ? action.payload : "";
       })
       .addCase(uploadStations.fulfilled, (state, action) => {
-        console.log("fulfilled");
         state.error = false;
         state.loading = true;
         state.success = true;
       })
       .addCase(uploadStations.pending, (state) => {
-        console.log("pending");
         state.error = false;
         state.loading = true;
       })
@@ -209,7 +205,6 @@ export const StationSlice = createSlice({
         state.loading = false;
         state.success = false;
         state.message = typeof action.payload === "string" ? action.payload : "";
-        console.log("rejected", state.message);
       })
       .addCase(getStationById.fulfilled, (state, action) => {
         state.error = false;

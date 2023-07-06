@@ -1,12 +1,12 @@
 export type TLocation = {
-  _id: string;
   Latitude: string;
   Longitude: string;
-  Info: {
+  stations: Array<{
     _id: string;
+    NumEstacao: string;
     EnderecoEstacao: string;
-    Label?: StringConstructor;
-  };
+    Label?: string;
+  }>;
 };
 
 export type TBounds = {
