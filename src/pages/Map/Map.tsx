@@ -33,7 +33,8 @@ const Map = ({ locations }: Props) => {
   const map = useRef<any>(null);
   const [iniDrag, setIniDrag] = useState<TBounds | null>(null);
   const [visibleLocations, setVisibleLocations] = useState<TLocation[]>(locations);
-  const [infoWindow, setInfoWindow] = useState("");
+  const [latInfoWindow, setLatInfoWindow] = useState("");
+  const [lngInfoWindow, setLngInfoWindow] = useState("");
   const [zoom, setZoom] = useState(0);
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: googleMapsApiKey,
@@ -136,18 +137,19 @@ const Map = ({ locations }: Props) => {
   //fim do processo de montagem do mapa
 
   //Manipulações após carregamento do mapa
-  const handleInfoWindow = (marker: TLocation) => {
+  const handleInfoWindow = (lat: string, lng: string) => {
     //addPassiveSupport(false, true, true, false);
-    if (marker.Latitude === infoWindow) {
+    if (lat === latInfoWindow && lng === lngInfoWindow) {
       return;
     }
-    setInfoWindow(marker.Latitude);
+    setLatInfoWindow(lat);
+    setLngInfoWindow(lng);
     //setVisibleStations([marker]);
   };
 
-  function isVisible(latitude: string) {
+  function isVisible(lat: string, lng: string) {
     for (let i = 0; i < visibleLocations.length; i++) {
-      if (visibleLocations[i].Latitude === latitude) {
+      if (visibleLocations[i].Latitude === lat && visibleLocations[i].Longitude === lng) {
         return true;
       }
     }
@@ -178,11 +180,17 @@ const Map = ({ locations }: Props) => {
                     lng: parseFloat(eq.Longitude),
                   }}
                   icon="img/radio-tower.svg"
-                  onClick={(e) => handleInfoWindow(eq)}
+                  onClick={(e) => handleInfoWindow(eq.Latitude, eq.Longitude)}
                   //onPositionChanged={() => handleInfoWindow(eq)}
                 >
-                  {(infoWindow && infoWindow === eq.Latitude) || (zoom > 14 && isVisible(eq.Latitude)) ? (
-                    <InfoWindow onCloseClick={() => setInfoWindow("")}>
+                  {(latInfoWindow === eq.Latitude && lngInfoWindow === eq.Longitude) ||
+                  (zoom > 16 && isVisible(eq.Latitude, eq.Longitude)) ? (
+                    <InfoWindow
+                      onCloseClick={() => {
+                        setLatInfoWindow("");
+                        setLngInfoWindow("");
+                      }}
+                    >
                       <InfoWindowStations location={eq} />
                     </InfoWindow>
                   ) : null}
@@ -192,7 +200,7 @@ const Map = ({ locations }: Props) => {
         )}
       </div>
       <div className="mt-2 h-full w-full overflow-y-auto">
-        <Station visibleLocations={visibleLocations} />
+        <Station visibleLocations={visibleLocations} handleInfoWindow={handleInfoWindow} />
       </div>
     </>
   );

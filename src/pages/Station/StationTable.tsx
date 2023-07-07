@@ -6,14 +6,16 @@ import { Link } from "react-router-dom";
 import useAppSelector from "../../hooks/useAppSelector";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import { labelStationSelector, setNewLabelStation, resetLabelStationSlice } from "../../slices/LabelStationSlice";
+import { TStation } from "../../Interfaces/IStation";
 
 type Props = {
-  stations: any[];
+  stations: TStation[];
   labels: any[];
   setResetVisibleStations: React.Dispatch<React.SetStateAction<boolean>>;
+  handleInfoWindow: (lat: string, lng: string) => void;
 };
 
-const StationTable = ({ stations, labels, setResetVisibleStations }: Props) => {
+const StationTable = ({ stations, labels, setResetVisibleStations, handleInfoWindow }: Props) => {
   const [editStation, setEditStation] = useState<string>("");
   const [labelStation, setLabelStation] = useState<string>("");
 
@@ -64,6 +66,7 @@ const StationTable = ({ stations, labels, setResetVisibleStations }: Props) => {
               stations.map((station, index) => (
                 <tr
                   key={station._id}
+                  onClick={() => handleInfoWindow(station.Latitude, station.Longitude)}
                   className={`border-b dark:border-neutral-500 ${index % 2 ? " bg-top-digital-op-25" : "bg-white"}`}
                 >
                   {labels &&
@@ -76,20 +79,20 @@ const StationTable = ({ stations, labels, setResetVisibleStations }: Props) => {
                       >
                         {label[0] === "NumEstacao" && (
                           <Link className="underline" key={`lnk${station._id}`} to={`/stationpage/${station._id}`}>
-                            {station[label[0]]}
+                            {station[label[0] as keyof TStation]}
                           </Link>
                         )}
                         {label[2] ? (
                           station._id !== editStation ? (
                             <div className={`flex items-center gap-2 ${label[2] ? "justify-center" : ""}`}>
-                              {station[label[0]]}
+                              {station[label[0] as keyof TStation]}
                               <button
                                 className=" hover:text-top-digital-link-hover text-center"
                                 title="Coloque um apelido na Estação"
                                 onClick={(e) => {
                                   e.preventDefault();
                                   setEditStation(station._id);
-                                  setLabelStation(station[label[0]]);
+                                  setLabelStation(station[label[0] as keyof TStation]);
                                   setResetVisibleStations(false);
                                 }}
                               >
@@ -128,7 +131,7 @@ const StationTable = ({ stations, labels, setResetVisibleStations }: Props) => {
                             </div>
                           )
                         ) : (
-                          label[0] !== "NumEstacao" && station[label[0]]
+                          label[0] !== "NumEstacao" && station[label[0] as keyof TStation]
                         )}
                       </td>
                     ))}
