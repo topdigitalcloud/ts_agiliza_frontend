@@ -368,7 +368,7 @@ const StationPage = (props: Props) => {
                             htmlFor="document"
                             className="mb-3 block text-base font-medium text-top-digital-content-color"
                           >
-                            Selecione o arquivo CSV para upload
+                            Selecione o arquivo para upload (PDF, DOC, Excel)
                           </label>
                           <input
                             type="file"

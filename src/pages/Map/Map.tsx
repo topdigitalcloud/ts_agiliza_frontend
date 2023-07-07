@@ -33,6 +33,8 @@ const Map = ({ locations }: Props) => {
   const map = useRef<any>(null);
   const [iniDrag, setIniDrag] = useState<TBounds | null>(null);
   const [visibleLocations, setVisibleLocations] = useState<TLocation[]>(locations);
+  const [infoWindow, setInfoWindow] = useState("");
+  const [zoom, setZoom] = useState(0);
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: googleMapsApiKey,
   });
@@ -74,6 +76,8 @@ const Map = ({ locations }: Props) => {
       }
     }
     setVisibleLocations([...visible]);
+    const newZoom = map.current.getZoom(); // Use a referência do mapa para obter o novo valor de zoom
+    setZoom(newZoom);
   };
 
   const setMapCoordenates = () => {
@@ -132,8 +136,6 @@ const Map = ({ locations }: Props) => {
   //fim do processo de montagem do mapa
 
   //Manipulações após carregamento do mapa
-  const [infoWindow, setInfoWindow] = useState("");
-
   const handleInfoWindow = (marker: TLocation) => {
     //addPassiveSupport(false, true, true, false);
     if (marker.Latitude === infoWindow) {
@@ -142,6 +144,15 @@ const Map = ({ locations }: Props) => {
     setInfoWindow(marker.Latitude);
     //setVisibleStations([marker]);
   };
+
+  function isVisible(latitude: string) {
+    for (let i = 0; i < visibleLocations.length; i++) {
+      if (visibleLocations[i].Latitude === latitude) {
+        return true;
+      }
+    }
+    return false; // Retorna null se a latitude não for encontrada
+  }
 
   return (
     <>
@@ -168,8 +179,9 @@ const Map = ({ locations }: Props) => {
                   }}
                   icon="img/radio-tower.svg"
                   onClick={(e) => handleInfoWindow(eq)}
+                  //onPositionChanged={() => handleInfoWindow(eq)}
                 >
-                  {infoWindow && infoWindow === eq.Latitude ? (
+                  {(infoWindow && infoWindow === eq.Latitude) || (zoom > 14 && isVisible(eq.Latitude)) ? (
                     <InfoWindow onCloseClick={() => setInfoWindow("")}>
                       <InfoWindowStations location={eq} />
                     </InfoWindow>

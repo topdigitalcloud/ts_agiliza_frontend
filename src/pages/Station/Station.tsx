@@ -18,13 +18,13 @@ const Station = ({ visibleLocations }: Props) => {
   const dispatch = useAppDispatch();
   const { stations, labels, loading, pageCount: apiPageCount } = useAppSelector(stationSelector);
   const lastPage = localStorage.getItem("page") || "1";
+  const [resetVisbleStations, setResetVisibleStations] = useState<boolean>(true);
 
   const [page, setPage] = useState<number>(parseInt(lastPage));
   const [pageCount, setPageCount] = useState<number>(0);
 
   useEffect(() => {
     const startPage = localStorage.getItem("page");
-
     if (startPage !== null) {
       setPage(() => parseInt(startPage));
     }
@@ -45,6 +45,7 @@ const Station = ({ visibleLocations }: Props) => {
   }, [apiPageCount]);
 
   useEffect(() => {
+    if (!resetVisbleStations) return;
     let latLocations: string = "";
     for (const loc of visibleLocations) {
       latLocations += `${loc.Latitude},`;
@@ -56,7 +57,7 @@ const Station = ({ visibleLocations }: Props) => {
     };
 
     dispatch(getVisibleStations(objData));
-  }, [visibleLocations, page, dispatch]);
+  }, [visibleLocations, page, dispatch, resetVisbleStations]);
 
   const handlePrevious = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -74,6 +75,7 @@ const Station = ({ visibleLocations }: Props) => {
       return p + 1;
     });
   };
+
   return (
     <>
       {stations && stations.length !== 0 && (
@@ -91,7 +93,9 @@ const Station = ({ visibleLocations }: Props) => {
               Página {page} de {pageCount}
             </div>
           </div>
-          {!loading && <StationTable stations={stations} labels={labels} />}
+          {!loading && (
+            <StationTable stations={stations} labels={labels} setResetVisibleStations={setResetVisibleStations} />
+          )}
           {loading && <div>Aguarde.....</div>}
           <div className="mb-14"></div>
         </>

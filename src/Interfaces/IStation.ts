@@ -50,23 +50,6 @@ export type TUpload = {
   };
 };
 
-// thirdStep: {
-//   insertEquipments: false,
-// },
-// fourthStep: {
-//   status: false,
-//   totalStations: 0,
-//   totalNewStations: 0,
-//   totalUpdatedStations: 0,
-//   totalNoChangedStations: 0,
-//   totalSystems: 0,
-//   totalNewSystems: 0,
-//   totalUpdatedSystems: 0,
-//   totalNoChangedSystems: 0,
-//   error: false,
-//   message: "",
-// },
-
 export interface IStationStates {
   labels: string[];
   stations: TStation[];

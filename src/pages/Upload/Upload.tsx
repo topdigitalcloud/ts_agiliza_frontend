@@ -53,7 +53,6 @@ const Upload = (props: Props) => {
 
   const submitHandle = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     //build form data
     if (csvFile) {
       const formData = new FormData();

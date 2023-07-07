@@ -91,18 +91,6 @@ export const setLabelStation = createAsyncThunk(
   }
 );
 
-// //upload CSV file
-// export const uploadStations = createAsyncThunk("stations/uploadStations", async (csv: FormData, thunkAPI) => {
-//   const appState = thunkAPI.getState() as RootState;
-//   const token = appState.LoginReducer.user!.token;
-//   const res = await StationService.uploadStations(csv, token);
-//   //check for errors
-//   if (res.errors) {
-//     return thunkAPI.rejectWithValue(res.errors[0]);
-//   }
-//   return res;
-// });
-
 export const uploadStations = createAsyncThunk(
   "station/uploadStations",
   async (csv: FormData, { getState, rejectWithValue, dispatch }) => {
@@ -175,7 +163,7 @@ export const StationSlice = createSlice({
       .addCase(getVisibleStations.fulfilled, (state, action) => {
         state.error = false;
         state.loading = false;
-        state.success = false;
+        state.success = true;
         state.stations = action.payload[1];
         state.labels = action.payload[0];
         state.page = action.payload[2];

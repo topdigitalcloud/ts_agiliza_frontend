@@ -3,21 +3,18 @@ export const links = [
     name: "Meu Perfil",
     auth: true,
     sublinks: [
-      { name: "Alterar Senha", link: "/password" },
-      { name: "Alterar Dados", link: "/profile" },
+      { name: "Alterar Senha", link: "/password", navLink: true },
+      { name: "Alterar Dados", link: "/profile", navLink: true },
     ],
   },
   {
     name: "Documentos",
     auth: true,
     sublinks: [
-      { name: "Upload", link: "/upload" },
-      { name: "Tipos de Documentos", link: "/doctype" },
-      { name: "Configurações Estações", link: "/configstation" },
-      { name: "Configurações Sistemas", link: "/configsystem" },
-      // { name: "ART", link: "/art" },
-      // { name: "Laudos Radiométricos", link: "/laudos" },
-      // { name: "Projetos", link: "/projetos" },
+      { name: "Upload", link: "/upload", navLink: false },
+      { name: "Tipos de Documentos", link: "/doctype", navLink: true },
+      { name: "Configurações Estações", link: "/configstation", navLink: true },
+      { name: "Configurações Sistemas", link: "/configsystem", navLink: true },
     ],
   },
 ];

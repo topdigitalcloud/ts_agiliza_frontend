@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { links } from "./Mylinks";
 import { ChevronUp, ChevronDown } from "lucide-react";
 
@@ -42,7 +42,11 @@ const NavLinks = ({ auth, open, setOpen }: Props) => {
                         {link.sublinks.map((mysublinks) => (
                           <div key={mysublinks.name}>
                             <li className="text-base my-2.5">
-                              <NavLink to={mysublinks.link}>{mysublinks.name}</NavLink>
+                              {mysublinks.navLink ? (
+                                <NavLink to={mysublinks.link}>{mysublinks.name}</NavLink>
+                              ) : (
+                                <a href={mysublinks.link}>{mysublinks.name}</a>
+                              )}
                             </li>
                           </div>
                         ))}
@@ -57,7 +61,11 @@ const NavLinks = ({ auth, open, setOpen }: Props) => {
                   <div key={sLink.name}>
                     <div onClick={() => setOpen(!open)}>
                       <li className="py-3 pl-5">
-                        <NavLink to={sLink.link}>{sLink.name}</NavLink>
+                        {sLink.navLink ? (
+                          <NavLink to={sLink.link}>{sLink.name}</NavLink>
+                        ) : (
+                          <Link to={sLink.link}>{sLink.name}</Link>
+                        )}
                       </li>
                     </div>
                   </div>
