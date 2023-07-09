@@ -15,7 +15,7 @@ import { ContextSystem } from "../../contexts/ContextSystem";
 
 //components
 import DocumentsSystem from "../Document/DocumentsSystem";
-import { LabelSystem } from "../../contexts/ContextSystem";
+import { GlobalStateSystem } from "../../Interfaces/ISystemState";
 import DataUnixTimeStamp from "../../components/DataUnixTimeStamp";
 
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
 };
 
 const SystemDetails = ({ systemId }: Props) => {
-  const { labelSystem, setLabelSystem } = useContext<LabelSystem>(ContextSystem);
+  const { systemGlobalState, setSystemGlobalState } = useContext<GlobalStateSystem>(ContextSystem);
   const dispatch = useAppDispatch();
   const { system } = useAppSelector(systemSelector);
   const { config } = useAppSelector(configSelector);
@@ -41,13 +41,19 @@ const SystemDetails = ({ systemId }: Props) => {
       <div>
         <div className="flex justify-between items-center">
           <h1 className="text-xl p-1 text-top-digital font-semibold mb-1 font-top-digital-title text-center">
-            Documentos do sistema {system?.Label !== "" ? system?.Label : system?._id}
+            Sistema {system?.Label !== "" ? system?.Label : system?._id}
           </h1>
           <button
-            onClick={() => setLabelSystem({ ...labelSystem, openedSystemDetails: false, openedLabelSystemForm: false })}
+            onClick={() =>
+              setSystemGlobalState({ ...systemGlobalState, openedSystemDetails: false, openedLabelSystemForm: false })
+            }
           >
             <X className="cursor-pointer" />
           </button>
+        </div>
+        <DocumentsSystem systemId={systemId} />
+        <div className="grid grid-cols-1 text-lg text-top-digital font-semibold font-top-digital-title text-center">
+          Detalhes do sistema
         </div>
         {config &&
           system &&
@@ -78,7 +84,6 @@ const SystemDetails = ({ systemId }: Props) => {
               )
           )}
       </div>
-      <DocumentsSystem systemId={systemId} />
     </>
   );
 };

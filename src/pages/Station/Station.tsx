@@ -8,7 +8,7 @@ import { stationSelector, getVisibleStations } from "../../slices/StationSlice";
 import { SkipBack, SkipForward } from "lucide-react";
 
 //component
-import StationTable from "./StationTable";
+import StationTable from "../../components/Station/StationTable";
 
 type Props = {
   visibleLocations: TLocation[] | [];
@@ -81,8 +81,8 @@ const Station = ({ visibleLocations, handleInfoWindow }: Props) => {
     <>
       {stations && stations.length !== 0 && (
         <>
-          <div className="flex relative">
-            <div className="flex gap-2 justify-center items-center absolute left-0 right-0 m-auto w-full h-full">
+          <div className="flex relative border-2">
+            <div className="flex gap-2 md:justify-center items-center absolute left-0 right-0 m-auto w-full h-full">
               <button title="Voltar" disabled={page === 1 || loading === true} onClick={handlePrevious}>
                 <SkipBack className="text-top-digital hover:text-top-digital-hover" />
               </button>

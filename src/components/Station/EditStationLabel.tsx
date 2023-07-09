@@ -2,10 +2,10 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 //redux
-import useAppSelector from "../hooks/useAppSelector";
-import useAppDispatch from "../hooks/useAppDispatch";
-import { labelStationSelector, setNewLabelStation, resetLabelStationSlice } from "../slices/LabelStationSlice";
-import { stationSelector } from "../slices/StationSlice";
+import useAppSelector from "../../hooks/useAppSelector";
+import useAppDispatch from "../../hooks/useAppDispatch";
+import { labelStationSelector, setNewLabelStation, resetLabelStationSlice } from "../../slices/LabelStationSlice";
+import { stationSelector } from "../../slices/StationSlice";
 
 type Props = {
   setOpenedLabelStationForm: Dispatch<SetStateAction<boolean>>;
@@ -52,8 +52,8 @@ const EditStationLabel = ({ setOpenedLabelStationForm, label }: Props) => {
         <div className="mx-auto w-full max-w-[550px]">
           <form encType="multipart/form-data" onSubmit={submitHandleLabelStation}>
             <div className="mb-5">
-              <label htmlFor="labelStation" className="mb-3 block text-base font-medium text-top-digital-content-color">
-                Apelido da Estação
+              <label htmlFor="labelStation" className="mb-2 block text-base font-medium text-top-digital-content-color">
+                Apelido da Estação:
               </label>
               <input
                 type="text"
@@ -61,19 +61,19 @@ const EditStationLabel = ({ setOpenedLabelStationForm, label }: Props) => {
                 name="labelStation"
                 value={labelStation}
                 id="labelStation"
-                className="w-full appearance-none rounded-md border border-top-digital-op-25 bg-white py-3 px-6 text-base font-medium text-top-digital-content-color outline-none focus:border-top-digital focus:shadow-md focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
+                className="w-2/3 appearance-none rounded-md border border-top-digital-op-25 bg-white py-2 px-2 text-base font-medium text-top-digital-content-color outline-none focus:border-top-digital focus:shadow-md focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
               />
             </div>
             <div>
               <div className="flex gap-1">
                 <button
                   type="submit"
-                  className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                  className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-2 px-6 text-center text-base font-semibold text-white outline-none"
                 >
                   Enviar
                 </button>
                 <button
-                  className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                  className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-2 px-6 text-center text-base font-semibold text-white outline-none"
                   type="button"
                   onClick={(e) => {
                     e.preventDefault();

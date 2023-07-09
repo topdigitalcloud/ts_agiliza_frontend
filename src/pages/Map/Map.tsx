@@ -186,6 +186,8 @@ const Map = ({ locations }: Props) => {
                   {(latInfoWindow === eq.Latitude && lngInfoWindow === eq.Longitude) ||
                   (zoom > 16 && isVisible(eq.Latitude, eq.Longitude)) ? (
                     <InfoWindow
+                      options={{ disableAutoPan: true }}
+                      position={{ lat: parseFloat(eq.Latitude), lng: parseFloat(eq.Longitude) }}
                       onCloseClick={() => {
                         setLatInfoWindow("");
                         setLngInfoWindow("");

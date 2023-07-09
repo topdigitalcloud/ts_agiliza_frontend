@@ -22,7 +22,7 @@ import { ContextSystem } from "../../contexts/ContextSystem";
 
 //types
 import DateFormat from "../../components/DateFormat";
-import { LabelSystem } from "../../contexts/ContextSystem";
+import { GlobalStateSystem } from "../../Interfaces/ISystemState";
 
 //icons
 import { Download, Edit, Link } from "lucide-react";
@@ -33,7 +33,7 @@ import { TStation } from "../../Interfaces/IStation";
 //pages
 import System from "../System/System";
 import SystemLinkDocument from "../System/SystemLinkDocument";
-import EditStationLabel from "../../components/EditStationLabel";
+import EditStationLabel from "../../components/Station/EditStationLabel";
 import SystemDetails from "../System/SystemDetails";
 
 type Props = {};
@@ -90,22 +90,22 @@ const StationPage = (props: Props) => {
   idSystem: "",  
   */
   const { success: successSystem } = useAppSelector(systemSelector);
-  const { labelSystem, setLabelSystem } = useContext<LabelSystem>(ContextSystem);
+  const { systemGlobalState, setSystemGlobalState } = useContext<GlobalStateSystem>(ContextSystem);
   const submitHandleLabelSystem = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data: any = {
-      labelSystem: labelSystem.labelSystem,
-      idSystem: labelSystem.idSystem,
+      labelSystem: systemGlobalState.labelSystem,
+      idSystem: systemGlobalState.idSystem,
     };
     dispatchSystem(setSystemSliceStation(data));
   };
 
   useEffect(() => {
     if (successSystem) {
-      setLabelSystem({ ...labelSystem, openedLabelSystemForm: false });
+      setSystemGlobalState({ ...systemGlobalState, openedLabelSystemForm: false });
     }
     dispatchStation(resetSystemSlice());
-  }, [successSystem, dispatchStation, setLabelSystem, labelSystem]);
+  }, [successSystem, dispatchStation, systemGlobalState, setSystemGlobalState]);
 
   /*Fim Formulário de Label do Sistema*/
 
@@ -186,7 +186,9 @@ const StationPage = (props: Props) => {
       <div className="flex-1 w-full">
         <div className="flex flex-wrap flex-col md:flex-row md:flex-nowrap ">
           <div className="bg-white m-2 flex-1 order-2 md:order-1 overflow-x-auto relative">
-            <h1 className="text-xl text-top-digital font-semibold mb-2 font-top-digital-title">Dados da Estação</h1>
+            <h1 className="md:text-xl text-base text-top-digital font-semibold mb-2 font-top-digital-title">
+              Dados da Estação {station?.Label && station?.Label !== "" ? station.Label : station?.EnderecoEstacao}
+            </h1>
             {config &&
               station &&
               config.map((conf, index) => (
@@ -229,13 +231,18 @@ const StationPage = (props: Props) => {
             {station && openedLabelStationForm && (
               <EditStationLabel setOpenedLabelStationForm={setOpenedLabelStationForm} label={station.Label} />
             )}
-            {station && labelSystem.openedLabelSystemForm && (
+            {station && systemGlobalState.openedLabelSystemForm && (
               <div className="absolute bg-white top-0 right-0 w-full h-full border">
                 <div className="flex flex-col items-center justify-center font-bold p-2 text-top-digital text-lg">
                   <div className="mx-auto w-full max-w-[550px] mb-6">
                     <h2 className="font-top-digital-content font-normal text-top-digital-content-color">
                       Adicione/Edite um apelido para o Sistema
-                      <span className="font-bold"> {labelSystem.openedLabelSystemForm && labelSystem.idSystem}</span>
+                      <span className="font-bold">
+                        {" "}
+                        {systemGlobalState.labelSystem && systemGlobalState.labelSystem !== ""
+                          ? systemGlobalState.labelSystem
+                          : systemGlobalState.idSystem}
+                      </span>
                     </h2>
                   </div>
                   <div className="mx-auto w-full max-w-[550px]">
@@ -245,13 +252,13 @@ const StationPage = (props: Props) => {
                           htmlFor="labelStation"
                           className="mb-3 block text-base font-medium text-top-digital-content-color"
                         >
-                          Apelido da Estação
+                          Apelido para o Sistema
                         </label>
                         <input
                           type="text"
-                          onChange={(e) => setLabelSystem({ ...labelSystem, labelSystem: e.target.value })}
+                          onChange={(e) => setSystemGlobalState({ ...systemGlobalState, labelSystem: e.target.value })}
                           name="labelSystem"
-                          value={labelSystem.labelSystem}
+                          value={systemGlobalState.labelSystem}
                           id="labelSystem"
                           className="w-full appearance-none rounded-md border border-top-digital-op-25 bg-white py-3 px-6 text-base font-medium text-top-digital-content-color outline-none focus:border-top-digital focus:shadow-md focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
                         />
@@ -260,16 +267,16 @@ const StationPage = (props: Props) => {
                         <div className="flex gap-1">
                           <button
                             type="submit"
-                            className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                            className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-2 px-6 text-center text-base font-semibold text-white outline-none"
                           >
                             Enviar
                           </button>
                           <button
-                            className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                            className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-2 px-6 text-center text-base font-semibold text-white outline-none"
                             type="button"
                             onClick={(e) => {
                               e.preventDefault();
-                              setLabelSystem({ ...labelSystem, openedLabelSystemForm: false });
+                              setSystemGlobalState({ ...systemGlobalState, openedLabelSystemForm: false });
                             }}
                           >
                             Cancelar
@@ -281,42 +288,52 @@ const StationPage = (props: Props) => {
                 </div>
               </div>
             )}
-            {station && labelSystem.openedSystemDetails && (
+            {station && systemGlobalState.openedSystemDetails && (
               <div className="absolute bg-white top-0 right-0 w-full h-full border">
-                <SystemDetails systemId={labelSystem.idSystem} />
+                <SystemDetails systemId={systemGlobalState.idSystem} />
               </div>
             )}
           </div>
-          <div className="bg-white border p-2 m-2 flex-1 order-1 md:order-2">
+          <div
+            className={`bg-white border p-2 m-2 flex-1 order-1 md:order-2 ${
+              systemGlobalState.openedLabelSystemForm || openedLabelStationForm || systemGlobalState.openedSystemDetails
+                ? "hidden md:block"
+                : ""
+            }`}
+          >
             {docLoading ? (
               <p>Aguarde....</p>
             ) : (
               <>
                 <h1 className="text-2xl text-top-digital font-semibold mb-2 font-top-digital-title">Documentos</h1>
                 {!openedUploadForm && (
-                  <button
-                    className="rounded-md bg-top-digital py-3 px-8 text-center text-base font-normal font-top-digital-title text-white hover:text-top-digital-buttom-hover outline-none"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setOpenedUploadForm(true);
-                    }}
-                  >
-                    Cadastrar
-                  </button>
-                )}
+                  <div>
+                    {documents && documents.length === 0 && (
+                      <p className="text-top-digital-content-color">
+                        Você ainda não possui documentos cadastrados para estação e seus respectivos sistemas.
+                      </p>
+                    )}
 
-                {documents && documents.length === 0 && (
-                  <p className="text-top-digital-content-color">
-                    Você ainda não possui documentos cadastrados para esse site. Faço seu primeiro upload utilizando o
-                    formulário abaixo
-                  </p>
+                    <button
+                      className="rounded-md bg-top-digital py-2 px-6 text-center text-base font-normal font-top-digital-title text-white hover:text-top-digital-buttom-hover outline-none"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenedUploadForm(true);
+                      }}
+                    >
+                      Cadastrar Documento
+                    </button>
+                  </div>
                 )}
                 {openedUploadForm && (
-                  <div className="flex flex-col items-center justify-center font-bold p-2 text-top-digital text-lg">
+                  <div className="flex flex-col items-center justify-center p-2 text-top-digital">
                     <div className="mx-auto w-full max-w-[550px] mb-6">
-                      <h2 className="font-top-digital-content font-normal text-top-digital-content-color">
-                        Upload de documentação relacionada ao Site
-                        <span className="font-bold"> {station && station._id}</span>
+                      <h2 className="text-top-digital-content-color">
+                        Upload de documentação relacionada a estação
+                        <span className="font-bold">
+                          {" "}
+                          {station?.Label && station.Label !== "" ? station.Label : station?.EnderecoEstacao}
+                        </span>
                       </h2>
                     </div>
                     <div className="mx-auto w-full max-w-[550px]">
@@ -383,12 +400,12 @@ const StationPage = (props: Props) => {
                           <div className="flex gap-1">
                             <button
                               type="submit"
-                              className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                              className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-2 px-6 text-center text-base font-semibold text-white outline-none"
                             >
                               Enviar
                             </button>
                             <button
-                              className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                              className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-2 px-6 text-center text-base font-semibold text-white outline-none"
                               type="button"
                               onClick={(e) => {
                                 e.preventDefault();
@@ -404,70 +421,72 @@ const StationPage = (props: Props) => {
                   </div>
                 )}
                 {documents && documents.length !== 0 && (
-                  <div className="bg-white p-2 m-2 flex-1 order-2 md:order-1 overflow-x-auto">
-                    <div className="grid grid-cols-5 text-top-digital-content-color">
-                      <div className="bg-top-digital-op-25 font-semibold">Titulo do Documento</div>
+                  <div className="mt-2 w-full h-[50vh] overflow-y-auto">
+                    <div className="grid grid-cols-6 text-top-digital-content-color">
+                      <div className="bg-top-digital-op-25 font-semibold ">Titulo do Documento</div>
                       <div className="bg-top-digital-op-25 font-semibold">Tipo</div>
                       <div className="bg-top-digital-op-25 font-semibold">Extensão</div>
                       <div className="bg-top-digital-op-25 font-semibold">Data Criação</div>
                       <div className="bg-top-digital-op-25 font-semibold">Download</div>
+                      <div>fffffffffffffffffffffffffffffffffffff</div>
+                      {documents &&
+                        documents.map((doc, index) => (
+                          <>
+                            <div
+                              className={`${
+                                !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                              } text-top-digital-content-color p-1`}
+                            >
+                              {doc.title}
+                            </div>
+                            <div
+                              title="Vincular Documento com Sistemas"
+                              className={`${
+                                !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                              } text-top-digital-content-color p-1 flex`}
+                            >
+                              {doc.tipo?.toSystem && (
+                                <Link
+                                  className="cursor-pointer text-top-digital-hover"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleOpenFormLinkSystem(doc._id);
+                                    setSystemGlobalState({
+                                      ...systemGlobalState,
+                                      openedSystemDetails: false,
+                                      openedLabelSystemForm: false,
+                                    });
+                                  }}
+                                />
+                              )}
+                              {doc.tipo?.typeName || "-"}
+                            </div>
+                            <div
+                              className={`${
+                                !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                              } text-top-digital-content-color center flex justify-center items-center p-1`}
+                            >
+                              <DocIcon extension={doc.extension} />
+                            </div>
+                            <div
+                              className={`${
+                                !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                              } text-top-digital-content-color p-1`}
+                            >
+                              <DateFormat data={doc.createdAt} />
+                            </div>
+                            <div
+                              className={`${
+                                !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
+                              } text-top-digital-content-color flex justify-center items-center p-1 cursor-pointer`}
+                              onClick={(e) => submitDownload(e, doc)}
+                            >
+                              <Download />
+                            </div>
+                            <div>fffffffffffffffffffffffffffffffffffff</div>
+                          </>
+                        ))}
                     </div>
-                    {documents &&
-                      documents.map((doc, index) => (
-                        <div key={`${index}`} className="grid grid-cols-5 border border-top-digital-op-25">
-                          <div
-                            className={`${
-                              !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
-                            } text-top-digital-content-color p-1`}
-                          >
-                            {doc.title}
-                          </div>
-                          <div
-                            title="Vincular Documento com Sistemas"
-                            className={`${
-                              !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
-                            } text-top-digital-content-color p-1 flex`}
-                          >
-                            {doc.tipo?.toSystem && (
-                              <Link
-                                className="cursor-pointer text-top-digital-hover"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleOpenFormLinkSystem(doc._id);
-                                  setLabelSystem({
-                                    ...labelSystem,
-                                    openedSystemDetails: false,
-                                    openedLabelSystemForm: false,
-                                  });
-                                }}
-                              />
-                            )}
-                            {doc.tipo?.typeName || "-"}
-                          </div>
-                          <div
-                            className={`${
-                              !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
-                            } text-top-digital-content-color center flex justify-center items-center p-1`}
-                          >
-                            <DocIcon extension={doc.extension} />
-                          </div>
-                          <div
-                            className={`${
-                              !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
-                            } text-top-digital-content-color p-1`}
-                          >
-                            <DateFormat data={doc.createdAt} />
-                          </div>
-                          <div
-                            className={`${
-                              !(index % 2) ? "bg-white" : "bg-top-digital-op-25"
-                            } text-top-digital-content-color flex justify-center items-center p-1 cursor-pointer`}
-                            onClick={(e) => submitDownload(e, doc)}
-                          >
-                            <Download />
-                          </div>
-                        </div>
-                      ))}
                   </div>
                 )}
               </>

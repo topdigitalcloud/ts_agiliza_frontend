@@ -43,7 +43,7 @@ const StationTable = ({ stations, labels, setResetVisibleStations, handleInfoWin
   return (
     <>
       {stations && stations.length !== 0 && (
-        <table className="text-left text-sm font-light ">
+        <table className="text-left text-sm font-light w-full">
           <thead className="border-b bg-top-digital-op-40 font-medium dark:border-neutral-500">
             <tr key="loc0">
               {labels && labels.length !== 0 && (

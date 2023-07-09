@@ -112,7 +112,7 @@ const Upload = (props: Props) => {
                   <div>
                     <button
                       type="submit"
-                      className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                      className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-2 px-6 text-center text-base font-semibold text-white outline-none"
                     >
                       Enviar
                     </button>

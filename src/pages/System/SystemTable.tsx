@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { Edit, BookOpen } from "lucide-react";
 
 //types
-import { LabelSystem } from "../../contexts/ContextSystem";
+import { GlobalStateSystem } from "../../Interfaces/ISystemState";
 
 //context
 import { ContextSystem } from "../../contexts/ContextSystem";
@@ -16,7 +16,7 @@ type Props = {
 };
 
 const SystemTable = ({ systems, labels }: Props) => {
-  const { labelSystem, setLabelSystem } = useContext<LabelSystem>(ContextSystem);
+  const { systemGlobalState, setSystemGlobalState } = useContext<GlobalStateSystem>(ContextSystem);
 
   const handleOpenLabelSystemForm = (e: React.MouseEvent<HTMLElement>, idSystem: string, label: string) => {
     e.preventDefault();
@@ -24,8 +24,8 @@ const SystemTable = ({ systems, labels }: Props) => {
       top: 0,
       behavior: "smooth",
     });
-    setLabelSystem({
-      ...labelSystem,
+    setSystemGlobalState({
+      ...systemGlobalState,
       openedLabelSystemForm: true,
       openedSystemDetails: false,
       idSystem: idSystem,
@@ -39,35 +39,29 @@ const SystemTable = ({ systems, labels }: Props) => {
       top: 0,
       behavior: "smooth",
     });
-    setLabelSystem({
-      ...labelSystem,
+    setSystemGlobalState({
+      ...systemGlobalState,
       openedLabelSystemForm: false,
       openedSystemDetails: true,
       idSystem: idSystem,
     });
   };
 
+  console.log(systemGlobalState.idSystem, systems);
+
   return (
     <>
       {systems && systems.length !== 0 && (
-        <table className="text-left text-sm font-light ">
-          <thead className="border-b bg-top-digital-op-40 font-medium dark:border-neutral-500">
-            <tr key="loc0">
-              <th
-                key="open"
-                scope="col"
-                className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base"
-              >
+        <table className="text-left font-light ">
+          <thead className="border-b bg-top-digital-op-40 font-medium">
+            <tr key="loc0" className="font-top-digital-title font-semibold text-base">
+              <th key="open" scope="col" className="px-6 py-4 whitespace-nowrap">
                 Abrir
               </th>
               {labels && labels.length !== 0 && (
                 <>
                   {labels.map((label, index) => (
-                    <th
-                      key={index}
-                      scope="col"
-                      className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base"
-                    >
+                    <th key={index} scope="col" className="px-6 py-4 whitespace-nowrap">
                       {label[1]}
                     </th>
                   ))}
@@ -80,11 +74,19 @@ const SystemTable = ({ systems, labels }: Props) => {
               systems.map((system, index) => (
                 <tr
                   key={system._id}
-                  className={`border-b dark:border-neutral-500 ${index % 2 ? " bg-top-digital-op-25" : "bg-white"}`}
+                  className={`text-sm font-top-digital-content ${index % 2 ? " bg-top-digital-op-25" : "bg-white"} ${
+                    system._id === systemGlobalState.idSystem
+                      ? "border-2 border-top-digital-hover text-top-digital-hover font-semibold"
+                      : "font-normal"
+                  }`}
                 >
-                  <td key="open" className="px-6 py-4 whitespace-nowrap font-top-digital-title font-semibold text-base">
+                  <td key="open" className={`whitespace-nowrap px-4 py-2`}>
                     <button
-                      className="underline hover:text-top-digital-link-hover"
+                      className={`${
+                        system._id === systemGlobalState.idSystem
+                          ? "text-top-digital-link-hover"
+                          : "hover:text-top-digital-link-hover"
+                      }`}
                       title="Ver detalhes"
                       onClick={(e) => {
                         e.preventDefault();
@@ -97,10 +99,7 @@ const SystemTable = ({ systems, labels }: Props) => {
 
                   {labels &&
                     labels.map((label) => (
-                      <td
-                        key={`${label[0]}${system._id}`}
-                        className="whitespace-nowrap px-6 py-4 font-normal text-sm font-top-digital-content"
-                      >
+                      <td key={`${label[0]}${system._id}`} className="whitespace-nowrap px-4 py-2">
                         {label[0] === "Label" && (
                           <div
                             className="w-full text-center flex items-center gap-2"
@@ -111,7 +110,11 @@ const SystemTable = ({ systems, labels }: Props) => {
                           >
                             {system[label[0]]}
                             <button
-                              className="underline hover:text-top-digital-link-hover"
+                              className={`${
+                                system._id === systemGlobalState.idSystem
+                                  ? "text-top-digital-link-hover"
+                                  : "hover:text-top-digital-link-hover"
+                              }`}
                               title="Coloque um apelido na Estação"
                             >
                               <Edit />

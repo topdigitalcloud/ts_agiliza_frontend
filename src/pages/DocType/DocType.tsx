@@ -105,7 +105,7 @@ const DocType = (props: Props) => {
             <h1 className="text-3xl text-top-digital font-semibold mb-2 font-top-digital-title">Tipos de Documentos</h1>
             {!openedForm && (
               <button
-                className="rounded-md bg-top-digital py-3 px-8 text-center text-base font-normal font-top-digital-title text-white hover:text-top-digital-buttom-hover outline-none"
+                className="rounded-md bg-top-digital py-2 px-6 text-center text-base font-normal font-top-digital-title text-white hover:text-top-digital-buttom-hover outline-none"
                 onClick={(e) => {
                   e.preventDefault();
                   setOpenedForm(true);
@@ -117,12 +117,6 @@ const DocType = (props: Props) => {
 
             {openedForm && (
               <div className="flex flex-col items-center justify-center font-bold p-2 text-top-digital text-lg">
-                {/* <div className="mx-auto w-full max-w-[550px] mb-6">
-                <h2 className="font-top-digital-content font-normal text-top-digital-content-color">
-                  Upload de documentação relacionada ao Site
-                  <span className="font-bold"> {station && station._id}</span>
-                </h2>
-              </div> */}
                 <div className="mx-auto w-full max-w-[550px]">
                   <form onSubmit={submitHandle}>
                     <div className="flex gap-3 items-center mb-4">
@@ -189,7 +183,7 @@ const DocType = (props: Props) => {
                           Enviar
                         </button>
                         <button
-                          className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                          className="hover:shadow-form rounded-md bg-top-digital hover:text-top-digital-buttom-hover py-2 px-6 text-center text-base font-semibold text-white outline-none"
                           type="button"
                           onClick={(e) => {
                             e.preventDefault();

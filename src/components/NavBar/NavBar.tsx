@@ -47,7 +47,7 @@ function NavBar() {
     //Nav que abraça todo o cabeçalho
     <nav className="bg-top-digital bg-opacity-25">
       {/* DIV1 principal cabeçalho */}
-      <div className="flex items-center justify-around text-base font-top-digital-nav border-b-[1px] border-top-digital">
+      <div className="flex items-center justify-around font-top-digital-nav border-b-[1px] border-top-digital">
         {/* DIV11 que contem a logomarca ou menu modo mobile */}
         <div className="flex justify-between md:w-auto w-full z-50 p-5">
           {/* DIV111 para subir um pouco a logo */}
@@ -61,16 +61,16 @@ function NavBar() {
             </NavLink>
           </div>
           {/* DIV112 visível no modo mobile */}
-          <div className="text-normal md:hidden mt-5" onClick={() => setOpen(!open)}>
+          <div className="text-base md:hidden mt-5" onClick={() => setOpen(!open)}>
             {open ? <X className="" /> : <Menu />}
           </div>
         </div>
         {/* DIV12 que abraça os itens do Menu */}
 
-        <ul className="md:flex hidden items-center gap-8">
+        <ul className="md:flex hidden items-center gap-8 ">
           {auth ? (
             <li>
-              <NavLink to="/" className="py-7 px-3 inline-block">
+              <NavLink to="/" className="py-7 px-3 inline-block ">
                 Home
               </NavLink>
             </li>
@@ -113,23 +113,42 @@ function NavBar() {
                         }
                     `}
         >
-          <li>
-            <NavLink to="/" onClick={() => setOpen(!open)} className="py-7 px-3 inline-block">
-              Home
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/register" onClick={() => setOpen(!open)} className="py-7 px-3 inline-block">
-              Cadastro
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/login" onClick={() => setOpen(!open)} className="py-7 px-3 inline-block">
-              Login
-            </NavLink>
-          </li>
-
+          {auth ? (
+            <li>
+              <NavLink to="/" onClick={() => setOpen(!open)} className="py-7 px-3 inline-block">
+                Home
+              </NavLink>
+            </li>
+          ) : (
+            <>
+              <li>
+                <NavLink to="/register" onClick={() => setOpen(!open)} className="py-7 px-3 inline-block">
+                  Cadastro
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/login" onClick={() => setOpen(!open)} className="py-7 px-3 inline-block">
+                  Login
+                </NavLink>
+              </li>
+            </>
+          )}
           <NavLinks auth={auth} open={open} setOpen={setOpen} />
+          {auth && (
+            <li>
+              <form>
+                <button
+                  onClick={(e) => {
+                    handleLogout(e);
+                    setOpen(!open);
+                  }}
+                  className="py-5 px-3 inline-block text-top-digital-link-color hover:text-top-digital-link-hover"
+                >
+                  Logout
+                </button>
+              </form>
+            </li>
+          )}
           <div className="py-5"></div>
         </ul>
       </div>
