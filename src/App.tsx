@@ -25,8 +25,7 @@ import Footer from "./components/Footer/Footer";
 import DocType from "./pages/DocType/DocType";
 
 //context //context
-import { ContextSystemProvider } from "./contexts/ContextSystem";
-import SystemDetails from "./pages/System/SystemDetails";
+import { GlobalContextProvider } from "./contexts/GlobalContext";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -37,7 +36,7 @@ function App() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <ContextSystemProvider>
+      <GlobalContextProvider>
         <BrowserRouter>
           <NavBar />
           <ToastContainer />
@@ -55,7 +54,7 @@ function App() {
           </Routes>
           <Footer />
         </BrowserRouter>
-      </ContextSystemProvider>
+      </GlobalContextProvider>
     </div>
   );
 }

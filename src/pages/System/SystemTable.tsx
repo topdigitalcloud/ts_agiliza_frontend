@@ -1,14 +1,11 @@
-import { useContext } from "react";
-
 //icons
 import { Edit, BookOpen } from "lucide-react";
 
-//types
-import { GlobalStateSystem } from "../../Interfaces/ISystemState";
-
-//context
-import { ContextSystem } from "../../contexts/ContextSystem";
+//components
 import DataUnixTimeStamp from "../../components/DataUnixTimeStamp";
+
+//hooks
+import { useGlobalContext } from "../../hooks/useGlobalContext";
 
 type Props = {
   systems: any[];
@@ -16,7 +13,7 @@ type Props = {
 };
 
 const SystemTable = ({ systems, labels }: Props) => {
-  const { systemGlobalState, setSystemGlobalState } = useContext<GlobalStateSystem>(ContextSystem);
+  const { globalState, dispatchGlobalState } = useGlobalContext();
 
   const handleOpenLabelSystemForm = (e: React.MouseEvent<HTMLElement>, idSystem: string, label: string) => {
     e.preventDefault();
@@ -24,12 +21,10 @@ const SystemTable = ({ systems, labels }: Props) => {
       top: 0,
       behavior: "smooth",
     });
-    setSystemGlobalState({
-      ...systemGlobalState,
-      openedLabelSystemForm: true,
-      openedSystemDetails: false,
-      idSystem: idSystem,
+    dispatchGlobalState({
+      type: "OPEN_LABEL_SYSTEM_FORM",
       labelSystem: label,
+      idSystem: idSystem,
     });
   };
 
@@ -39,15 +34,11 @@ const SystemTable = ({ systems, labels }: Props) => {
       top: 0,
       behavior: "smooth",
     });
-    setSystemGlobalState({
-      ...systemGlobalState,
-      openedLabelSystemForm: false,
-      openedSystemDetails: true,
+    dispatchGlobalState({
+      type: "OPEN_SYSTEM_DETAILS",
       idSystem: idSystem,
     });
   };
-
-  console.log(systemGlobalState.idSystem, systems);
 
   return (
     <>
@@ -75,7 +66,7 @@ const SystemTable = ({ systems, labels }: Props) => {
                 <tr
                   key={system._id}
                   className={`text-sm font-top-digital-content ${index % 2 ? " bg-top-digital-op-25" : "bg-white"} ${
-                    system._id === systemGlobalState.idSystem
+                    system._id === globalState.idSystem
                       ? "border-2 border-top-digital-hover text-top-digital-hover font-semibold"
                       : "font-normal"
                   }`}
@@ -83,7 +74,7 @@ const SystemTable = ({ systems, labels }: Props) => {
                   <td key="open" className={`whitespace-nowrap px-4 py-2`}>
                     <button
                       className={`${
-                        system._id === systemGlobalState.idSystem
+                        system._id === globalState.idSystem
                           ? "text-top-digital-link-hover"
                           : "hover:text-top-digital-link-hover"
                       }`}
@@ -111,11 +102,11 @@ const SystemTable = ({ systems, labels }: Props) => {
                             {system[label[0]]}
                             <button
                               className={`${
-                                system._id === systemGlobalState.idSystem
+                                system._id === globalState.idSystem
                                   ? "text-top-digital-link-hover"
                                   : "hover:text-top-digital-link-hover"
                               }`}
-                              title="Coloque um apelido na Estação"
+                              title="Coloque um apelido no sistema"
                             >
                               <Edit />
                             </button>

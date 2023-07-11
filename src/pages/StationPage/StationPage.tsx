@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 
 //hooks
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useNotify } from "../../hooks/useNotify";
 
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
+import { useGlobalContext } from "../../hooks/useGlobalContext";
 
 //redux
 
@@ -17,12 +18,8 @@ import { reset, getStationDocs, documentSelector, insertDoc, downloadDoc } from 
 import { systemSelector, setLabelSystem as setSystemSliceStation, resetSystemSlice } from "../../slices/SystemSlice";
 import { getDocTypes, docTypeSelector } from "../../slices/DocumentTypeSlice";
 
-//context
-import { ContextSystem } from "../../contexts/ContextSystem";
-
 //types
 import DateFormat from "../../components/DateFormat";
-import { GlobalStateSystem } from "../../Interfaces/ISystemState";
 
 //icons
 import { Download, Edit, Link } from "lucide-react";
@@ -90,22 +87,23 @@ const StationPage = (props: Props) => {
   idSystem: "",  
   */
   const { success: successSystem } = useAppSelector(systemSelector);
-  const { systemGlobalState, setSystemGlobalState } = useContext<GlobalStateSystem>(ContextSystem);
+  const { globalState, dispatchGlobalState } = useGlobalContext();
   const submitHandleLabelSystem = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data: any = {
-      labelSystem: systemGlobalState.labelSystem,
-      idSystem: systemGlobalState.idSystem,
+      labelSystem: globalState.labelSystem,
+      idSystem: globalState.idSystem,
     };
     dispatchSystem(setSystemSliceStation(data));
   };
 
   useEffect(() => {
     if (successSystem) {
-      setSystemGlobalState({ ...systemGlobalState, openedLabelSystemForm: false });
+      //setGlobalState({ ...globalState, openedLabelSystemForm: false });
+      dispatchGlobalState({ type: "CLOSE_LABEL_SYSTEM_FORM" });
     }
     dispatchStation(resetSystemSlice());
-  }, [successSystem, dispatchStation, systemGlobalState, setSystemGlobalState]);
+  }, [successSystem, dispatchStation, globalState, dispatchGlobalState]);
 
   /*Fim Formulário de Label do Sistema*/
 
@@ -231,7 +229,7 @@ const StationPage = (props: Props) => {
             {station && openedLabelStationForm && (
               <EditStationLabel setOpenedLabelStationForm={setOpenedLabelStationForm} label={station.Label} />
             )}
-            {station && systemGlobalState.openedLabelSystemForm && (
+            {station && globalState.openedLabelSystemForm && (
               <div className="absolute bg-white top-0 right-0 w-full h-full border">
                 <div className="flex flex-col items-center justify-center font-bold p-2 text-top-digital text-lg">
                   <div className="mx-auto w-full max-w-[550px] mb-6">
@@ -239,9 +237,9 @@ const StationPage = (props: Props) => {
                       Adicione/Edite um apelido para o Sistema
                       <span className="font-bold">
                         {" "}
-                        {systemGlobalState.labelSystem && systemGlobalState.labelSystem !== ""
-                          ? systemGlobalState.labelSystem
-                          : systemGlobalState.idSystem}
+                        {globalState.labelSystem && globalState.labelSystem !== ""
+                          ? globalState.labelSystem
+                          : globalState.idSystem}
                       </span>
                     </h2>
                   </div>
@@ -256,9 +254,12 @@ const StationPage = (props: Props) => {
                         </label>
                         <input
                           type="text"
-                          onChange={(e) => setSystemGlobalState({ ...systemGlobalState, labelSystem: e.target.value })}
+                          onChange={(e) =>
+                            dispatchGlobalState({ type: "SET_LABEL_SYSTEM", labelSystem: e.target.value })
+                          }
+                          //onChange={(e) => setGlobalState({ ...globalState, labelSystem: e.target.value })}
                           name="labelSystem"
-                          value={systemGlobalState.labelSystem}
+                          value={globalState.labelSystem}
                           id="labelSystem"
                           className="w-full appearance-none rounded-md border border-top-digital-op-25 bg-white py-3 px-6 text-base font-medium text-top-digital-content-color outline-none focus:border-top-digital focus:shadow-md focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
                         />
@@ -276,7 +277,8 @@ const StationPage = (props: Props) => {
                             type="button"
                             onClick={(e) => {
                               e.preventDefault();
-                              setSystemGlobalState({ ...systemGlobalState, openedLabelSystemForm: false });
+                              //setGlobalState({ ...globalState, openedLabelSystemForm: false });
+                              dispatchGlobalState({ type: "CLOSE_LABEL_SYSTEM_FORM" });
                             }}
                           >
                             Cancelar
@@ -288,15 +290,15 @@ const StationPage = (props: Props) => {
                 </div>
               </div>
             )}
-            {station && systemGlobalState.openedSystemDetails && (
+            {station && globalState.openedSystemDetails && (
               <div className="absolute bg-white top-0 right-0 w-full h-full border">
-                <SystemDetails systemId={systemGlobalState.idSystem} />
+                <SystemDetails systemId={globalState.idSystem} />
               </div>
             )}
           </div>
           <div
             className={`bg-white border p-2 m-2 flex-1 order-1 md:order-2 ${
-              systemGlobalState.openedLabelSystemForm || openedLabelStationForm || systemGlobalState.openedSystemDetails
+              globalState.openedLabelSystemForm || openedLabelStationForm || globalState.openedSystemDetails
                 ? "hidden md:block"
                 : ""
             }`}
@@ -451,11 +453,7 @@ const StationPage = (props: Props) => {
                                   onClick={(e) => {
                                     e.preventDefault();
                                     handleOpenFormLinkSystem(doc._id);
-                                    setSystemGlobalState({
-                                      ...systemGlobalState,
-                                      openedSystemDetails: false,
-                                      openedLabelSystemForm: false,
-                                    });
+                                    dispatchGlobalState({ type: "CLOSE_SYSTEM_DETAILS_AND_LABEL_SYSTEM_FORM" });
                                   }}
                                 />
                               )}

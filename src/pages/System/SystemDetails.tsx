@@ -1,21 +1,19 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 
 //redux
-
 //primeira parte do componente: config e station
 import { configSelector, getConfig } from "../../slices/ConfigSystemSlice";
 import { systemSelector, getSystemById } from "../../slices/SystemSlice";
 import { TSystem } from "../../Interfaces/ISystem";
 import { X } from "lucide-react";
 
-//context
-import { ContextSystem } from "../../contexts/ContextSystem";
+//hooks
+import { useGlobalContext } from "../../hooks/useGlobalContext";
 
 //components
 import DocumentsSystem from "../Document/DocumentsSystem";
-import { GlobalStateSystem } from "../../Interfaces/ISystemState";
 import DataUnixTimeStamp from "../../components/DataUnixTimeStamp";
 
 type Props = {
@@ -23,7 +21,7 @@ type Props = {
 };
 
 const SystemDetails = ({ systemId }: Props) => {
-  const { systemGlobalState, setSystemGlobalState } = useContext<GlobalStateSystem>(ContextSystem);
+  const { dispatchGlobalState } = useGlobalContext();
   const dispatch = useAppDispatch();
   const { system } = useAppSelector(systemSelector);
   const { config } = useAppSelector(configSelector);
@@ -43,11 +41,7 @@ const SystemDetails = ({ systemId }: Props) => {
           <h1 className="text-xl p-1 text-top-digital font-semibold mb-1 font-top-digital-title text-center">
             Sistema {system?.Label !== "" ? system?.Label : system?._id}
           </h1>
-          <button
-            onClick={() =>
-              setSystemGlobalState({ ...systemGlobalState, openedSystemDetails: false, openedLabelSystemForm: false })
-            }
-          >
+          <button onClick={() => dispatchGlobalState({ type: "CLOSE_SYSTEM_DETAILS_AND_LABEL_SYSTEM_FORM" })}>
             <X className="cursor-pointer" />
           </button>
         </div>

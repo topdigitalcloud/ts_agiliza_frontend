@@ -9,7 +9,6 @@ type Props = {
 const InfoWindowStations = ({ location }: Props) => {
   return (
     <div className="max-w-[110px] overflow-auto">
-      {/* {location.stations.map((station) => ( */}
       {location.stations && location.stations.length !== 0 && (
         <table className="text-left text-sm font-light min-w-full">
           <thead className="border-b bg-top-digital-op-40 font-medium dark:border-neutral-500">
