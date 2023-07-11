@@ -8,14 +8,18 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import { labelStationSelector, setNewLabelStation, resetLabelStationSlice } from "../../slices/LabelStationSlice";
 import { TStation } from "../../Interfaces/IStation";
 
+//context
+import { useGlobalContext } from "../../hooks/useGlobalContext";
+
 type Props = {
   stations: TStation[];
   labels: any[];
   setResetVisibleStations: React.Dispatch<React.SetStateAction<boolean>>;
-  handleInfoWindow: (lat: string, lng: string) => void;
 };
 
-const StationTable = ({ stations, labels, setResetVisibleStations, handleInfoWindow }: Props) => {
+const StationTable = ({ stations, labels, setResetVisibleStations }: Props) => {
+  //context
+  const { dispatchGlobalState } = useGlobalContext();
   const [editStation, setEditStation] = useState<string>("");
   const [labelStation, setLabelStation] = useState<string>("");
 
@@ -66,7 +70,9 @@ const StationTable = ({ stations, labels, setResetVisibleStations, handleInfoWin
               stations.map((station, index) => (
                 <tr
                   key={station._id}
-                  onClick={() => handleInfoWindow(station.Latitude, station.Longitude)}
+                  onClick={() =>
+                    dispatchGlobalState({ type: "SET_INFOWINDOW_COORD", lat: station.Latitude, lng: station.Longitude })
+                  }
                   className={`border-b dark:border-neutral-500 ${index % 2 ? " bg-top-digital-op-25" : "bg-white"}`}
                 >
                   {labels &&

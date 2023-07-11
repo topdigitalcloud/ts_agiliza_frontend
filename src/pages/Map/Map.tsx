@@ -15,7 +15,10 @@ import { TBounds, TCoordInfo, TLocation } from "../../Interfaces/ILocation";
 //components
 //import Equipment from "../Equipment/Equipment";
 import Station from "../Station/Station";
-import InfoWindowStations from "./InfoWindowStations";
+import InfoWindowStations from "../../components/Map/InfoWindowStations";
+
+//context
+import { useGlobalContext } from "../../hooks/useGlobalContext";
 
 //parameters: touchstart, wheel, mousewheel, touchmove
 addPassiveSupport(true, false, false, true);
@@ -33,16 +36,18 @@ const Map = ({ locations }: Props) => {
   const map = useRef<any>(null);
   const [iniDrag, setIniDrag] = useState<TBounds | null>(null);
   const [visibleLocations, setVisibleLocations] = useState<TLocation[]>(locations);
-  const [latInfoWindow, setLatInfoWindow] = useState("");
-  const [lngInfoWindow, setLngInfoWindow] = useState("");
   const [zoom, setZoom] = useState(0);
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: googleMapsApiKey,
   });
 
+  //context
+  const { globalState, dispatchGlobalState } = useGlobalContext();
+
   const onLoad = useCallback(
     (mapInstance: any) => {
       const storedCoords = localStorage.getItem("coords");
+      //console.log(storedCoords);
       const coords: TBounds | null = storedCoords ? JSON.parse(storedCoords) : null;
       const bounds = new google.maps.LatLngBounds();
       if (coords !== null) {
@@ -139,11 +144,10 @@ const Map = ({ locations }: Props) => {
   //Manipulações após carregamento do mapa
   const handleInfoWindow = (lat: string, lng: string) => {
     //addPassiveSupport(false, true, true, false);
-    if (lat === latInfoWindow && lng === lngInfoWindow) {
+    if (lat === globalState.latInfoWindow && lng === globalState.lngInfoWindow) {
       return;
     }
-    setLatInfoWindow(lat);
-    setLngInfoWindow(lng);
+    dispatchGlobalState({ type: "SET_INFOWINDOW_COORD", lat: lat, lng: lng });
     //setVisibleStations([marker]);
   };
 
@@ -164,7 +168,7 @@ const Map = ({ locations }: Props) => {
         ) : (
           <GoogleMap
             ref={map}
-            mapContainerClassName="w-full h-full"
+            mapContainerClassName="h-[45vh] w-full"
             onLoad={onLoad}
             onDragEnd={getStationsVisible}
             onDragStart={setDragStart}
@@ -183,14 +187,13 @@ const Map = ({ locations }: Props) => {
                   onClick={(e) => handleInfoWindow(eq.Latitude, eq.Longitude)}
                   //onPositionChanged={() => handleInfoWindow(eq)}
                 >
-                  {(latInfoWindow === eq.Latitude && lngInfoWindow === eq.Longitude) ||
+                  {(globalState.latInfoWindow === eq.Latitude && globalState.lngInfoWindow === eq.Longitude) ||
                   (zoom > 16 && isVisible(eq.Latitude, eq.Longitude)) ? (
                     <InfoWindow
                       options={{ disableAutoPan: true }}
                       position={{ lat: parseFloat(eq.Latitude), lng: parseFloat(eq.Longitude) }}
                       onCloseClick={() => {
-                        setLatInfoWindow("");
-                        setLngInfoWindow("");
+                        dispatchGlobalState({ type: "CLEAN_INFOWINDOW_COORD" });
                       }}
                     >
                       <InfoWindowStations location={eq} />
@@ -202,7 +205,7 @@ const Map = ({ locations }: Props) => {
         )}
       </div>
       <div className="mt-2 h-full w-full overflow-y-auto">
-        <Station visibleLocations={visibleLocations} handleInfoWindow={handleInfoWindow} />
+        <Station visibleLocations={visibleLocations} />
       </div>
     </>
   );

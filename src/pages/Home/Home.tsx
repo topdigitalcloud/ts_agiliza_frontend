@@ -24,7 +24,7 @@ const Home = () => {
     return <p>Carregando...</p>;
   }
   return (
-    <div className="flex justify-center items-center container mx-auto">
+    <div className="flex justify-center items-center mx-auto">
       {locations && locations.length !== 0 && (
         <div className="text-center flex-1 w-full ">
           <h2 className="font-semibold font-top-digital-title text-2xl md:text-3xl text-top-digital my-4">

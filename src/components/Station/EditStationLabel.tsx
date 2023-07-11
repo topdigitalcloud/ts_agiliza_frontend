@@ -1,5 +1,5 @@
 //react
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 //redux
 import useAppSelector from "../../hooks/useAppSelector";
@@ -7,36 +7,38 @@ import useAppDispatch from "../../hooks/useAppDispatch";
 import { labelStationSelector, setNewLabelStation, resetLabelStationSlice } from "../../slices/LabelStationSlice";
 import { stationSelector } from "../../slices/StationSlice";
 
-type Props = {
-  setOpenedLabelStationForm: Dispatch<SetStateAction<boolean>>;
-  label: string;
-};
+//context
+import { useGlobalContext } from "../../hooks/useGlobalContext";
 
-const EditStationLabel = ({ setOpenedLabelStationForm, label }: Props) => {
-  const [labelStation, setLabelStation] = useState<string>("");
-
+const EditStationLabel = () => {
+  //global context
+  const { globalState, dispatchGlobalState } = useGlobalContext();
+  //states
   const dispatch = useAppDispatch();
   const { success } = useAppSelector(labelStationSelector);
   const { station } = useAppSelector(stationSelector);
 
   useEffect(() => {
-    setLabelStation(label);
-  }, [label]);
+    dispatchGlobalState({ type: "SET_LABEL_STATION", labelStation: station!.Label });
+  }, [station, dispatchGlobalState]);
 
   useEffect(() => {
     if (success) {
-      setOpenedLabelStationForm(false);
+      dispatchGlobalState({ type: "CLOSE_LABEL_STATION_FORM" });
     }
     dispatch(resetLabelStationSlice());
-  }, [success, dispatch, setOpenedLabelStationForm]);
+  }, [success, dispatch, dispatchGlobalState]);
 
   const submitHandleLabelStation = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const label = globalState.labelStation;
+
     const data: any = {
-      labelStation,
+      labelStation: label,
       idStation: station!._id,
     };
+
     dispatch(setNewLabelStation(data));
   };
 
@@ -57,9 +59,9 @@ const EditStationLabel = ({ setOpenedLabelStationForm, label }: Props) => {
               </label>
               <input
                 type="text"
-                onChange={(e) => setLabelStation(e.target.value)}
+                onChange={(e) => dispatchGlobalState({ type: "SET_LABEL_STATION", labelStation: e.target.value })}
                 name="labelStation"
-                value={labelStation}
+                value={globalState.labelStation}
                 id="labelStation"
                 className="w-2/3 appearance-none rounded-md border border-top-digital-op-25 bg-white py-2 px-2 text-base font-medium text-top-digital-content-color outline-none focus:border-top-digital focus:shadow-md focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none"
               />
@@ -77,7 +79,7 @@ const EditStationLabel = ({ setOpenedLabelStationForm, label }: Props) => {
                   type="button"
                   onClick={(e) => {
                     e.preventDefault();
-                    setOpenedLabelStationForm(false);
+                    dispatchGlobalState({ type: "CLOSE_LABEL_STATION_FORM" });
                   }}
                 >
                   Cancelar

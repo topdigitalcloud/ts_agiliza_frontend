@@ -1,19 +1,28 @@
 import { useParams } from "react-router-dom";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
+
+//redux
 import useAppDispatch from "../../hooks/useAppDispatch";
 import useAppSelector from "../../hooks/useAppSelector";
 import { linkSystemDocSelector, getAllSystemsByStation } from "../../slices/LinkSystemDocSlice";
 import { documentSelector, getDocById } from "../../slices/DocumentSlice";
+
+//icons
 import { X } from "lucide-react";
+
+//type
 import { TSystem } from "../../Interfaces/ISystem";
+
+//components
 import SystemActionLinkDoc from "./SystemActionLinkDoc";
 
-type Props = {
-  setOpenSystemLinkForm: Dispatch<SetStateAction<boolean>>;
-  documentId: string;
-};
+//context
+import { useGlobalContext } from "../../hooks/useGlobalContext";
 
-const SystemLinkDocument = ({ setOpenSystemLinkForm, documentId }: Props) => {
+const SystemLinkDocument = () => {
+  //context
+  const { globalState, dispatchGlobalState } = useGlobalContext();
+
   const dispatch = useAppDispatch();
   const { systemsToLink, labels } = useAppSelector(linkSystemDocSelector);
   const { id } = useParams();
@@ -22,16 +31,16 @@ const SystemLinkDocument = ({ setOpenSystemLinkForm, documentId }: Props) => {
 
   useEffect(() => {
     dispatch(getAllSystemsByStation(id));
-  }, [documentId, dispatch, id]);
+  }, [globalState.documentId, dispatch, id]);
 
   useEffect(() => {
     const objData = {
-      id: documentId,
+      id: globalState.documentId,
     };
     dispatch(getDocById(objData));
-  }, [documentId, dispatch]);
+  }, [globalState.documentId, dispatch]);
   return (
-    <>
+    <div className="absolute bg-white top-0 right-0 w-full h-full border">
       {systemsToLink && systemsToLink.length !== 0 && (
         <>
           <div className="sticky bg-white top-0 z-50 flex justify-between mb-2">
@@ -46,7 +55,7 @@ const SystemLinkDocument = ({ setOpenSystemLinkForm, documentId }: Props) => {
               <X
                 className="cursor-pointer"
                 onClick={() => {
-                  setOpenSystemLinkForm(false);
+                  dispatchGlobalState({ type: "CLOSE_SYSTEM_LINK_FORM", idDocument: "" });
                 }}
               />
             </div>
@@ -96,9 +105,9 @@ const SystemLinkDocument = ({ setOpenSystemLinkForm, documentId }: Props) => {
                       >
                         <SystemActionLinkDoc
                           key={system._id}
-                          document={documentId}
+                          document={globalState.documentId}
                           system={system._id}
-                          linked={system.documents!.includes(documentId)}
+                          linked={system.documents!.includes(globalState.documentId)}
                         />
                       </td>
                       {labels &&
@@ -123,7 +132,7 @@ const SystemLinkDocument = ({ setOpenSystemLinkForm, documentId }: Props) => {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };
 

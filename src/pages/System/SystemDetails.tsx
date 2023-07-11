@@ -35,7 +35,7 @@ const SystemDetails = ({ systemId }: Props) => {
   }, [dispatch, systemId]);
 
   return (
-    <>
+    <div className="absolute bg-white top-0 right-0 w-full h-full border">
       <div>
         <div className="flex justify-between items-center">
           <h1 className="text-xl p-1 text-top-digital font-semibold mb-1 font-top-digital-title text-center">
@@ -78,7 +78,7 @@ const SystemDetails = ({ systemId }: Props) => {
               )
           )}
       </div>
-    </>
+    </div>
   );
 };
 

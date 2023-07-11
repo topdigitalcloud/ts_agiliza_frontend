@@ -12,10 +12,9 @@ import StationTable from "../../components/Station/StationTable";
 
 type Props = {
   visibleLocations: TLocation[] | [];
-  handleInfoWindow: (lat: string, lng: string) => void;
 };
 
-const Station = ({ visibleLocations, handleInfoWindow }: Props) => {
+const Station = ({ visibleLocations }: Props) => {
   const dispatch = useAppDispatch();
   const { stations, labels, loading, pageCount: apiPageCount } = useAppSelector(stationSelector);
   const lastPage = localStorage.getItem("page") || "1";
@@ -95,12 +94,7 @@ const Station = ({ visibleLocations, handleInfoWindow }: Props) => {
             </div>
           </div>
           {!loading && (
-            <StationTable
-              stations={stations}
-              labels={labels}
-              setResetVisibleStations={setResetVisibleStations}
-              handleInfoWindow={handleInfoWindow}
-            />
+            <StationTable stations={stations} labels={labels} setResetVisibleStations={setResetVisibleStations} />
           )}
           {loading && <div>Aguarde.....</div>}
           <div className="mb-14"></div>
