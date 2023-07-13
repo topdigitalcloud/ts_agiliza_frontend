@@ -4,6 +4,9 @@ import { GoogleMap, InfoWindow, MarkerF, useJsApiLoader } from "@react-google-ma
 //hooks
 import { useState, useCallback, useRef } from "react";
 
+//url for logo
+import { urlapp } from "../../utils/config";
+
 //preciso analisar essa importação para entender o que ela faz
 //lembrei - tem a ver com event listener do DOM
 //Depois vou verificar mais a fundo
@@ -183,7 +186,7 @@ const Map = ({ locations }: Props) => {
                     lat: parseFloat(eq.Latitude),
                     lng: parseFloat(eq.Longitude),
                   }}
-                  icon="img/radio-tower.svg"
+                  icon={`${urlapp}/img/radio-tower.svg`}
                   onClick={(e) => handleInfoWindow(eq.Latitude, eq.Longitude)}
                   //onPositionChanged={() => handleInfoWindow(eq)}
                 >

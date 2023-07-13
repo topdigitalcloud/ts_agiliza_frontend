@@ -9,6 +9,7 @@ import { useAuth } from "./hooks/useAuth";
 
 //Pages
 import Home from "./pages/Home/Home";
+import NewHome from "./pages/Home/NewHome";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Header from "./components/header/Header";
@@ -20,10 +21,10 @@ import ConfigSystem from "./pages/ConfigSystem/ConfigSystem";
 import StationPage from "./pages/StationPage/StationPage";
 import Footer from "./components/Footer/Footer";
 import DocType from "./pages/DocType/DocType";
+import Main from "./components/Main/Main";
 
 //context //context
 import { GlobalContextProvider } from "./contexts/GlobalContext";
-import Main from "./components/Main/Main";
 
 function App() {
   const { auth, loading } = useAuth();
@@ -39,6 +40,7 @@ function App() {
         <Main>
           <Routes>
             <Route path="/" element={auth ? <Home /> : <Navigate to="/login" />} />
+            <Route path="/newhome" element={auth ? <NewHome /> : <Navigate to="/login" />} />
             <Route path="/profile" element={auth ? <MyProfile /> : <Navigate to="/login" />} />
             <Route path="/configstation" element={auth ? <ConfigStation /> : <Navigate to="/login" />} />
             <Route path="/configsystem" element={auth ? <ConfigSystem /> : <Navigate to="/login" />} />

@@ -1,5 +1,4 @@
-import React from "react";
-import NavBar from "../NavBar/NavBar";
+import NavBar from "../NavBarV2/NavBar";
 //ToastFy to show messages
 import { ToastContainer } from "react-toastify";
 

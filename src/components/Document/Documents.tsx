@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 
-//icons
-
 //context
 import { useGlobalContext } from "../../hooks/useGlobalContext";
 

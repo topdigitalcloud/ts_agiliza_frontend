@@ -14,6 +14,8 @@ export type GlobalState = {
   openSystemLinkForm: boolean;
   openedUploadForm: boolean;
   documentId: string;
+  //mode app
+  newTailwindDesign: boolean;
 };
 
 export type ActionGlobalState =

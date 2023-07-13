@@ -91,16 +91,10 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     openSystemLinkForm: false,
     openedUploadForm: false,
     documentId: "",
+    //mode app
+    newTailwindDesign: true,
   };
 
   const [globalState, dispatchGlobalState] = useReducer(globalStateReducer, initialState);
-  console.log(globalState);
-
-  // const [globalState, setGlobalState] = useState({
-  //   openedLabelSystemForm: false,
-  //   openedSystemDetails: false,
-  //   labelSystem: "",
-  //   idSystem: "",
-  // });
   return <GlobalContext.Provider value={{ globalState, dispatchGlobalState }}>{children}</GlobalContext.Provider>;
 };
