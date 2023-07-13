@@ -5,8 +5,6 @@ import { useEffect } from "react";
 //Hooks Redux
 import useAppSelector from "../../hooks/useAppSelector";
 import useAppDispatch from "../../hooks/useAppDispatch";
-
-//Redux
 import { getLocations, locationSelector } from "../../slices/LocationSlice";
 
 //Components
